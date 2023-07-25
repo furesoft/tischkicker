@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0271a5c9-e3ca-461c-a019-af66a78cfa9c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../Server/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/java/Spieler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/Spieler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/Basisklasse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/Basisklasse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/Spiel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/Spiel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/Team.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/Team.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/Turnier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/Turnier.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
