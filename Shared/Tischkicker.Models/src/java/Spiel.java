@@ -26,27 +26,27 @@ class Spiel extends BasisKlasse {
         this.teams = teams;
     }
 
-    public int getPlazierung() {
-        return plazierung;
-    }
-
-    public void setPlazierung(int plazierung) {
-        this.plazierung = plazierung;
-    }
-
-    public int getTore() {
-        return tore;
-    }
-
-    public void setTore(int tore) {
-        this.tore = tore;
-    }
-
     public int getQualifikation() {
         return qualifikation;
     }
 
     public void setQualifikation(int qualifikation) {
         this.qualifikation = qualifikation;
+    }
+
+    public int getToreteam1() {
+        return toreteam1;
+    }
+
+    public void setToreteam1(int toreteam1) {
+        this.toreteam1 = toreteam1;
+    }
+
+    public int getToreteam2() {
+        return toreteam2;
+    }
+
+    public void setToreteam2(int toreteam2) {
+        this.toreteam2 = toreteam2;
     }
 }

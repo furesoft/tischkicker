@@ -2,14 +2,17 @@ import java.util.ArrayList;
 
 class Team extends BasisKlasse {
     private String name;
-    private ArrayList<Integer> spielerID = new ArrayList <> ();
+    private ArrayList<Integer> spielerID = new ArrayList<>();
     private int gesamttore;
     private int gegentore;
     private boolean aufgegeben;
-}
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ArrayList<Integer> getSpielerID() {
@@ -18,10 +21,6 @@ class Team extends BasisKlasse {
 
     public void setSpielerID(ArrayList<Integer> spielerID) {
         this.spielerID = spielerID;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getGesamttore() {
