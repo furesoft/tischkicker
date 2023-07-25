@@ -8,7 +8,8 @@ class Spiel extends Basisklasse {
 
     private int plazierung ;
 
-   private int tore ;
+   private int toreteam1 ;
+   private int toreteam2 ;
 
    private int qualifikation ;
 
