@@ -1,4 +1,4 @@
-class Spiel extends Basisklasse {
+class Spiel extends BasisKlasse {
 
 
 
@@ -27,20 +27,20 @@ class Spiel extends Basisklasse {
       this.teams = teams;
    }
 
-   public int getPlazierung() {
-      return plazierung;
+   public int getToreteam1() {
+      return toreteam1;
    }
 
-   public void setPlazierung(int plazierung) {
-      this.plazierung = plazierung;
+   public void setToreteam1(int toreteam1) {
+      this.toreteam1 = toreteam1;
    }
 
-   public int getTore() {
-      return tore;
+   public int getToreteam2() {
+      return toreteam2;
    }
 
-   public void setTore(int tore) {
-      this.tore = tore;
+   public void setToreteam2(int toreteam2) {
+      this.toreteam2 = toreteam2;
    }
 
    public int getQualifikation() {
