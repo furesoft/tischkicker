@@ -6,10 +6,8 @@ class Spiel extends Basisklasse {
 
     private String[] teams = new String[];
 
-    private int plazierung ;
-
-   private int toreteam1 ;
-   private int toreteam2 ;
+    private int toreteam1 ;
+    private int toreteam2 ;
 
    private int qualifikation ;
 
