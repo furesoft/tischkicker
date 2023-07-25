@@ -1,4 +1,4 @@
-class Spieler : BasisKlasse {
+class Spieler extends BasisKlasse {
     private String name;
     private String abteilung;
 
