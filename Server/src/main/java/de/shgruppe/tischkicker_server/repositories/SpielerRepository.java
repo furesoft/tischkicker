@@ -1,4 +1,4 @@
-package de.shgruppe.tischkicker_server;
+package de.shgruppe.tischkicker_server.repositories;
 
 import org.hibernate.annotations.Table;
 import org.springframework.data.jpa.repository.JpaRepository;
