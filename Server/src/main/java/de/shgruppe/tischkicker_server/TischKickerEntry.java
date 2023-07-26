@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EntityScan("tischkicker.models")
-@EnableJpaRepositories("de.shgruppe")
+@EnableJpaRepositories("de.shgruppe.tischkicker_server.repositories")
 public class TischKickerEntry {
 
     public static void main(String[] args) {

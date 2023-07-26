@@ -1,8 +1,20 @@
 package tischkicker.models;
 
-public class Spieler extends BasisKlasse {
+import javax.persistence.*;
+
+@Entity
+public class Spieler {
     private String name;
     private String abteilung;
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int ID;
+
+    public int getID() {
+        return ID;
+    }
 
     public String getName() {
         return this.name;
