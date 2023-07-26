@@ -1,16 +1,44 @@
 package tischkicker.models;
 
+import javax.persistence.*;
 import java.util.Date;
 
-public class Spiel extends BasisKlasse {
+@Entity
+@Table(name = "spiel")
+public class Spiel {
+    public Spiel(Date spieldatum, String[] teams, int toreteam1, int toreteam2, int qualifikation, int ID) {
+        this.spieldatum = spieldatum;
+        this.teams = teams;
+        this.toreteam1 = toreteam1;
+        this.toreteam2 = toreteam2;
+        this.qualifikation = qualifikation;
+        this.spielID = ID;
+    }
+
+    @Column(name = "datum")
     private Date spieldatum;
 
+    @Column(name = "teams")
     private String[] teams = new String[2];
 
+    @Column(name = "TORET1")
     private int toreteam1;
+
+    @Column(name = "TORET2")
     private int toreteam2;
 
+    @Column(name = "qualifikation")
     private int qualifikation;
+
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue
+    private int spielID;
+
+
+    public int getSpielID() {
+        return spielID;
+    }
 
     public Date getSpieldatum() {
         return spieldatum;

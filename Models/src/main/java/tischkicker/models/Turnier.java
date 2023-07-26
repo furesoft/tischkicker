@@ -1,9 +1,11 @@
 package tischkicker.models;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Turnier extends BasisKlasse {
+@Entity
+public class Turnier {
     private Date startdatum;
     private Date enddatum;
     private ArrayList<Integer> spieleID = new ArrayList<>();
@@ -15,6 +17,15 @@ public class Turnier extends BasisKlasse {
 
     public void setStartdatum(Date startdatum) {
         this.startdatum = startdatum;
+    }
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int ID;
+
+    public int getID() {
+        return ID;
     }
 
     public Date getEnddatum() {

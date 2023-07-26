@@ -1,14 +1,24 @@
 package tischkicker.models;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 
-
- public class Team extends BasisKlasse {
+@Entity
+public class Team {
     private String name;
     private ArrayList<Integer> spielerID = new ArrayList<>();
     private int gesamttore;
     private int gegentore;
     private boolean aufgegeben;
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int ID;
+
+    public int getID() {
+        return ID;
+    }
 
     public String getName() {
         return name;
