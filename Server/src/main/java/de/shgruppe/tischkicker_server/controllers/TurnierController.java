@@ -9,13 +9,13 @@ import java.util.Date;
 @RestController
 public class TurnierController {
 
-    @GetMapping("/tuniere")
+    @GetMapping("/turniere")
     public Turnier alleTuniereHolen() {
 
         return null;
     }
 
-    @GetMapping("/tuniere/{id}")
+    @GetMapping("/turniere/{id}")
     public Turnier einzelnesTurnierHolen(@PathVariable int id) {
 
 
