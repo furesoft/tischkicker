@@ -9,7 +9,6 @@
     </parent>
 
 
-    <groupId>de.shgruppe</groupId>
     <artifactId>Models</artifactId>
     <packaging>jar</packaging>
 
