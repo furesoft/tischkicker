@@ -1,3 +1,5 @@
+package tischkicker.models;
+
 import java.util.Date;
 
 class Spiel extends BasisKlasse {

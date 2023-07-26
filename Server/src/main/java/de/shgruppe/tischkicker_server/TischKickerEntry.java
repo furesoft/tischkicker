@@ -1,4 +1,4 @@
-package de.shgruppe.springsample;
+package de.shgruppe.tischkicker_server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,12 +6,12 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EntityScan("de.shgruppe.tischkicker.models")
+@EntityScan("tischkicker.models")
 @EnableJpaRepositories("de.shgruppe")
-public class SpringSampleApplication {
+public class TischKickerEntry {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringSampleApplication.class, args);
+        SpringApplication.run(TischKickerEntry.class, args);
     }
 
 }

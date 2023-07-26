@@ -1,4 +1,6 @@
-class Spieler extends BasisKlasse {
+package tischkicker.models;
+
+public class Spieler extends BasisKlasse {
     private String name;
     private String abteilung;
 

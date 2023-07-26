@@ -1,1 +1,1 @@
-mvn install && %JAVA_HOME%/bin/java -jar target/tischkicker_server-0.0.1-SNAPSHOT-jar-with-dependencies.jar && PAUSE
+mvn install && %JAVA_HOME%/bin/java -jar target/Server-1.0.0-SNAPSHOT-jar-with-dependencies.jar && PAUSE

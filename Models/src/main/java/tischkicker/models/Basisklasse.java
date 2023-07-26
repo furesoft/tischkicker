@@ -1,3 +1,5 @@
+package tischkicker.models;
+
 class BasisKlasse {
     private int ID;
 

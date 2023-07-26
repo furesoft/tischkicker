@@ -1,4 +1,7 @@
+package tischkicker.models;
+
 import java.util.ArrayList;
+
 
 class Team extends BasisKlasse {
     private String name;
