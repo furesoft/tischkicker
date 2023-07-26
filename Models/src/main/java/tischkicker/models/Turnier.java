@@ -3,7 +3,7 @@ package tischkicker.models;
 import java.util.ArrayList;
 import java.util.Date;
 
-class Turnier extends BasisKlasse {
+public class Turnier extends BasisKlasse {
     private Date startdatum;
     private Date enddatum;
     private ArrayList<Integer> spieleID = new ArrayList<>();

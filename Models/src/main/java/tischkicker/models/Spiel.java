@@ -2,7 +2,7 @@ package tischkicker.models;
 
 import java.util.Date;
 
-class Spiel extends BasisKlasse {
+public class Spiel extends BasisKlasse {
     private Date spieldatum;
 
     private String[] teams = new String[2];

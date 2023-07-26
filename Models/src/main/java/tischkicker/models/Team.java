@@ -3,7 +3,7 @@ package tischkicker.models;
 import java.util.ArrayList;
 
 
-class Team extends BasisKlasse {
+ public class Team extends BasisKlasse {
     private String name;
     private ArrayList<Integer> spielerID = new ArrayList<>();
     private int gesamttore;
