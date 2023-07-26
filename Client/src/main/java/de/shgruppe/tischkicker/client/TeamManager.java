@@ -29,7 +29,7 @@ public class TeamManager {
 
         teamManagers.add(teamManager1);
     }
-    public List<TeamManager> getTeamManagers() {
+    public static List<TeamManager> getTeamManagers() {
 
         return teamManagers;
     }

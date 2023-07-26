@@ -1,65 +1,53 @@
 package de.shgruppe.tischkicker.client;
 import com.google.gson.Gson;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 public class Client {
-    TeamManager zugriffAufTeams;
+
     public static void main(String[] args) {
-        String apiUrl = "https://api.example.com/data"; // Hier die API-URL einsetzen
+        String apiUrl = "http://localhost:8080/teams"; // Hier die API-URL einsetzen
 
         try {
 
-
             // Gson-Objekt zum Serialisieren von JSON erstellen
             Gson gson = new Gson();
-        //    String jsonData = gson.toJson(zugriffAufTeams.getTeamManager);
+            String jsonData = gson.toJson(TeamManager.getTeamManagers());
 
-            // URL-Verbindung aufbauen
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            // HTTP-Client erstellen
+            HttpClient httpClient = HttpClient.newHttpClient();
 
+            // HTTP-POST-Anfrage erstellen und konfigurieren
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(apiUrl))
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+                    .build();
 
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setDoOutput(true);
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // JSON-Daten senden
-            OutputStream outputStream = connection.getOutputStream();
-           // outputStream.write(jsonData.getBytes());
-            outputStream.flush();
-
-            // Die Antwort lesen
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
-                StringBuilder response = new StringBuilder();
-
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-
+            // Den HTTP-Statuscode der Antwort überprüfen
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
                 // Die JSON-Antwort verarbeiten
+                String responseBody = response.body();
                 System.out.println("API-Antwort:");
-                System.out.println(response.toString());
+                System.out.println(responseBody);
             } else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + responseCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
             }
 
-            connection.disconnect();
-
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-}
+
+    }
 
