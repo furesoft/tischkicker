@@ -1,0 +1,5 @@
+tischkicker\models\Team.class
+tischkicker\models\Spieler.class
+tischkicker\models\Spiel.class
+tischkicker\models\BasisKlasse.class
+tischkicker\models\Turnier.class
