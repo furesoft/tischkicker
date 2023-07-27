@@ -9,11 +9,8 @@ import java.io.IOException;
 @RestController
 public class TorController {
 
-
     @PostMapping ("/tor")
-    public void torgeschossen() throws IOException {
-        Tor t1= new Tor();
-        t1.seite = Tor.Seite.ROT;
-        SocketHandler.broadcast(t1);
+    public void torgeschossen(@RequestBody Tor body) throws IOException {
+        SocketHandler.broadcast(body);
     }
 }
