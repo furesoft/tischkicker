@@ -15,11 +15,10 @@ public class SpielController {
         return null;
     }
 
-    @GetMapping("/spiele{id}")
+    @GetMapping("/spiele/{id}")
     public Spiel betimmtesSpieleHolen(@PathVariable int id) {
 
         return null;
     }
-
 
 }
