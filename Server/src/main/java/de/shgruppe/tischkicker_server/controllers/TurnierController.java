@@ -17,22 +17,16 @@ public class TurnierController {
 
     @GetMapping("/turniere/{id}")
     public Turnier einzelnesTurnierHolen(@PathVariable int id) {
-
-
         return null;
     }
 
     @GetMapping("/turniere/{datum}")
     public Turnier turnierAnlegen(@PathVariable Date datum) {
-
-
         return null;
     }
 
     @PostMapping("/turniere")
     public Turnier turnierAnlegen(@RequestBody Turnier turnier) {
-
-
         return turnier;
     }
 
