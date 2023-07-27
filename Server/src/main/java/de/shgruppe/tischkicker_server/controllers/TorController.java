@@ -1,6 +1,6 @@
 package de.shgruppe.tischkicker_server.controllers;
 import org.springframework.web.bind.annotation.*;
-import tischkicker.models.Spieler;
+
 
 
 @RestController
