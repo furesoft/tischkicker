@@ -23,4 +23,9 @@ public class SpielController {
         return repository.getReferenceById(id);
     }
 
+    @PostMapping("/spiel/start/{id}")
+    public void spielStarten(@PathVariable int id){}
+
+    @PostMapping("/spiel/aufgeben/{id}")
+    public void spielAufgeben(@PathVariable int id){}
 }

@@ -26,5 +26,10 @@ class SpielerController {
     public void spielerAnlegen(@RequestBody Spieler spieler) {
         repository.save(spieler);
     }
+
+
+
+
+
 }
 
