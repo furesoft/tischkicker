@@ -13,13 +13,12 @@ public class Baumerfassung {
 
     //Booleans zur erkennung ob gerade/ungerade.
     boolean teamanzahlGerade = false;
-    boolean teamanzahlUngerade = false;
 
     public Baumerfassung() {
 
     }
 
-    private void erhalteTeams(){
+    private void erhalteTeams() {
         //Schnittstelle zum Erhalten der Teams
         //TeamManager.getTeamManagers();
         //          TO BE CONTINUED
@@ -37,36 +36,31 @@ public class Baumerfassung {
         teamanzahlVerarbeitung();
     }
 
-    private void teamanzahlVerarbeitung(){
-        //Prüfen ob Anzahl der Teams ungerade --> wichtig für den Aufbau des Turnierbaums
-        if(teamManager.size() % 2 == 0)
-        {
-            teamanzahlGerade = true;
-        }
-        else
-        {
-            teamanzahlUngerade = true;
-        }
+    private void teamanzahlVerarbeitung() {
+        teamanzahlGerade = teamManager.size() % 2 == 0;
+
         generiereDurchgang();
     }
 
-    public ArrayList generiereIDList(){
+    public ArrayList generiereIDList() {
         //Erstellen einer Liste mit den ID´s der Teams für die Spiellisten
         ArrayList<Integer> idlist = new ArrayList<Integer>();
-        for(int i =0;i<teamManager.size();i++){
+        for (int i = 0; i < teamManager.size(); i++) {
             idlist.add(teamManager.get(i).getID());
         }
+
         return idlist;
     }
 
-    public ArrayList generiereSpielList(){
+    public ArrayList generiereSpielList() {
         ArrayList<Spiel> spiellist = new ArrayList<Spiel>();
-        for(int i = 0;i<teamManager.size();i++){
+        for (int i = 0; i < teamManager.size(); i++) {
         }
+
         return spiellist;
     }
 
-    public int generiereDurchgang(){
+    public int generiereDurchgang() {
         //Spiel-Array mithilfe von ID-Array mit Teams befüllen
         //Wenn teamanzahlUngerade = true --> die letze ID abnehmen und in zwischenvariable für
         //        // nächsten Durchgang speichern
@@ -80,30 +74,29 @@ public class Baumerfassung {
         return 0;
     }
 
-    public ArrayList teamsVerschiebenRandom(ArrayList<Integer> idlist){
+    public ArrayList teamsVerschiebenRandom(ArrayList<Integer> idlist) {
         //random verschieben --> Arraysortrandom mit ID-Array und dann wieder einfügen über generiereDurchgang
         Collections.shuffle(idlist);
         //funktioniert das? :D
         return idlist;
     }
 
-    public ArrayList teamsVerschiebenEinzeln(ArrayList<Integer> idlist, int id1, int id2){
+    public ArrayList teamsVerschiebenEinzeln(ArrayList<Integer> idlist, int id1, int id2) {
         //zwischenvariable und erfassung der zu den teams passenden id´s im Spiel-Array.teamid1 und 2 über for-schleife
         int listenstelleid1 = 0;
         int listenstelleid2 = 0;
-        for(int i = 0; i<idlist.size();i++){
-            if(idlist.get(i) == id1)
-            {
+        for (int i = 0; i < idlist.size(); i++) {
+            if (idlist.get(i) == id1) {
                 listenstelleid1 = i;
             }
-            if(idlist.get(i) == id2)
-            {
+            if (idlist.get(i) == id2) {
                 listenstelleid2 = i;
             }
 
-            idlist.set(listenstelleid1,id2);
-            idlist.set(listenstelleid2,id1);
+            idlist.set(listenstelleid1, id2);
+            idlist.set(listenstelleid2, id1);
         }
+
         return idlist;
     }
 
