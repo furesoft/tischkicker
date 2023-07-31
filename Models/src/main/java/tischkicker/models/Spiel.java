@@ -6,7 +6,7 @@ import java.util.Date;
 @Entity
 @Table(name = "spiel")
 public class Spiel {
-    public Spiel(Date spieldatum, String[] teams, int toreteam1, int toreteam2, int qualifikation, int ID) {
+    public Spiel(Date spieldatum, String teams, int toreteam1, int toreteam2, int qualifikation, int ID) {
         this.spieldatum = spieldatum;
         this.teams = teams;
         this.toreteam1 = toreteam1;
@@ -15,11 +15,15 @@ public class Spiel {
         this.spielID = ID;
     }
 
+    public Spiel(String teams) {
+        this.teams = teams;
+    }
+
     @Column(name = "datum")
     private Date spieldatum;
 
     @Column(name = "teams")
-    private String[] teams = new String[2];
+    private String teams;
 
     @Column(name = "TORET1")
     private int toreteam1;
