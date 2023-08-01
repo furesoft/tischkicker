@@ -1,6 +1,9 @@
 package de.shgruppe.tischkicker.client;
 import com.google.gson.Gson;
 import tischkicker.models.Spiel;
+
+import javax.swing.*;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
@@ -13,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 public class Client {
 
     public static void main(String[] args) {
-        String apiUrl = "http://localhost:8080/teams"; // Hier die API-URL einsetzen
+        String apiUrl = "http://localhost:8080/teams";
         String apiUrl2 = "http://localhost:8080/spiele";
         try {
 
@@ -24,7 +27,7 @@ public class Client {
             // HTTP-Client erstellen
             HttpClient httpClient = HttpClient.newHttpClient();
 
-            // HTTP-POST-Anfrage erstellen und konfigurieren
+            // HTTP-POST-Anfrage erstellen
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(apiUrl))
                     .header("Content-Type", "application/json")
@@ -46,7 +49,7 @@ public class Client {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             HttpResponse<String> responseSpieler = httpClient.send(requestSpieler, HttpResponse.BodyHandlers.ofString());
 
-            // Den HTTP-Statuscode der Antwort überprüfen
+
             int statusCode = response.statusCode();
             if (statusCode == 200) {
                 // Die JSON-Antwort verarbeiten
@@ -64,6 +67,19 @@ public class Client {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        try {
+            URI serverURI = new URI("http://localhost:8080/live");
+            ClientManager client = new ClientManager(serverURI);
+            client.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new TeamApp().setVisible(true);
+            }
+        });
     }
     }
 

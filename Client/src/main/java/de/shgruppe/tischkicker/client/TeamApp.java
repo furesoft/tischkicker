@@ -21,17 +21,17 @@ public class TeamApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
 
-        // Create TextFields for players
+
         playerFields = new JTextField[4];
         for (int i = 0; i < 4; i++) {
             playerFields[i] = new JTextField(15);
         }
 
-        // Create TextField for team name
+
         teamNameField = new JTextField(15);
         outputTextArea = new JTextArea(6, 21);
         outputTextArea.setEditable(false);
-        // Create Buttons
+
         addButton = new JButton("Team hinzufügen");
         startButton = new JButton("Start");
         JPanel outputPanel = new JPanel();
@@ -39,7 +39,7 @@ public class TeamApp extends JFrame {
 
 
 
-        // Füge das JTextArea-Element zur GUI hinzu
+
 
         // Set actions for Buttons
         addButton.addActionListener(new ActionListener() {
@@ -59,27 +59,20 @@ public class TeamApp extends JFrame {
         add(panel);
 
 
-        // Create JPanel and set layout
 
-
-
-        // Add labels and TextFields for players
+        // Add labels and TextFields/players
         for (int i = 0; i < 4; i++) {
             panel.add(new JLabel("Spieler " + (i + 1) + ":"));
             panel.add(playerFields[i]);
         }
 
-        // Add label and TextField for team name
+        // Add label and TextField/teams
         panel.add(new JLabel("Teamname:"));
         panel.add(teamNameField);
         panel.add(addButton);
         panel.add(startButton);
         panel.add(outputPanel);
-        // Add Buttons
 
-        // Add panel to frame
-
-        // Create TeamManager instance
 
     }
 
@@ -114,12 +107,5 @@ public class TeamApp extends JFrame {
             outputTextArea.setText("Spiel gestartet!");}
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new TeamApp().setVisible(true);
-            }
-        });
-    }
+
 }
