@@ -1,4 +1,5 @@
 package de.shgruppe.tischkicker.client;
+import com.google.gson.Gson;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -17,6 +18,8 @@ public class ClientManager extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
+        Gson gson = new Gson();
+        Tor tore = gson.fromJson(message, Tor.class);
         System.out.println("Received message: " + message);
     }
 
