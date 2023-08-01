@@ -1,33 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="6f831e88-aa2c-440c-8517-a73e300308df" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_01_08_2023_07_15_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_01_08_2023_07_15__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_01_08_2023_08_00_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_01_08_2023_08_00__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_08_2023_07_59_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_08_2023_07_59__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideaALT/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideaALT/Tischkicker.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideaALT/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideaALT/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideaALT/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideaALT/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideaALT/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideaALT/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/ClientManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2TN8AJ9fz5kHRpaoBt1ELzs4zoQ" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6f831e88-aa2c-440c-8517-a73e300308df" name="Changes" comment="" />
+      <created>1690872035122</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1690872035122</updated>
+    </task>
     <servers />
   </component>
 </project>

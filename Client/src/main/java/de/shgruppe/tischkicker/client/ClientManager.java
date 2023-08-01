@@ -3,6 +3,8 @@ import com.google.gson.Gson;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import tischkicker.models.Tor;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -33,13 +35,4 @@ public class ClientManager extends WebSocketClient {
         ex.printStackTrace();
     }
 
-    public static void main(String[] args) {
-        try {
-            URI serverURI = new URI("http://localhost:8080/live");
-            ClientManager client = new ClientManager(serverURI);
-            client.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
 }
