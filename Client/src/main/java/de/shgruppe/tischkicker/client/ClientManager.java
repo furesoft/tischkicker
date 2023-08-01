@@ -3,6 +3,8 @@ import com.google.gson.Gson;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import tischkicker.models.Spiel;
+import tischkicker.models.Spielergebnis;
 import tischkicker.models.Tor;
 
 import java.net.URI;
@@ -21,8 +23,13 @@ public class ClientManager extends WebSocketClient {
     @Override
     public void onMessage(String message) {
         Gson gson = new Gson();
-        Tor tore = gson.fromJson(message, Tor.class);
+        Spielergebnis tore = gson.fromJson(message, Spielergebnis.class);
         System.out.println("Received message: " + message);
+        gesamtTore neu = new gesamtTore();
+
+        neu.empfangeTor(tore);
+
+
     }
 
     @Override
