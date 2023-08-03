@@ -3,7 +3,10 @@ package de.shgruppe.tischkicker_server.controllers;
 import de.shgruppe.tischkicker_server.logic.SpielManager;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import tischkicker.models.Spiel;
 
 import java.util.List;
@@ -26,7 +29,7 @@ public class SpielController {
 
     @PostMapping("/spiel/start/{id}")
     public void spielStarten(@PathVariable int id){
-        SpielManager.Instance.reset();
+        SpielManager.Instance.spielStarten(repository.getReferenceById(id));
     }
 
     @PostMapping("/spiel/aufgeben/{id}")

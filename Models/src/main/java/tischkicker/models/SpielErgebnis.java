@@ -1,7 +1,7 @@
 package tischkicker.models;
 
 public class SpielErgebnis {
-    public int spielID;
+    public Spiel spiel;
     public int toreTeam1;
     public int toreTeam2;
 

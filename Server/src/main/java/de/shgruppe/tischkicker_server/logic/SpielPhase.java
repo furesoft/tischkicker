@@ -21,7 +21,7 @@ public class SpielPhase {
      */
     public void empfangeEndergebnis(SpielErgebnis ergebnis) {
         for (Spiel spiel : aktuelleSpiele) {
-            if (spiel.getSpielID() == ergebnis.spielID) {
+            if (spiel.getSpielID() == ergebnis.spiel.getSpielID()) {
                 Team gewinnerTeam = ermittleGewinnerTeam(ergebnis);
 
                 Spiel letztesSpiel = naechstenSpiele.get(naechstenSpiele.size() - 1);
