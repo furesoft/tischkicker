@@ -5,11 +5,17 @@ import tischkicker.models.Tor;
 
 public class SpielManager {
     public static SpielManager Instance = new SpielManager();
-    private SpielErgebnis ergebnis = new SpielErgebnis();
+    private final SpielErgebnis ergebnis = new SpielErgebnis();
     private boolean tauscheTeams = false;
 
     private SpielManager() {
 
+    }
+
+    public void reset() {
+        ergebnis.team1 = 0;
+        ergebnis.team2 = 0;
+        tauscheTeams = false;
     }
 
     public void empfangeTor(Tor tor) {

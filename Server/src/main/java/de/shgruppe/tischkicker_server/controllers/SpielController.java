@@ -1,5 +1,6 @@
 package de.shgruppe.tischkicker_server.controllers;
 
+import de.shgruppe.tischkicker_server.logic.SpielManager;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,12 @@ public class SpielController {
     }
 
     @PostMapping("/spiel/start/{id}")
-    public void spielStarten(@PathVariable int id){}
+    public void spielStarten(@PathVariable int id){
+        SpielManager.Instance.reset();
+    }
 
     @PostMapping("/spiel/aufgeben/{id}")
-    public void spielAufgeben(@PathVariable int id){}
+    public void spielAufgeben(@PathVariable int id){
+        SpielManager.Instance.reset();
+    }
 }
