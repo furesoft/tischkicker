@@ -1,7 +1,10 @@
 package tischkicker.models;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "spiel")
@@ -17,6 +20,10 @@ public class Spiel {
 
     public Spiel(String teams) {
         this.teams = teams;
+    }
+
+    public Spiel() {
+
     }
 
     @Column(name = "datum")
@@ -52,12 +59,14 @@ public class Spiel {
         this.spieldatum = spieldatum;
     }
 
-    public String[] getTeams() {
-        return teams;
+    public int[] getTeams() {
+        return Arrays.stream(teams.split(",")).map(id -> Integer.parseInt(id)).mapToInt(id -> id).toArray();
     }
 
-    public void setTeams(String[] teams) {
-        this.teams = teams;
+    public void setTeams(int teamID1, int teamID2) {
+        List<String> strings = Arrays.stream(new int[]{ teamID1, teamID2 }).boxed().map(id -> Integer.toString(id))
+                                     .collect(Collectors.toList());
+        this.teams = String.join(",", strings);
     }
 
     public int getQualifikation() {
