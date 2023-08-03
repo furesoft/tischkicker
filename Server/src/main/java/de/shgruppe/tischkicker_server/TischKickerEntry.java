@@ -1,4 +1,4 @@
-Spielpackage de.shgruppe.tischkicker_server;
+package de.shgruppe.tischkicker_server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
