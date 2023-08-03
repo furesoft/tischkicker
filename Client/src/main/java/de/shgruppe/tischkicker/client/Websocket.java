@@ -3,15 +3,13 @@ import com.google.gson.Gson;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import tischkicker.models.Spiel;
 import tischkicker.models.Spielergebnis;
-import tischkicker.models.Tor;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
-public class ClientManager extends WebSocketClient {
-    public ClientManager(URI serverURI) {
+
+public class Websocket extends WebSocketClient {
+    public Websocket(URI serverURI) {
         super(serverURI);
     }
 
@@ -28,7 +26,6 @@ public class ClientManager extends WebSocketClient {
         gesamtTore neu = new gesamtTore();
 
         neu.empfangeTor(tore);
-
 
     }
 

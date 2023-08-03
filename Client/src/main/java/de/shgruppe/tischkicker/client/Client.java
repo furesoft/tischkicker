@@ -14,7 +14,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 public class Client {
-
+    public static List <Spiel> spiele;
     public static void main(String[] args) {
         String apiUrl = "http://localhost:8080/teams";
         String apiUrl2 = "http://localhost:8080/spiele";
@@ -59,7 +59,7 @@ public class Client {
                 System.out.println(responseBody);
 
                 Spiel[] spielArray = gson.fromJson(responseBody2, Spiel[].class);
-                List<Spiel> spiele = Arrays.asList(spielArray);
+                spiele = Arrays.asList(spielArray);
             } else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
             }
@@ -68,8 +68,8 @@ public class Client {
             e.printStackTrace();
         }
         try {
-            URI serverURI = new URI("http://localhost:8080/live");
-            ClientManager client = new ClientManager(serverURI);
+            URI serverURI = new URI("ws://localhost:8080/live");
+            Websocket client = new Websocket(serverURI);
             client.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();

@@ -16,11 +16,12 @@ public class TeamApp extends JFrame {
     private JTextArea outputTextArea;
     JPanel panel = new JPanel();
     public TeamApp() {
-
+        panel.setBackground(Color.BLACK);
         setTitle("Team App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
-
+        Color color = new Color(46, 50, 52);
+        panel.setBackground(color);
 
         playerFields = new JTextField[4];
         for (int i = 0; i < 4; i++) {
@@ -55,19 +56,23 @@ public class TeamApp extends JFrame {
                 startGame();
             }
         });
-        panel.setLayout(new GridLayout(8, 2, 10, 10));
+        panel.setLayout(new GridLayout(8, 2, 11, 11));
         add(panel);
 
 
 
-        // Add labels and TextFields/players
+
         for (int i = 0; i < 4; i++) {
-            panel.add(new JLabel("Spieler " + (i + 1) + ":"));
+            JLabel label = new JLabel("Spieler " + (i + 1) + ":");
+            label.setForeground(new Color(255, 215, 0));
+            panel.add(label);
             panel.add(playerFields[i]);
         }
 
         // Add label and TextField/teams
-        panel.add(new JLabel("Teamname:"));
+        JLabel teamname = new JLabel("Teamname:");
+        teamname.setForeground(new Color(255, 215, 0));
+        panel.add(teamname);
         panel.add(teamNameField);
         panel.add(addButton);
         panel.add(startButton);
@@ -92,6 +97,11 @@ public class TeamApp extends JFrame {
             teams.setTeamManagers(teams);
 
             outputTextArea.setText("Team '" + teamName + "' wurde hinzugefügt.");
+
+            for (int i = 0; i < 4; i++) {
+                playerFields[i].setText("");
+            }
+            teamNameField.setText("");
         } else {
             outputTextArea.setText("Mindestens ein Spieler und ein Teamname erforderlich!");
         }
