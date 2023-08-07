@@ -1,10 +1,13 @@
 package de.shgruppe.tischkicker_server.logic;
 
+import de.shgruppe.tischkicker_server.SocketHandler;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import tischkicker.models.Spiel;
 import tischkicker.models.SpielErgebnis;
 import tischkicker.models.Tor;
+
+import java.io.IOException;
 
 public class SpielManager {
     public static SpielManager Instance = new SpielManager();
@@ -27,39 +30,28 @@ public class SpielManager {
     public void reset() {
         ergebnis.toreTeam2 = 0;
         ergebnis.toreTeam1 = 0;
+        ergebnis.spiel = null;
         tauscheTeams = false;
         spielVorbei = false;
     }
 
     public void spielStarten(Spiel spiel) {
-        ergebnis.spiel = spiel;
-
         reset();
+
+        ergebnis.spiel = spiel;
     }
 
-    public void empfangeTor(Tor tor) {
+    /***
+     * Erhöht die entsprechende Toranzahl und sendet den aktuellen Zwischenstand an die Clients.
+     * @param tor
+     * @throws IOException
+     */
+    public void empfangeTor(Tor tor) throws Exception {
         if (spielVorbei) {
             return;
         }
 
-        if (tor.seite == Tor.Seite.ROT) {
-            if (tauscheTeams) {
-                ergebnis.toreTeam2 += 1;
-            }
-            else {
-                ergebnis.toreTeam1 += 1;
-            }
-        }
-        else if (tor.seite == Tor.Seite.WEISS) {
-            if (tauscheTeams) {
-                ergebnis.toreTeam1 += 1;
-            }
-            else {
-                ergebnis.toreTeam2 += 1;
-            }
-        }
-
-        triggerSpielMode();
+        increment(tor.seite);
     }
 
     /***
@@ -87,5 +79,69 @@ public class SpielManager {
 
     public SpielErgebnis getErgebnis() {
         return ergebnis;
+    }
+
+    /***
+     * Erhöht die entsprechende Toranzahl und sendet den aktuellen Zwischenstand an die Clients.
+     * @param seite
+     * @throws IOException
+     */
+    public void increment(Tor.Seite seite) throws Exception {
+        sicherstellungSpielGestartet();
+
+        triggerSpielMode();
+
+        if (seite == Tor.Seite.ROT) {
+            if (tauscheTeams) {
+                ergebnis.toreTeam2 += 1;
+            }
+            else {
+                ergebnis.toreTeam1 += 1;
+            }
+        }
+        else if (seite == Tor.Seite.WEISS) {
+            if (tauscheTeams) {
+                ergebnis.toreTeam1 += 1;
+            }
+            else {
+                ergebnis.toreTeam2 += 1;
+            }
+        }
+
+        SocketHandler.broadcast(ergebnis);
+    }
+
+    private void sicherstellungSpielGestartet() throws Exception {
+        if (ergebnis.spiel == null) {
+            throw new Exception("Es wurde kein Spiel gestartet");
+        }
+    }
+
+    /***
+     * Verringert die entsprechende Toranzahl und sendet den aktuellen Zwischenstand an die Clients.
+     * @param seite
+     * @throws IOException
+     */
+    public void decrement(Tor.Seite seite) throws Exception {
+        sicherstellungSpielGestartet();
+
+        if (seite == Tor.Seite.ROT) {
+            if (tauscheTeams) {
+                ergebnis.toreTeam2 -= 1;
+            }
+            else {
+                ergebnis.toreTeam1 -= 1;
+            }
+        }
+        else if (seite == Tor.Seite.WEISS) {
+            if (tauscheTeams) {
+                ergebnis.toreTeam1 -= 1;
+            }
+            else {
+                ergebnis.toreTeam2 -= 1;
+            }
+        }
+
+        SocketHandler.broadcast(ergebnis);
     }
 }

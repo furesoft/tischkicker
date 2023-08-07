@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tischkicker.models.Spiel;
+import tischkicker.models.Tor;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,5 +37,20 @@ public class SpielController {
     @PostMapping("/spiel/aufgeben/{id}")
     public void spielAufgeben(@PathVariable int id){
         SpielManager.Instance.reset();
+    }
+
+    @PostMapping("/spiel/increment/{seite}")
+    public void spielstandIncrementieren(@PathVariable Tor.Seite seite) throws Exception {
+        SpielManager.Instance.increment(seite);
+    }
+
+    @PostMapping("/spiel/decrement/{seite}")
+    public void spielstandDecrementieren(@PathVariable Tor.Seite seite) throws Exception {
+        SpielManager.Instance.decrement(seite);
+    }
+
+    @PostMapping("/spiel/seitenwechsel")
+    public void seitenwechsel() throws IOException {
+        SpielManager.Instance.seitenWechsel();
     }
 }
