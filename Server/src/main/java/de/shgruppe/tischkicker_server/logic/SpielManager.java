@@ -12,6 +12,7 @@ public class SpielManager {
 
     private final SpielPhase runde = new SpielPhase();
     private boolean tauscheTeams = false;
+    public boolean spielVorbei = false;
 
     public int anzahltoreBisGewonnen = 10;
     public boolean beachteSeitenwechsel = false;
@@ -27,6 +28,7 @@ public class SpielManager {
         ergebnis.toreTeam2 = 0;
         ergebnis.toreTeam1 = 0;
         tauscheTeams = false;
+        spielVorbei = false;
     }
 
     public void spielStarten(Spiel spiel) {
@@ -36,6 +38,10 @@ public class SpielManager {
     }
 
     public void empfangeTor(Tor tor) {
+        if (spielVorbei) {
+            return;
+        }
+
         if (tor.seite == Tor.Seite.ROT) {
             if (tauscheTeams) {
                 ergebnis.toreTeam2 += 1;
