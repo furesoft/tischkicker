@@ -11,7 +11,7 @@ public class gesamtTore {
 
     }
 
-    public Spielergebnis getGesamtAnzahlTore() {
+    public Spielergebnis getSpielergebnis() {
         return ergebnis;
     }
 }

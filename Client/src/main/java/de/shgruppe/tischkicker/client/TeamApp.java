@@ -1,48 +1,73 @@
 package de.shgruppe.tischkicker.client;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static de.shgruppe.tischkicker.client.Client.getSpieleFromServer;
+import static de.shgruppe.tischkicker.client.Client.sendTeamsToServer;
+import static de.shgruppe.tischkicker.client.Team.counter;
 
 public class TeamApp extends JFrame {
 
-    private JTextField[] playerFields;
-    private JTextField teamNameField;
+    private List<String> tempPlayers;
+    private JTextField playerField = new JTextField(15);
+    private JTextField teamNameField = new JTextField(15);
+    private JButton saveButton = new JButton("Speichern");
+    private JButton addPlayerButton;
     private JButton addButton;
+    private JButton addConfigButton;
     private JButton startButton;
-    public TeamManager teams;
-    private JTextArea outputTextArea;
-    JPanel panel = new JPanel();
+    private JFrame fenster;
+    private Team team;
+
+    public static List<Team> teams = new ArrayList<>();
+    public List<JTextField> teamNameFields = new ArrayList<>();
+    private JTextArea outputTextArea = new JTextArea(6, 21);
+    private JPanel panel = new JPanel();
+
+    private void initRows() {
+        outputTextArea.setEditable(false);
+
+        panel.setLayout(new GridLayout(9, 2, 11, 11));
+        add(panel);
+
+        JLabel label = new JLabel("Spieler:");
+        label.setForeground(new Color(0, 0, 0));
+        panel.add(label);
+        panel.add(playerField);
+
+        JLabel teamname = new JLabel("Teamname:");
+        teamname.setForeground(new Color(0, 0, 0));
+        panel.add(teamname);
+        panel.add(teamNameField);
+
+        teamNameField.setText("Erst alle Spieler hinzufügen");
+    }
+
     public TeamApp() {
-        panel.setBackground(Color.BLACK);
         setTitle("Team App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
-        Color color = new Color(46, 50, 52);
-        panel.setBackground(color);
+        Color backgroundColor = new Color(108, 107, 107, 255);
+        panel.setBackground(backgroundColor);
 
-        playerFields = new JTextField[4];
-        for (int i = 0; i < 4; i++) {
-            playerFields[i] = new JTextField(15);
-        }
+        tempPlayers = new ArrayList<>();
+        initRows();
 
-
-        teamNameField = new JTextField(15);
-        outputTextArea = new JTextArea(6, 21);
-        outputTextArea.setEditable(false);
+        addPlayerButton = new JButton("Spieler hinzufügen");
+        addPlayerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addPlayer();
+            }
+        });
 
         addButton = new JButton("Team hinzufügen");
-        startButton = new JButton("Start");
-        JPanel outputPanel = new JPanel();
-        outputPanel.add(new JScrollPane(outputTextArea));
-
-
-
-
-
-        // Set actions for Buttons
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,72 +75,145 @@ public class TeamApp extends JFrame {
             }
         });
 
+        startButton = new JButton("Start");
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 startGame();
             }
         });
-        panel.setLayout(new GridLayout(8, 2, 11, 11));
-        add(panel);
 
+        addConfigButton = new JButton("Bearbeiten");
+        addConfigButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                config();
+            }
+        });
 
-
-
-        for (int i = 0; i < 4; i++) {
-            JLabel label = new JLabel("Spieler " + (i + 1) + ":");
-            label.setForeground(new Color(255, 215, 0));
-            panel.add(label);
-            panel.add(playerFields[i]);
-        }
-
-        // Add label and TextField/teams
-        JLabel teamname = new JLabel("Teamname:");
-        teamname.setForeground(new Color(255, 215, 0));
-        panel.add(teamname);
-        panel.add(teamNameField);
+        panel.add(addPlayerButton);
         panel.add(addButton);
         panel.add(startButton);
-        panel.add(outputPanel);
+        panel.add(addConfigButton);
 
+        panel.add(new JScrollPane(outputTextArea));
+    }
 
+    private void addPlayer() {
+        String player = playerField.getText();
+        if (!player.isEmpty()) {
+            tempPlayers.add(player);
+            outputTextArea.append("Spieler '" + player + "' wurde hinzugefügt.\n");
+            playerField.setText("");
+            scrollToBottom();
+        } else {
+            outputTextArea.append("Spielername erforderlich!\n");
+        }
     }
 
     private void addTeam() {
-        String[] players = new String[4];
-        boolean hasPlayer = false;
-        for (int i = 0; i < 4; i++) {
-            players[i] = playerFields[i].getText();
-            if (!players[i].isEmpty()) {
-                hasPlayer = true;
-            }
-        }
-
         String teamName = teamNameField.getText();
-        if (hasPlayer && !teamName.isEmpty()) {
-            teams = new TeamManager(players,teamName);
-            teams.setTeamManagers(teams);
+        if (!teamName.isEmpty() && !tempPlayers.isEmpty()) {
+            team = new Team(tempPlayers, teamName);
+            teams.add(team);
 
-            outputTextArea.setText("Team '" + teamName + "' wurde hinzugefügt.");
-
-            for (int i = 0; i < 4; i++) {
-                playerFields[i].setText("");
-            }
+            outputTextArea.append("Team '" + teamName + "' wurde hinzugefügt.\n");
+            sendTeamsToServer();
+            tempPlayers = new ArrayList<>();
+            playerField.setText("");
             teamNameField.setText("");
         } else {
-            outputTextArea.setText("Mindestens ein Spieler und ein Teamname erforderlich!");
+            outputTextArea.append("Mindestens ein Spieler und ein Teamname erforderlich!\n");
         }
+    }
+
+    public void config() {
+        fenster = new JFrame();
+        fenster.setTitle("Bearbeiten");
+        fenster.setSize(400, 300);
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        // Reiter für "Spielername ändern"
+        JPanel spielerPanel = new JPanel();
+        spielerPanel.setLayout(new BoxLayout(spielerPanel, BoxLayout.PAGE_AXIS));
+
+        int anzahlSpielerallerTeams = teams.stream().mapToInt(team -> team.players.size()).sum();
+        List<String> nameSpielerallerTeams =
+                teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
+
+        int playerIndex = 0;
+        for (Team team : teams) {
+            // teams hinzufügen
+            JLabel teamLabel = new JLabel("Team " + team.getTeamName());
+            spielerPanel.add(teamLabel);
+
+            // Spielernamen hinzufügen
+            for (int i = 0; i < team.getNumberOfPlayersPerTeam(); i++) {
+                String spielerName = nameSpielerallerTeams.get(playerIndex);
+                JTextArea spielerNameArea = new JTextArea(spielerName);
+                spielerNameArea.setLineWrap(true);
+                spielerNameArea.setWrapStyleWord(true);
+                spielerPanel.add(spielerNameArea);
+                playerIndex++;
+            }
+        }
+        tabbedPane.addTab("Spielername ändern", spielerPanel);
+
+        // Reiter für "Teamname ändern"
+        JPanel teamPanel = new JPanel();
+        for (int i = 0; i < counter; i++) {
+            JTextField teamNameField = new JTextField(15);
+            teamPanel.add(teamNameField);
+
+            Team team1 = teams.get(i);
+            teamNameField.setText(team1.getTeamName());
+
+            teamNameFields.add(teamNameField);
+        }
+        initActionListener();
+        tabbedPane.addTab("Teamname ändern", teamPanel);
+        teamPanel.add(saveButton);
+        fenster.add(tabbedPane);
+        fenster.setVisible(true);
+        scrollToBottom();
+    }
+
+    private void updateTeamNames() {
+        for (int i = 0; i < teams.size(); i++) {
+            Team value = teams.get(i);
+            JTextField teamNameField = teamNameFields.get(i);
+
+            String newTeamName = teamNameField.getText();
+            value.setTeamName(newTeamName);
+        }
+    }
+
+    public void initActionListener() {
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateTeamNames();
+                teamNameFields.clear();
+                outputTextArea.append("Teamnamen gespeichert!\n");
+            }
+        });
+    }
+
+    private void scrollToBottom() {
+        outputTextArea.setCaretPosition(outputTextArea.getDocument().getLength());
     }
 
     private void startGame() {
-        if (teams.getNumTeams() < 2) {
-            outputTextArea.setText("Mindestens zwei Teams erforderlich!");
-
+        if (team.getNumTeams() < 2) {
+            outputTextArea.append("Mindestens zwei Teams erforderlich!\n");
+            getSpieleFromServer();
+        } else {
+            team.startGame();
+            for (int i = 0; i < teams.size(); i++) {
+                System.out.println(teams.get(i).teamName);
+            }
+            outputTextArea.append("Spiel gestartet!\n");
         }
-    else{
-        teams.startGame();
-            outputTextArea.setText("Spiel gestartet!");}
     }
-
-
 }

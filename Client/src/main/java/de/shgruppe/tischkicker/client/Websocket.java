@@ -14,19 +14,18 @@ public class Websocket extends WebSocketClient {
     }
 
     @Override
-    public void onOpen(ServerHandshake handshakedata) {
+    public void onOpen(ServerHandshake handshakeData) {
         System.out.println("WebSocket connection opened");
     }
 
     @Override
     public void onMessage(String message) {
         Gson gson = new Gson();
-        Spielergebnis tore = gson.fromJson(message, Spielergebnis.class);
+        Spielergebnis spielergebnis = gson.fromJson(message, Spielergebnis.class);
         System.out.println("Received message: " + message);
         gesamtTore neu = new gesamtTore();
 
-        neu.empfangeTor(tore);
-
+        neu.empfangeTor(spielergebnis);
     }
 
     @Override

@@ -7,15 +7,17 @@
     <list default="true" id="6f831e88-aa2c-440c-8517-a73e300308df" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Websocket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Team.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Websocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Websocket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/gesamtTore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/gesamtTore.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/ClientManager.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/src/main/java/tischkicker/models/Team.java" beforeDir="false" afterPath="$PROJECT_DIR$/Models/src/main/java/tischkicker/models/Team.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +49,11 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\TischKicker\Tischkicker\Client\src\main\resources" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Pseudo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="de.shgruppe.tischkicker.client.Pseudo" />
@@ -96,7 +103,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690881046976</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="bug fixes">
+      <created>1691070762693</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1691070762693</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -124,6 +138,23 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Überflüssige Mains entfernt" />
-    <option name="LAST_COMMIT_MESSAGE" value="Überflüssige Mains entfernt" />
+    <MESSAGE value="bug fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug fixes" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java</url>
+          <line>145</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java</url>
+          <line>159</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
