@@ -1,12 +1,15 @@
 package tischkicker.models;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "spiel")
 public class Spiel {
-    public Spiel(Date spieldatum, String[] teams, int toreteam1, int toreteam2, int qualifikation, int ID) {
+    public Spiel(Date spieldatum, String teams, int toreteam1, int toreteam2, int qualifikation, int ID) {
         this.spieldatum = spieldatum;
         this.teams = teams;
         this.toreteam1 = toreteam1;
@@ -15,11 +18,19 @@ public class Spiel {
         this.spielID = ID;
     }
 
+    public Spiel(String teams) {
+        this.teams = teams;
+    }
+
+    public Spiel() {
+
+    }
+
     @Column(name = "datum")
     private Date spieldatum;
 
     @Column(name = "teams")
-    private String[] teams = new String[2];
+    private String teams;
 
     @Column(name = "TORET1")
     private int toreteam1;
@@ -29,6 +40,8 @@ public class Spiel {
 
     @Column(name = "qualifikation")
     private int qualifikation;
+
+    private String[] teamNames;
 
     @Id
     @Column(name = "ID")
@@ -48,12 +61,18 @@ public class Spiel {
         this.spieldatum = spieldatum;
     }
 
-    public String[] getTeams() {
-        return teams;
+    public int[] getTeamIDs() {
+        return Arrays.stream(teams.split(",")).map(id -> Integer.parseInt(id)).mapToInt(id -> id).toArray();
     }
 
-    public void setTeams(String[] teams) {
-        this.teams = teams;
+    public String[] getTeamNames() {
+        return teamNames;
+    }
+
+    public void setTeams(int teamID1, int teamID2) {
+        List<String> strings = Arrays.stream(new int[]{ teamID1, teamID2 }).boxed().map(id -> Integer.toString(id))
+                                     .collect(Collectors.toList());
+        this.teams = String.join(",", strings);
     }
 
     public int getQualifikation() {
@@ -78,5 +97,9 @@ public class Spiel {
 
     public void setToreteam2(int toreteam2) {
         this.toreteam2 = toreteam2;
+    }
+
+    public void setTeamNames(String team1, String team2) {
+        teamNames = new String[]{team1, team2};
     }
 }

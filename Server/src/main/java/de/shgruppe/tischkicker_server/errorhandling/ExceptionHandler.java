@@ -1,4 +1,4 @@
-package de.shgruppe.springsample.errorhandling;
+package de.shgruppe.tischkicker_server.errorhandling;
 
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
