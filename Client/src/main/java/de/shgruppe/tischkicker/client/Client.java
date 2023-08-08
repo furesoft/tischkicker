@@ -97,8 +97,8 @@ public class Client {
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void run() {
-                new TeamApp().setVisible(true);
+                public void run() {
+                    new TeamApp().setVisible(true);
             }
         });
 

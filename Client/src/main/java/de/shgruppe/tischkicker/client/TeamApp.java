@@ -1,5 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
+import de.shgruppe.tischkicker.client.UI.DataButton;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,12 +24,15 @@ public class TeamApp extends JFrame {
     private JFrame fenster;
     private Team team;
 
+    JPanel playerPanel;
     // Liste zur Speicherung von Teams
     public static List<Team> teams = new ArrayList<>();
     public List<JTextField> teamNameFields = new ArrayList<>();
     public List<JTextField> playerNameFields = new ArrayList<>();
     private JTextArea outputTextArea = new JTextArea(6, 21);
     private JPanel panel = new JPanel();
+
+    private boolean fensterSchließen=false;
 
     // Methode zur Initialisierung der UI-Reihen
     private void initRows() {
@@ -101,6 +106,8 @@ public class TeamApp extends JFrame {
             }
         });
 
+
+
         // ActionListener für das Speichern von Spielernamen
         saveButtonPlayers.addActionListener(new ActionListener() {
             @Override
@@ -125,7 +132,7 @@ public class TeamApp extends JFrame {
             tempPlayers.add(player);
             outputTextArea.append("Spieler '" + player + "' wurde hinzugefügt.\n");
             playerField.setText("");
-            scrollToBottom();
+
         } else {
             outputTextArea.append("Spielername erforderlich!\n");
         }
@@ -153,54 +160,74 @@ public class TeamApp extends JFrame {
         fenster.setTitle("Bearbeiten");
         fenster.setSize(400, 300);
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+            JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Reiter für "Spielername ändern"
-        JPanel spielerPanel = new JPanel();
-        spielerPanel.setLayout(new BoxLayout(spielerPanel, BoxLayout.PAGE_AXIS));
 
-        //int anzahlSpielerallerTeams = teams.stream().mapToInt(team -> team.players.size()).sum();
-        List<String> nameSpielerallerTeams =
-                teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
+            // Reiter für "Spielername ändern"
+            JPanel spielerPanel = new JPanel();
+            spielerPanel.setLayout(new BoxLayout(spielerPanel, BoxLayout.PAGE_AXIS));
 
-        int playerIndex = 0;
-        for (Team team : teams) {
-            // Teamnamen hinzufügen
-            JLabel teamLabel = new JLabel("Team " + team.getName());
-            spielerPanel.add(teamLabel);
+            //int anzahlSpielerallerTeams = teams.stream().mapToInt(team -> team.players.size()).sum();
+            List<String> nameSpielerallerTeams =
+                    teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
 
-            // Spielernamen hinzufügen
-            for (int i = 0; i < team.getNumberOfPlayersPerTeam(); i++) {
-                String spielerName = nameSpielerallerTeams.get(playerIndex);
-                JTextField spielerNameField = new JTextField(spielerName);
+            int playerIndex = 0;
+            for (Team team : teams) {
+                // Teamnamen hinzufügen
+                JLabel teamLabel = new JLabel("Team " + team.getName());
+                spielerPanel.add(teamLabel);
 
-                spielerNameField.setColumns(20);
-                spielerPanel.add(spielerNameField);
-                playerNameFields.add(spielerNameField); // Textfeld zur Liste hinzufügen
-                playerIndex++;
+                // Spielernamen hinzufügen
+                for (int i = 0; i < team.getNumberOfPlayersPerTeam(); i++) {
+                    String spielerName = nameSpielerallerTeams.get(playerIndex);
+                    JTextField spielerNameField = new JTextField(spielerName);
+
+                    spielerNameField.setColumns(20);
+
+                    DataButton deletePlayerButton = new DataButton("Löschen");
+                    deletePlayerButton.setData(playerIndex);
+
+                    deletePlayerButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            DataButton sender = (DataButton) e.getSource();
+                            int id = (int) sender.getData();
+
+                            deletePlayerByID(id);
+                        }
+                    });
+                    playerPanel = new JPanel();
+                    playerPanel.add(spielerNameField);
+                    playerPanel.add(deletePlayerButton);
+                    spielerPanel.add(playerPanel);
+                    playerNameFields.add(spielerNameField);
+                    playerIndex++;
+
+                }
             }
+
+
+            spielerPanel.add(saveButtonPlayers);
+            tabbedPane.addTab("Spielername ändern", spielerPanel);
+
+            // Reiter für "Teamname ändern"
+            JPanel teamPanel = new JPanel();
+            for (int i = 0; i < teams.size(); i++) {
+                JTextField teamNameField = new JTextField(15);
+                teamPanel.add(teamNameField);
+
+                Team team1 = teams.get(i);
+                teamNameField.setText(team1.getName());
+
+                teamNameFields.add(teamNameField);
+            }
+            initActionListener();
+            tabbedPane.addTab("Teamname ändern", teamPanel);
+            teamPanel.add(saveButtonTeams);
+            fenster.add(tabbedPane);
+            fenster.setVisible(true);
+            scrollToBottom();
         }
-        spielerPanel.add(saveButtonPlayers);
-        tabbedPane.addTab("Spielername ändern", spielerPanel);
-
-        // Reiter für "Teamname ändern"
-        JPanel teamPanel = new JPanel();
-        for (int i = 0; i < teams.size(); i++) {
-            JTextField teamNameField = new JTextField(15);
-            teamPanel.add(teamNameField);
-
-            Team team1 = teams.get(i);
-            teamNameField.setText(team1.getName());
-
-            teamNameFields.add(teamNameField);
-        }
-        initActionListener();
-        tabbedPane.addTab("Teamname ändern", teamPanel);
-        teamPanel.add(saveButtonTeams);
-        fenster.add(tabbedPane);
-        fenster.setVisible(true);
-        scrollToBottom();
-    }
 
     // Methode zum Aktualisieren von Spielernamen
     private void updatePlayerNames() {
@@ -231,8 +258,34 @@ public class TeamApp extends JFrame {
             team.setTeamName(newTeamName);
         }
     }
-    private void deletePlayerNames(){
+    private void deletePlayerByID(int playerIndex) {
+        int index = 0;
 
+        for (Team team : teams) {
+            for (int i = 0; i < team.getNumberOfPlayersPerTeam(); i++) {
+                if (index == playerIndex) {
+                    if (team.players.size() > 1) {
+                        team.players.remove(i);
+                        playerNameFields.remove(i);
+
+                        // Entferne das Panel des Spielers aus dem spielerPanel
+                        playerNameFields.remove(playerIndex);
+                        playerPanel.remove(i);
+                        playerPanel.remove(i);
+
+                        // Revalidate und repaint das spielerPanel
+                        playerPanel.revalidate();
+                        playerPanel.repaint();
+
+                        return;
+                    } else {
+                        System.out.println("Zu wenig Spieler im Team!!");
+                    }
+                }
+                index++;
+            }
+        }
+        config();
     }
 
     private void deleteTeamNames(){

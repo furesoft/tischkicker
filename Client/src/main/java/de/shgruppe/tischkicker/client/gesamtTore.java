@@ -1,17 +1,18 @@
 package de.shgruppe.tischkicker.client;
 
-import tischkicker.models.Spielergebnis;
+import tischkicker.models.SpielErgebnis;
+
 
 public class gesamtTore {
-    Spielergebnis ergebnis;
+    SpielErgebnis ergebnis;
 
-    public void empfangeTor(Spielergebnis tor) {
+    public void empfangeTor(SpielErgebnis tor) {
 
         this.ergebnis = tor;
 
     }
 
-    public Spielergebnis getSpielergebnis() {
+    public SpielErgebnis getSpielergebnis() {
         return ergebnis;
     }
 }

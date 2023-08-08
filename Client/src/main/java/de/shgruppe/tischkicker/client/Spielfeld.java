@@ -58,11 +58,11 @@ public class Spielfeld {
     }
     public void setTeams(Spiel spiel){
         this.spiel = spiel;
-        team1.setText(spiel.getTeam1().getName());
+        team1.setText(spiel.getTeamNames()[0]);
         if(besterVerlierer){
-            team2.setText(" * " + spiel.getTeam2().getName());
+            team2.setText(" * " + spiel.getTeamNames()[1]);
         }else{
-            team2.setText(spiel.getTeam2().getName());
+            team2.setText(spiel.getTeamNames()[1]);
 
         }
        // toreTeam1.setText(String.valueOf(spiel.getTeam1().getTore()));
