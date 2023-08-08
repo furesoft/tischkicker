@@ -1,6 +1,10 @@
 package tischkicker.models;
 
-public class Spielergebnis {
-    public int toreSchwarz;
-    public int toreRot;
+public class SpielErgebnis {
+    public Spiel spiel;
+    public int toreTeam1;
+    public int toreTeam2;
+
+    public Team[] teams;
 }
+
