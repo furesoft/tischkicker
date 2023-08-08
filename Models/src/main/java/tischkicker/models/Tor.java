@@ -2,7 +2,7 @@ package tischkicker.models;
 
 public class Tor {
     public enum Seite {
-        SCHWARZ,
+        WEISS,
         ROT
     }
     public Seite seite;
