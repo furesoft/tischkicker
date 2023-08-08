@@ -1,4 +1,4 @@
-package de.shgruppe.springsample.errorhandling;
+package de.shgruppe.tischkicker_server.errorhandling;
 
 import org.springframework.http.HttpStatus;
 
