@@ -75,7 +75,8 @@ public class Client {
                 // Spiele-Array parsen und in die Liste setzen
 
                spiele = gson.fromJson(responseBody, List.class);
-
+               for (int i=0;i<Team.getNumTeams()/2;i++)
+                Tunierbaum.spielfeldFuellen(spiele.get(i),0,i);
             } else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
             }

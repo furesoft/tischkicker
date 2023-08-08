@@ -39,12 +39,12 @@ public class TeamApp extends JFrame {
 
         // UI-Komponenten hinzufügen
         JLabel label = new JLabel("Spieler:");
-        label.setForeground(new Color(0, 0, 0));
+        label.setForeground(new Color(0, 255, 255));
         panel.add(label);
         panel.add(playerField);
 
         JLabel teamname = new JLabel("Teamname:");
-        teamname.setForeground(new Color(0, 0, 0));
+        teamname.setForeground(new Color(0, 255, 255));
         panel.add(teamname);
         panel.add(teamNameField);
 
@@ -230,6 +230,13 @@ public class TeamApp extends JFrame {
             String newTeamName = teamNameField.getText();
             team.setTeamName(newTeamName);
         }
+    }
+    private void deletePlayerNames(){
+
+    }
+
+    private void deleteTeamNames(){
+
     }
 
     // Methode zum Initialisieren des ActionListeners zum Speichern von Teamnamen

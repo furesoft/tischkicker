@@ -1,9 +1,9 @@
 package de.shgruppe.tischkicker.client;
 
+import tischkicker.models.Spiel;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class Spielfeld {
     JLabel background;

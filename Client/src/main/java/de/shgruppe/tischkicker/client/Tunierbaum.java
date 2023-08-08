@@ -1,12 +1,13 @@
 package de.shgruppe.tischkicker.client;
 
+import tischkicker.models.Spiel;
+
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Tunierbaum{
 
-    ArrayList<ArrayList<Spielfeld>> reihen = new ArrayList<>();
+    static ArrayList<ArrayList<Spielfeld>> reihen = new ArrayList<>();
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
 
@@ -66,7 +67,7 @@ public class Tunierbaum{
             y += 125;
         }
     }
-    public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld){
+    public static void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld){
         reihen.get(reihe).get(spielfeld).setTeams(spiel);
     }
 }
