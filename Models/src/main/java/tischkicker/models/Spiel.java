@@ -41,6 +41,8 @@ public class Spiel {
     @Column(name = "qualifikation")
     private int qualifikation;
 
+    private String[] teamNames;
+
     @Id
     @Column(name = "ID")
     @GeneratedValue
@@ -59,8 +61,12 @@ public class Spiel {
         this.spieldatum = spieldatum;
     }
 
-    public int[] getTeams() {
+    public int[] getTeamIDs() {
         return Arrays.stream(teams.split(",")).map(id -> Integer.parseInt(id)).mapToInt(id -> id).toArray();
+    }
+
+    public String[] getTeamNames() {
+        return teamNames;
     }
 
     public void setTeams(int teamID1, int teamID2) {
@@ -91,5 +97,9 @@ public class Spiel {
 
     public void setToreteam2(int toreteam2) {
         this.toreteam2 = toreteam2;
+    }
+
+    public void setTeamNames(String team1, String team2) {
+        teamNames = new String[]{team1, team2};
     }
 }

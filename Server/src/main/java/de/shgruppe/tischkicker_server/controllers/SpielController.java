@@ -2,12 +2,14 @@ package de.shgruppe.tischkicker_server.controllers;
 
 import de.shgruppe.tischkicker_server.logic.SpielManager;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
+import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tischkicker.models.Spiel;
+import tischkicker.models.Team;
 import tischkicker.models.Tor;
 
 import java.io.IOException;
@@ -17,21 +19,31 @@ import java.util.List;
 public class SpielController {
 
     @Autowired
-    SpielRepository repository;
+    SpielRepository spielRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
 
     @GetMapping("/spiele")
     public List<Spiel> alleSpieleHolen() {
-        return repository.findAll();
+        return spielRepository.findAll();
     }
 
     @GetMapping("/spiele/{id}")
     public Spiel betimmtesSpieleHolen(@PathVariable int id) {
-        return repository.getReferenceById(id);
+        Spiel spiel = spielRepository.getReferenceById(id);
+        int[] teamIDs = spiel.getTeamIDs();
+        Team team1 = teamRepository.getReferenceById(teamIDs[0]);
+        Team team2 = teamRepository.getReferenceById(teamIDs[2]);
+
+        spiel.setTeamNames(team1.getName(), team2.getName());
+
+        return spiel;
     }
 
     @PostMapping("/spiel/start/{id}")
     public void spielStarten(@PathVariable int id){
-        SpielManager.Instance.spielStarten(repository.getReferenceById(id));
+        SpielManager.Instance.spielStarten(spielRepository.getReferenceById(id));
     }
 
     @PostMapping("/spiel/aufgeben/{id}")
