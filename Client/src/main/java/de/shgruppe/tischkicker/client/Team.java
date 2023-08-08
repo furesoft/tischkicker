@@ -2,6 +2,7 @@ package de.shgruppe.tischkicker.client;
 import tischkicker.models.Spieler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Team {
@@ -34,5 +35,13 @@ public class Team {
     public int getNumberOfPlayersPerTeam() {
         return numberOfPlayersPerTeam;
     }
+    public void setPlayerName(int playerIndex, String newPlayerName) {
+        if (playerIndex >= 0 && playerIndex < players.size()) {
+            players.set(playerIndex, newPlayerName);
+        } else {
+            System.out.println("Ungültiger Spielerindex.");
+        }
+    }
+
 
 }

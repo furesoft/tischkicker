@@ -6,18 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6f831e88-aa2c-440c-8517-a73e300308df" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Team.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Team.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Team.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Websocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/Websocket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/gesamtTore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/gesamtTore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Client/target/classes/de/shgruppe/tischkicker/client/TeamManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/src/main/java/tischkicker/models/Team.java" beforeDir="false" afterPath="$PROJECT_DIR$/Models/src/main/java/tischkicker/models/Team.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +100,14 @@
       <option name="project" value="LOCAL" />
       <updated>1691070762693</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Teamnamen ändern">
+      <created>1691415448414</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1691415448414</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -139,22 +136,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Überflüssige Mains entfernt" />
     <MESSAGE value="bug fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="bug fixes" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java</url>
-          <line>145</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Client/src/main/java/de/shgruppe/tischkicker/client/TeamApp.java</url>
-          <line>159</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Teamnamen ändern" />
+    <option name="LAST_COMMIT_MESSAGE" value="Teamnamen ändern" />
   </component>
 </project>
