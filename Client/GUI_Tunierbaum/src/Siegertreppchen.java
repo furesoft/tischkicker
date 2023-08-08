@@ -11,8 +11,6 @@ public class Siegertreppchen {
     JLabel treppchenPlatz3;
     JLabel dritter;
 
-
-
     public Siegertreppchen(JFrame frame, int x, int y, int width, int height, int unterschied /* sollte ca einem viertel der Höhe entsprechen */){
         // schön sieht aus: width: 150, height: 100, unterschied: 28
         treppchenPlatz2 = new JLabel("  #2");
@@ -33,15 +31,5 @@ public class Siegertreppchen {
         treppchenPlatz3.setBackground(new Color(209, 210, 209));
         frame.add(treppchenPlatz3);
     }
-
-    public void toggleTreppchenAnzeige(boolean anzeigenJaNein){
-        treppchenPlatz1.setVisible(anzeigenJaNein);
-        erster.setVisible(anzeigenJaNein);
-        treppchenPlatz2.setVisible(anzeigenJaNein);
-        zweiter.setVisible(anzeigenJaNein);
-        treppchenPlatz3.setVisible(anzeigenJaNein);
-        dritter.setVisible(anzeigenJaNein);
-    }
-
 
 }
