@@ -26,8 +26,8 @@ public class SpielPhase {
 
                 Spiel letztesSpiel = naechstenSpiele.get(naechstenSpiele.size() - 1);
 
-                if (letztesSpiel.getTeams()[1] == -1) {
-                    letztesSpiel.setTeams(letztesSpiel.getTeams()[0], gewinnerTeam.getID());
+                if (letztesSpiel.getTeamIDs()[1] == -1) {
+                    letztesSpiel.setTeams(letztesSpiel.getTeamIDs()[0], gewinnerTeam.getID());
                 }
                 else {
                     Spiel naechstesSpiel = new Spiel();

@@ -2,9 +2,11 @@ package de.shgruppe.tischkicker_server.logic;
 
 import de.shgruppe.tischkicker_server.SocketHandler;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
+import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import tischkicker.models.Spiel;
 import tischkicker.models.SpielErgebnis;
+import tischkicker.models.Team;
 import tischkicker.models.Tor;
 
 import java.io.IOException;
@@ -23,6 +25,9 @@ public class SpielManager {
     @Autowired
     SpielRepository spielRepository;
 
+    @Autowired
+    TeamRepository teamRepository;
+
     private SpielManager() {
 
     }
@@ -39,6 +44,16 @@ public class SpielManager {
         reset();
 
         ergebnis.spiel = spiel;
+        ergebnis.teams = getTeamsForSpiel(spiel);
+    }
+
+    private Team[] getTeamsForSpiel(Spiel spiel) {
+        int[] teamIDs = spiel.getTeamIDs();
+
+        Team team1 = teamRepository.getReferenceById(teamIDs[0]);
+        Team team2 = teamRepository.getReferenceById(teamIDs[2]);
+
+        return new Team[]{team1, team2};
     }
 
     /***
