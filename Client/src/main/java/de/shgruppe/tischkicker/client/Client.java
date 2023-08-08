@@ -100,6 +100,20 @@ public class Client {
                 new TeamApp().setVisible(true);
             }
         });
+
+
+
+        //in Bearbeitung
+        //Siegertreppchen sieger = new Siegertreppchen(f, 1400, 900, 150, 100, 28);
     }
+
+    public static void turnierbaumGenereieren() {
+        JFrame f=new JFrame();
+        Tunierbaum t = new Tunierbaum();
+        t.tunierbaumErstellen(f, Team.getNumTeams());
+        f.setSize(1920,1080);
+        f.setLayout(null);
+        f.setVisible(true);
     }
+}
 

@@ -166,7 +166,7 @@ public class TeamApp extends JFrame {
         int playerIndex = 0;
         for (Team team : teams) {
             // Teamnamen hinzufügen
-            JLabel teamLabel = new JLabel("Team " + team.getTeamName());
+            JLabel teamLabel = new JLabel("Team " + team.getName());
             spielerPanel.add(teamLabel);
 
             // Spielernamen hinzufügen
@@ -190,7 +190,7 @@ public class TeamApp extends JFrame {
             teamPanel.add(teamNameField);
 
             Team team1 = teams.get(i);
-            teamNameField.setText(team1.getTeamName());
+            teamNameField.setText(team1.getName());
 
             teamNameFields.add(teamNameField);
         }
@@ -255,6 +255,7 @@ public class TeamApp extends JFrame {
             outputTextArea.append("Mindestens zwei Teams erforderlich!\n");
         } else {
             team.startGame();
+            Client.turnierbaumGenereieren();
             for (int i = 0; i < teams.size(); i++) {
                 System.out.println(teams.get(i).teamName);
             }

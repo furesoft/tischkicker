@@ -24,7 +24,7 @@ public class Team {
 
     public void startGame() {
     }
-    public  String getTeamName() {
+    public  String getName() {
         return teamName;
     }
 
