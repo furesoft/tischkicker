@@ -17,6 +17,7 @@
 
     <modules>
         <module>Models</module>
+        <module>Client</module>
         <module>Server</module>
     </modules>
 
@@ -88,6 +89,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
