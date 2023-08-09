@@ -52,8 +52,6 @@ public class Tunierbaum{
                        reihen.get(reihe).get(spielfeld).setY(reihen.get(reihe).get(spielfeld-1).background.getY()+
                                reihen.get(reihe).get(spielfeld-1).background.getHeight()+25);
                        linienListe.add(new Verbindungslinie(frame,reihen.get(reihe-1).get(reihen.get(reihe-1).size()-1), reihen.get(reihe).get(spielfeld), 3));
-                       //reihen.get(reihe-1).get(reihen.get(reihe-1).size()-1).aktuellesSpiel();
-                       //reihen.get(reihe).get(spielfeld).aktuellesSpiel();
                    }
                }
             }

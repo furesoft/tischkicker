@@ -50,17 +50,17 @@ public class AktuellerSpielstand {
         team1Tore.setBackground(Color.PINK);
 
         team2Tore = new JLabel("1");
-        team2Tore.setBounds(team1Tore.getX()+team1Tore.getWidth(), team1Tore.getY(), (int)(width*0.4), (int)(height*0.5));
+        team2Tore.setBounds(team1Tore.getX()+team1Tore.getWidth(), team1Tore.getY(), team1Tore.getWidth(), team1Tore.getHeight());
         team2Tore.setOpaque(true);
         team2Tore.setBackground(Color.PINK);
 
         toreTeam2Erhoehen = new JButton("+");
-        toreTeam2Erhoehen.setBounds(team2Tore.getX()+team2Tore.getWidth(), team2Tore.getY(), (int)(width*0.1), (int)(height*0.25));
+        toreTeam2Erhoehen.setBounds(team2Tore.getX()+team2Tore.getWidth(), team2Tore.getY(), team1Tore.getWidth(), team1Tore.getHeight());
         toreTeam2Erhoehen.setOpaque(true);
         toreTeam2Erhoehen.setBackground(Color.BLUE);
 
         toreTeam2Verringern = new JButton("-");
-        toreTeam2Verringern.setBounds(toreTeam2Erhoehen.getX(), toreTeam1Verringern.getY(), (int)(width*0.1), (int)(height*0.25));
+        toreTeam2Verringern.setBounds(toreTeam2Erhoehen.getX(), toreTeam1Verringern.getY(), team1Tore.getWidth(), team1Tore.getHeight());
         toreTeam2Verringern.setOpaque(true);
         toreTeam2Verringern.setBackground(Color.GREEN);
 
