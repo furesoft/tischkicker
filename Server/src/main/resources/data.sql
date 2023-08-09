@@ -1,0 +1,1 @@
+-- wird nach schema.sql ausgeführt. Dient zur Anlage von Testdaten.
