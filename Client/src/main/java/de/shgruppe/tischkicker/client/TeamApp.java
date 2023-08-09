@@ -278,7 +278,7 @@ public class TeamApp extends JFrame {
                     System.out.println(index +" " + playerIndex+" "+i);
                     if (team.players.size() > 1) {
                         team.players.remove(index);
-
+                        Client.sendTeamsToServer(team);
 
                         // Entferne das Panel des Spielers aus dem spielerPanel
                         playerNameFields.remove(removeNameFields);
