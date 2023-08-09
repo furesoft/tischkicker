@@ -1,7 +1,0 @@
-tischkicker\models\Team.class
-tischkicker\models\Spieler.class
-tischkicker\models\Spiel.class
-tischkicker\models\SpielErgebnis.class
-tischkicker\models\Tor$Seite.class
-tischkicker\models\Tor.class
-tischkicker\models\Turnier.class
