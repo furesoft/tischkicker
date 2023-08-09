@@ -34,7 +34,6 @@ public class Tunierbaum{
 
             spielfeldList.clear(); // Zurücksetzen der spielfeldList für die nächste Reihe
             x += 200;
-            y = 100;
             teamAnzahl = Math.round((float) teamAnzahl /2);
             spielfelderAnzahlDouble = (double) spielfelderAnzahl / 2;
             spielfelderAnzahl = (int) Math.round(spielfelderAnzahlDouble);

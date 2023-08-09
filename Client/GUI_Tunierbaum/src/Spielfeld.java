@@ -75,7 +75,7 @@ public class Spielfeld {
     }
     public void besterVerlierer(){
         besterVerlierer = true;
-        team2.setText(" *");
+        team2.setText(" * haha");
     }
 
     public boolean isBesterVerlierer() {
