@@ -31,8 +31,7 @@ public class Tunierbaum{
             }
 
             spielfeldList.clear(); // Zurücksetzen der spielfeldList für die nächste Reihe
-            x += 200;
-            y = 100;
+            x += reihen.get(0).get(0).background.getWidth()+50;
             teamAnzahl = Math.round((float) teamAnzahl /2);
             spielfelderAnzahlDouble = (double) spielfelderAnzahl / 2;
             spielfelderAnzahl = (int) Math.round(spielfelderAnzahlDouble);
@@ -41,7 +40,7 @@ public class Tunierbaum{
             for(int spielfeld = 0; spielfeld < reihen.get(reihe).size();spielfeld++){
                if(reihe > 0){
                    if(spielfeld*2+1 < reihen.get(reihe-1).size()){
-                       int newY = 0;
+                       int newY;
                        newY = ((reihen.get(reihe-1).get(spielfeld*2).background.getY()
                                + (((reihen.get(reihe-1).get(spielfeld*2+1).background.getY())+reihen.get(reihe-1).get(spielfeld*2+1).background.getHeight())))/2)
                                - reihen.get(reihe).get(spielfeld).background.getHeight()/2;
@@ -51,8 +50,6 @@ public class Tunierbaum{
                        reihen.get(reihe).get(spielfeld).setY(reihen.get(reihe).get(spielfeld-1).background.getY()+
                                reihen.get(reihe).get(spielfeld-1).background.getHeight()+25);
                        linienListe.add(new Verbindungslinie(frame,reihen.get(reihe-1).get(reihen.get(reihe-1).size()-1), reihen.get(reihe).get(spielfeld), 3));
-                       //reihen.get(reihe-1).get(reihen.get(reihe-1).size()-1).aktuellesSpiel();
-                       //reihen.get(reihe).get(spielfeld).aktuellesSpiel();
                    }
                }
             }
@@ -62,7 +59,7 @@ public class Tunierbaum{
     public void spielfeldListeFuellen(JFrame frame, int x, int y, int anzhalSpiele){
         for(int i = 0; i < anzhalSpiele; i++){
             spielfeldList.add(new Spielfeld(frame, x, y, 150, 100));
-            y += 125;
+            y += spielfeldList.get(0).background.getHeight()*1.25;
         }
     }
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld){

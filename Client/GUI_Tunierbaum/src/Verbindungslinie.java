@@ -3,15 +3,37 @@ import java.awt.*;
 public class Verbindungslinie {
 
     public Verbindungslinie(JFrame frame, Spielfeld spielfeld1, Spielfeld spielfeld2, Spielfeld spielfeld3, int linienStaerke){
+        //	 ___
+        //	|_1_|--|
+        //         |   ___
+        //	       |--|_3_|
+        //	       |
+        //   ___   |
+        //	|_2_|--|
+
             verbindungslinie2(frame, spielfeld1,spielfeld3,linienStaerke);
             verbindungslinie1(frame, spielfeld2, spielfeld3,linienStaerke);
     }
 
     public Verbindungslinie(JFrame frame, Spielfeld spielfeld1, Spielfeld spielfeld2, int linienStaerke){
         if(spielfeld1.background.getY() < spielfeld2.background.getY()){
+            //	 ___
+            //	|_1_|--|
+            //         |
+            //         |   ___
+            //	       |--|_2_|
+
             verbindungslinie2(frame, spielfeld1,spielfeld2,linienStaerke);
+
         }else{
+            //             ___
+            //	       |--|_2_|
+            //         |
+            // 	 ___   |
+            //	|_1_|--|
+
             verbindungslinie1(frame, spielfeld1,spielfeld2,linienStaerke);
+
         }
     }
 
@@ -20,9 +42,9 @@ public class Verbindungslinie {
         //  ---------- <- Linie 3
         //	         |
         //	         |
-        //	         |
-        //	         |
         //	         | <- Linie 2
+        //	         |
+        //	         |
         //Linie 1 -> ----------
 
         JLabel linie1 = new JLabel(" ");
@@ -62,12 +84,10 @@ public class Verbindungslinie {
         //	       ------ <- Linie 3
         //	       |
         //	       |
-        //	       |
-        //	       |
         //	       | <- Linie 2
+        //	       |
+        //	       |
         //---------- <- Linie 1
-
-        System.out.println((spielfeld3.background.getX()-(spielfeld2.background.getX()+spielfeld2.background.getWidth()))/2);
 
         JLabel linie1 = new JLabel(" ");
         linie1.setBounds((spielfeld2.background.getX()+spielfeld2.background.getWidth()),

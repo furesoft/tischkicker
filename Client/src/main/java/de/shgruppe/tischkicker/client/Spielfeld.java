@@ -13,6 +13,7 @@ public class Spielfeld {
     JLabel toreTeam2;
     boolean besterVerlierer = false;
     Spiel spiel;
+    int spielId;
 
     public Spielfeld(JFrame frame, int x, int y, int width, int height){
         background = new JLabel(" ");

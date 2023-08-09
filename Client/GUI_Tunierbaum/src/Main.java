@@ -11,11 +11,10 @@ public class Main {
         Team t2 = new Team("BVB",0);
         Spiel s1 = new Spiel(0, t1, t2);
 
-        Spielfeld sf = new Spielfeld(f, 1200,587,150,100);
+        Spielfeld sf = new Spielfeld(f, 800,600,150,400);
         sf.aktuellesSpiel();
         sf.gewinnerTeam1();
         sf.setTeams(s1);
-        System.out.println(sf.aktuellesSpiel());
 
 
         //Spielfeld sf1 = new Spielfeld(f, 400, 400, 150, 100);
@@ -25,15 +24,15 @@ public class Main {
 
 
         Tunierbaum t = new Tunierbaum();
-        t.tunierbaumErstellen(f, 3);
+        t.tunierbaumErstellen(f, 9);
         //t.tunierbaumAusblenden(true);
        // t.spielfeldFuellen(s1,0,1);
 
 
         Siegertreppchen sieger = new Siegertreppchen(f, 1400, 900, 150, 100, 28);
-
-
         //AktuellerSpielstand a1 = new AktuellerSpielstand(f);
+
+        AktuellerSpielstand a1 = new AktuellerSpielstand(800,400);
 
         f.setSize(1920,1080);
         f.setLayout(null);
