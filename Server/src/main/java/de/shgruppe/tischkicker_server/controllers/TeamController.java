@@ -32,4 +32,9 @@ public class TeamController {
         return team;
     }
 
+    @DeleteMapping("/teams/{id}")
+    public void teamLoeschen(int id) {
+        repository.deleteById(id);
+    }
+
 }
