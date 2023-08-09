@@ -71,6 +71,8 @@ public class TeamApp extends JFrame {
         });
 
         addButton = new JButton("Team hinzufügen");
+
+        addButton.setEnabled(false);
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -87,6 +89,7 @@ public class TeamApp extends JFrame {
         });
 
         addConfigButton = new JButton("Bearbeiten");
+        addConfigButton.setEnabled(false);
         addConfigButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -117,6 +120,7 @@ public class TeamApp extends JFrame {
             tempPlayers.add(player);
             outputTextArea.append("Spieler '" + player + "' wurde hinzugefügt.\n");
             playerField.setText("");
+            addButton.setEnabled(true);
         } else {
             outputTextArea.append("Spielername erforderlich!\n");
         }
@@ -131,6 +135,7 @@ public class TeamApp extends JFrame {
             tempPlayers = new ArrayList<>();
             playerField.setText("");
             teamNameField.setText("");
+            addConfigButton.setEnabled(true);
         } else {
             outputTextArea.append("Mindestens ein Spieler und ein Teamname erforderlich!\n");
         }
