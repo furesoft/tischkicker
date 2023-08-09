@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,6 +114,7 @@ public class TeamApp extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updatePlayerNames();
+
                 outputTextArea.append("Spielername gespeichert!\n");
             }
         });
@@ -143,7 +145,7 @@ public class TeamApp extends JFrame {
         String teamName = teamNameField.getText();
         if (!teamName.isEmpty() && !tempPlayers.isEmpty()) {
             team = new Team(tempPlayers, teamName);
-            teams.add(team);
+            Client.sendTeamsToServer(team);
 
             outputTextArea.append("Team '" + teamName + "' wurde hinzugefügt.\n");
             tempPlayers = new ArrayList<>();
@@ -242,6 +244,7 @@ public class TeamApp extends JFrame {
 
                 // Neuer Spielername wird gesetzt
                 team.setPlayerName(j, newPlayerName);
+                Client.sendTeamsToServer(team);
 
                 playerIndex++;
             }
@@ -259,33 +262,46 @@ public class TeamApp extends JFrame {
         }
     }
     private void deletePlayerByID(int playerIndex) {
+        int removeNameFields=playerIndex;
         int index = 0;
-
+        int counter=0;
         for (Team team : teams) {
+
             for (int i = 0; i < team.getNumberOfPlayersPerTeam(); i++) {
+
+                if (counter == team.getNumberOfPlayersPerTeam()){
+                    playerIndex-=counter;
+                    index-=counter;
+                }
+                counter +=1;
                 if (index == playerIndex) {
+                    System.out.println(index +" " + playerIndex+" "+i);
                     if (team.players.size() > 1) {
-                        team.players.remove(i);
-                        playerNameFields.remove(i);
+                        team.players.remove(index);
+
 
                         // Entferne das Panel des Spielers aus dem spielerPanel
-                        playerNameFields.remove(playerIndex);
-                        playerPanel.remove(i);
-                        playerPanel.remove(i);
+                        playerNameFields.remove(removeNameFields);
+                        playerPanel.remove(removeNameFields);
 
-                        // Revalidate und repaint das spielerPanel
-                        playerPanel.revalidate();
+                        fenster.dispose();
+
                         playerPanel.repaint();
-
+                        playerPanel.revalidate();
                         return;
                     } else {
                         System.out.println("Zu wenig Spieler im Team!!");
                     }
+
                 }
+
                 index++;
+                //config();
             }
+
         }
-        config();
+
+
     }
 
     private void deleteTeamNames(){
@@ -308,6 +324,7 @@ public class TeamApp extends JFrame {
     private void scrollToBottom() {
         outputTextArea.setCaretPosition(outputTextArea.getDocument().getLength());
     }
+
 
     // Methode zum Starten des Spiels mit validierten Teams
     private void startGame() {

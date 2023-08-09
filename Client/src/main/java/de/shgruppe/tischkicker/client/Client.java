@@ -14,15 +14,16 @@ import java.nio.charset.StandardCharsets;
 
 public class Client {
     public static List <Spiel> spiele;
+
     private static final String URL = "http://localhost:8080";
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     private static final Gson gson = new Gson();
 
-    public static void sendTeamsToServer() {
+    public static void sendTeamsToServer(Team team) {
 
         try {
 
-            String jsonData = gson.toJson(TeamApp.teams);
+            String jsonData = gson.toJson(team);
 
 
             // HTTP-POST-Anfrage erstellen
@@ -38,6 +39,8 @@ public class Client {
                 // Die JSON-Antwort verarbeiten
                 String responseBody = response.body();
                 System.out.println("API-Antwort:");
+                Team teams= gson.fromJson(responseBody, Team.class);
+                TeamApp.teams.add(teams);
                 System.out.println(responseBody);
             } else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
@@ -68,6 +71,7 @@ public class Client {
             int statusCode = response.statusCode();
             if (statusCode == 200) {
                 // Die JSON-Antwort verarbeiten
+
                 String responseBody = response.body();
                 System.out.println("API-Antwort:");
                 System.out.println(responseBody);

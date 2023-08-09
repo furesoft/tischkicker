@@ -7,6 +7,8 @@ import java.util.List;
 
 public class Team {
     public List<String> players;
+
+    public int ID;
     public String teamName;
     public static int counter;
     public Team(List <String> players, String teamName){
