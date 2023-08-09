@@ -11,6 +11,10 @@ public class Team {
     private int gegentore;
     private boolean aufgegeben;
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -24,8 +24,12 @@ public class TeamController {
     }
 
     @PostMapping("/teams")
-    public void teamAnlegen(@RequestBody Team team) {
+    public Team teamAnlegen(@RequestBody Team team) {
         repository.save(team);
+
+        team.setID(repository.findAll().size());
+
+        return team;
     }
 
 }
