@@ -56,13 +56,15 @@ public class Client {
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json");
     }
-
-    public static void getSpieleFromServer() {
-
+    public static void deleteTeamsByID(Team team) {
         try {
-            HttpRequest request = createRequest("/spiele")
 
-                    .GET()
+
+
+
+            // HTTP-POST-Anfrage erstellen
+            HttpRequest request = createRequest("/teams/"+ team.ID)
+                    .DELETE()
                     .build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
@@ -71,23 +73,52 @@ public class Client {
             int statusCode = response.statusCode();
             if (statusCode == 200) {
                 // Die JSON-Antwort verarbeiten
-
                 String responseBody = response.body();
                 System.out.println("API-Antwort:");
+                Team teams= gson.fromJson(responseBody, Team.class);
+                TeamApp.teams.add(teams);
                 System.out.println(responseBody);
-
-                // Spiele-Array parsen und in die Liste setzen
-
-               spiele = gson.fromJson(responseBody, List.class);
-               for (int i=0;i<Team.getNumTeams()/2;i++)
-                Tunierbaum.spielfeldFuellen(spiele.get(i),0,i);
             } else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+
     }
+
+
+        public static void getSpieleFromServer () {
+
+            try {
+                HttpRequest request = createRequest("/spiele")
+
+                        .GET()
+                        .build();
+
+                // Die Anfrage an die API senden und die Antwort erhalten
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                int statusCode = response.statusCode();
+                if (statusCode == 200) {
+                    // Die JSON-Antwort verarbeiten
+
+                    String responseBody = response.body();
+                    System.out.println("API-Antwort:");
+                    System.out.println(responseBody);
+
+                    // Spiele-Array parsen und in die Liste setzen
+
+                    spiele = gson.fromJson(responseBody, List.class);
+                    for (int i = 0; i < Team.getNumTeams() / 2; i++)
+                        Tunierbaum.spielfeldFuellen(spiele.get(i), 0, i);
+                } else {
+                    System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                }
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     public static void main(String[] args) {
 

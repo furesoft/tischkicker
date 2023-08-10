@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Team {
+
+
     public List<String> players;
 
     public int ID;
