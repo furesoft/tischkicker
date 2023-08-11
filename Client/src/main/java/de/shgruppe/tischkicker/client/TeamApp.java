@@ -24,7 +24,6 @@ public class TeamApp extends JFrame {
     private DataButton deletePlayerButton;
     private JFrame fenster;
     private Team team;
-    int zaehler=0;
     JPanel reihe;
     public static List<Team> teams = new ArrayList<>();// Liste aller Teams
     public List<JTextField> teamNameFields = new ArrayList<>();// Liste der Textfelder für Teamnamen
@@ -32,6 +31,7 @@ public class TeamApp extends JFrame {
     private JTextArea outputTextArea = new JTextArea(6, 21);// Textfeld für Ausgaben
     private JPanel panel = new JPanel();// Hauptpanel für die GUI
     private JPanel spielerPanel;
+    private List<String> nameSpielerallerTeams;
 
 
     private void initRows() {
@@ -164,7 +164,7 @@ public class TeamApp extends JFrame {
         spielerPanel.setLayout(new BoxLayout(spielerPanel, BoxLayout.PAGE_AXIS));
 
         // Sammeln aller Spieler aller Teams in einer Liste
-        List<String> nameSpielerallerTeams =
+        nameSpielerallerTeams =
                 teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
 
         int playerIndex = 0;
@@ -183,7 +183,7 @@ public class TeamApp extends JFrame {
                 spielerNameField.setColumns(20);
 
                 deletePlayerButton = new DataButton("Löschen");
-                deletePlayerButton.setData(playerIndex);
+                deletePlayerButton.setData(spielerName);
 
                 deletePlayerButton.addActionListener(new ActionListener() {
                     @Override
@@ -222,8 +222,8 @@ public class TeamApp extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     DataButton sender = (DataButton) e.getSource();
 
-                    int id = (int) sender.getData();
-                   // deleteTeams(id);
+                    Team team2 = (Team) sender.getData();
+                   deleteTeams(team2);
                 }
             });
 
@@ -271,46 +271,34 @@ public class TeamApp extends JFrame {
         }
     }
 
-    //TODO Methode zum löschen der Spieler
+
     private void deletePlayerByID(DataButton btn) {
-        int playerIndex = (int)btn.getData();
-
-        playerIndex=playerIndex+zaehler;
-        //playerNameFields.remove(removeIndex);
-        int index = 0;
-
-
+        String playerNameToBeRemoved = (String)btn.getData();
 
         for (int j = 0; j < teams.size(); j++) {
             Team team = teams.get(j);
-
+            List <String> playerNamesTeam1 = team.getPlayerNames();
             for (int i = 0; i < team.getNumberOfPlayersPerTeam(); i++) {
+                String playerName = playerNamesTeam1.get(i);
+                if (playerName.equals(playerNameToBeRemoved)) {
 
-                if (index == playerIndex) {
-                    System.out.println(index + " " + playerIndex + " " + i);
                     if (team.players.size() > 1) {
                         // Spielerpanel löschen
                         spielerPanel.remove(btn.getParent());
                         spielerPanel.invalidate();
 
-                        team.players.remove(i);
+                        team.players.remove(playerName);
                         Client.sendTeamsToServer(team);
 
                         // Entferne das Panel des Spielers aus dem spielerPanel
-
-
                         spielerPanel.repaint();
                         //spielerPanel.revalidate();
-                        zaehler-=1;
                         return;
                     } else {
                         System.out.println("Zu wenig Spieler im Team!!");
                     }
-
                 }
 
-                index++;
-                //config();
             }
 
         }
@@ -318,9 +306,9 @@ public class TeamApp extends JFrame {
 
     }
     //TODO Löschen der teams
-    private void deleteTeams(int playerindex){
-        for (Team team : teams)
-        Client.deleteTeamsByID(team);
+    private void deleteTeams(Team team){
+
+        Client.deleteTeam(team);
 
     }
 

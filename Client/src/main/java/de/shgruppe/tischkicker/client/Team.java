@@ -44,6 +44,9 @@ public class Team {
             System.out.println("Ungültiger Spielerindex.");
         }
     }
+    public List<String> getPlayerNames() {
+        return players;
+    }
 
 
 }

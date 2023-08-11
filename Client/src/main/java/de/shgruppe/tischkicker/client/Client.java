@@ -56,7 +56,7 @@ public class Client {
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json");
     }
-    public static void deleteTeamsByID(Team team) {
+    public static void deleteTeam(Team team) {
         try {
 
 

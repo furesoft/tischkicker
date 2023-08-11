@@ -6,6 +6,7 @@ public class DataButton extends JButton {
     private Object data;
 
     public DataButton(String text) {
+
         setText(text);
     }
 
