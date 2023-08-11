@@ -20,34 +20,35 @@ public class TeamApp extends JFrame {
     private JButton addTeamButton;// Button zum Hinzufügen von Teams
     private JButton addConfigButton;// Button zum Öffnen der Konfigurationsansicht
     private JButton startButton;// Button zum Starten des Spiels
+    private JButton addPlayertoteam;
 
     private DataButton deletePlayerButton;
-    private JFrame fenster;
+    private JFrame bearbeitenFenster;
     private Team team;
-    JPanel reihe;
+    JPanel deleteButtonundSpielernamen;
     public static List<Team> teams = new ArrayList<>();// Liste aller Teams
     public List<JTextField> teamNameFields = new ArrayList<>();// Liste der Textfelder für Teamnamen
     public List<JTextField> playerNameFields = new ArrayList<>();// Liste der Textfelder für Spielernamen
     private JTextArea outputTextArea = new JTextArea(6, 21);// Textfeld für Ausgaben
-    private JPanel panel = new JPanel();// Hauptpanel für die GUI
-    private JPanel spielerPanel;
+    private JPanel hauptPanel = new JPanel();// Hauptpanel für die GUI
+    private JPanel spielerTab;
     private List<String> nameSpielerallerTeams;
 
 
     private void initRows() {
         outputTextArea.setEditable(false);
-        panel.setLayout(new GridLayout(9, 2, 11, 11));
-        add(panel);
+        hauptPanel.setLayout(new GridLayout(9, 2, 11, 11));
+        add(hauptPanel);
 
         JLabel label = new JLabel("Spieler:");
         label.setForeground(new Color(0, 255, 255));
-        panel.add(label);
-        panel.add(playerField);
+        hauptPanel.add(label);
+        hauptPanel.add(playerField);
 
         JLabel teamname = new JLabel("Teamname:");
         teamname.setForeground(new Color(0, 255, 255));
-        panel.add(teamname);
-        panel.add(teamNameField);
+        hauptPanel.add(teamname);
+        hauptPanel.add(teamNameField);
 
         teamNameField.setText("Erst alle Spieler hinzufügen");
     }
@@ -57,8 +58,8 @@ public class TeamApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 500);
         Color backgroundColor = new Color(40, 44, 52);
-        panel.setBackground(backgroundColor);
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        hauptPanel.setBackground(backgroundColor);
+        hauptPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         tempPlayers = new ArrayList<>();
         initRows();
@@ -109,11 +110,11 @@ public class TeamApp extends JFrame {
             }
         });
 
-        panel.add(addPlayerButton);
-        panel.add(addTeamButton);
-        panel.add(startButton);
-        panel.add(addConfigButton);
-        panel.add(new JScrollPane(outputTextArea));
+        hauptPanel.add(addPlayerButton);
+        hauptPanel.add(addTeamButton);
+        hauptPanel.add(startButton);
+        hauptPanel.add(addConfigButton);
+        hauptPanel.add(new JScrollPane(outputTextArea));
 
         initActionListener();
     }
@@ -154,14 +155,14 @@ public class TeamApp extends JFrame {
 
     // Methode zur Konfiguration von Spieler- und Teamnamen
     public void config() {
-        fenster = new JFrame();
-        fenster.setTitle("Bearbeiten");
-        fenster.setSize(400, 300);
+        bearbeitenFenster = new JFrame();
+        bearbeitenFenster.setTitle("Bearbeiten");
+        bearbeitenFenster.setSize(400, 300);
 
         JTabbedPane tabbedPane = new JTabbedPane();
         // Reiter für "Spielername ändern"
-        spielerPanel = new JPanel();
-        spielerPanel.setLayout(new BoxLayout(spielerPanel, BoxLayout.PAGE_AXIS));
+        spielerTab = new JPanel();
+        spielerTab.setLayout(new BoxLayout(spielerTab, BoxLayout.PAGE_AXIS));
 
         // Sammeln aller Spieler aller Teams in einer Liste
         nameSpielerallerTeams =
@@ -172,7 +173,7 @@ public class TeamApp extends JFrame {
         for (Team team : teams) {
             JLabel teamLabel = new JLabel("Team " + team.getName());
 
-            spielerPanel.add(teamLabel);
+            spielerTab.add(teamLabel);
 
             // Spielernamen hinzufügen
             // Hinzufügen der Textfelder für die Spielernamen und Lösch-Buttons
@@ -190,22 +191,22 @@ public class TeamApp extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         DataButton sender = (DataButton) e.getSource();
 
-                        deletePlayerByID(sender);
+                        deletePlayerByString(sender);
                     }
                 });
 
-                reihe = new JPanel();
-                reihe.add(spielerNameField);
-                reihe.add(deletePlayerButton);
+                deleteButtonundSpielernamen = new JPanel();
+                deleteButtonundSpielernamen.add(spielerNameField);
+                deleteButtonundSpielernamen.add(deletePlayerButton);
 
-                spielerPanel.add(reihe);
+                spielerTab.add(deleteButtonundSpielernamen);
                 playerNameFields.add(spielerNameField);
                 playerIndex++;
             }
         }
-
-        spielerPanel.add(saveButtonPlayers);
-        tabbedPane.addTab("Spielername ändern", spielerPanel);
+        spielerHinzufuegenGUI();
+        spielerTab.add(saveButtonPlayers);
+        tabbedPane.addTab("Spielername ändern", spielerTab);
 
         JPanel teamPanel = new JPanel();
         // Hinzufügen der Textfelder für die Teamnamen und Lösch-Buttons
@@ -238,10 +239,11 @@ public class TeamApp extends JFrame {
         tabbedPane.addTab("Teamname ändern", teamPanel);
         teamPanel.add(saveButtonTeams);
 
-        fenster.add(tabbedPane);
-        fenster.setVisible(true);
-        scrollToBottom();
+        bearbeitenFenster.add(tabbedPane);
+        bearbeitenFenster.setVisible(true);
+
     }
+
     // Methode zum Aktualisieren von Spielernamen
     private void updatePlayerNames() {
         int playerIndex = 0;
@@ -272,7 +274,37 @@ public class TeamApp extends JFrame {
     }
 
 
-    private void deletePlayerByID(DataButton btn) {
+
+    public void spielerHinzufuegenGUI() {
+        addPlayertoteam = new JButton("Hinzufügen");
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+
+        JTextField textField1 = new JTextField(15);
+        JTextField textField2 = new JTextField(15);
+        textField1.setText("Teamname");
+        textField2.setText("Spielername");
+
+        mainPanel.add(textField1);
+        mainPanel.add(Box.createRigidArea(new Dimension(5, 0))); // Add some spacing between text fields
+        mainPanel.add(textField2);
+        mainPanel.add(addPlayertoteam);
+
+        spielerTab.add(mainPanel);
+        addPlayertoteam.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addPlayertoExistingTeam();
+                outputTextArea.append("Spieler hinzugefügt!\n");
+            }
+        });
+    }
+
+    //TODO Spieler zum Team hinzufügen
+    private void addPlayertoExistingTeam(){
+
+    }
+    private void deletePlayerByString(DataButton btn) {
         String playerNameToBeRemoved = (String)btn.getData();
 
         for (int j = 0; j < teams.size(); j++) {
@@ -284,14 +316,14 @@ public class TeamApp extends JFrame {
 
                     if (team.players.size() > 1) {
                         // Spielerpanel löschen
-                        spielerPanel.remove(btn.getParent());
-                        spielerPanel.invalidate();
+                        spielerTab.remove(btn.getParent());
+                        spielerTab.invalidate();
 
                         team.players.remove(playerName);
                         Client.sendTeamsToServer(team);
 
                         // Entferne das Panel des Spielers aus dem spielerPanel
-                        spielerPanel.repaint();
+                        spielerTab.repaint();
                         //spielerPanel.revalidate();
                         return;
                     } else {
@@ -324,9 +356,9 @@ public class TeamApp extends JFrame {
         });
     }
 
-    // Methode zum Scrollen von outputTextArea nach unten
+    //TODO Methode zum Scrollen von outputTextArea nach unten
     private void scrollToBottom() {
-        outputTextArea.setCaretPosition(outputTextArea.getDocument().getLength());
+
     }
 
 
