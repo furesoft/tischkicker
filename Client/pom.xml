@@ -61,7 +61,7 @@
                         <archive>
                             <manifest>
                                 <mainClass>
-                                    TeamApp
+                                    de.shgruppe.tischkicker.client.Client
                                 </mainClass>
                             </manifest>
                         </archive>
