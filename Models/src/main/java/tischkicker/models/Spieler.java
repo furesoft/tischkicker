@@ -7,6 +7,10 @@ public class Spieler {
     private String name;
     private String abteilung;
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
