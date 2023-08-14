@@ -9,4 +9,5 @@ import tischkicker.models.Spiel;
 @Table(appliesTo = "Spiel")
 public interface SpielRepository extends JpaRepository<Spiel, Integer> {
 
+
 }
