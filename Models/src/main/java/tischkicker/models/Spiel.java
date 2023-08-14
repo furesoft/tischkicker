@@ -41,6 +41,7 @@ public class Spiel {
     @Column(name = "qualifikation")
     private int qualifikation;
 
+    @Transient
     private String[] teamNames;
 
     @Id
