@@ -269,7 +269,7 @@ public class TeamApp extends JFrame {
             JTextField teamNameField = teamNameFields.get(i);
 
             String newTeamName = teamNameField.getText();
-            team.setTeamName(newTeamName);
+            team.setName(newTeamName);
         }
     }
 
@@ -370,12 +370,14 @@ public class TeamApp extends JFrame {
             team.startGame();
             Client.turnierbaumGenereieren();
             for (int i = 0; i < teams.size(); i++) {
-                System.out.println(teams.get(i).teamName);
+                System.out.println(teams.get(i).name);
             }
             int anzahlSpielerallerTeams = teams.stream().mapToInt(team -> team.players.size()).sum();
-            for (int i = 0; i < anzahlSpielerallerTeams; i++) {
+            /*for (int i = 0; i < anzahlSpielerallerTeams; i++) {
                 System.out.println(teams.get(i).players);
             }
+
+             */
             outputTextArea.append("Spiel gestartet!\n");
         }
     }

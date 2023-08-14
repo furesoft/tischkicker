@@ -19,7 +19,7 @@ public class Client {
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     private static final Gson gson = new Gson();
 
-    public static void sendTeamsToServer(Team team) {
+    public static Team sendTeamsToServer(Team team) {
 
         try {
 
@@ -39,15 +39,14 @@ public class Client {
                 // Die JSON-Antwort verarbeiten
                 String responseBody = response.body();
                 System.out.println("API-Antwort:");
-                Team teams= gson.fromJson(responseBody, Team.class);
-                TeamApp.teams.add(teams);
-                System.out.println(responseBody);
+                return gson.fromJson(responseBody, Team.class);
             } else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private static HttpRequest.Builder createRequest(String ressource) {

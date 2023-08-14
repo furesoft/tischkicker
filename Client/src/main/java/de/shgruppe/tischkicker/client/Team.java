@@ -1,8 +1,5 @@
 package de.shgruppe.tischkicker.client;
-import tischkicker.models.Spieler;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Team {
@@ -11,11 +8,11 @@ public class Team {
     public List<String> players;
 
     public int ID;
-    public String teamName;
+    public String name;
     public static int counter;
-    public Team(List <String> players, String teamName){
+    public Team(List <String> players, String name){
         this.players  = players;
-        this.teamName = teamName;
+        this.name = name;
 
         counter+=1;
     }
@@ -27,12 +24,12 @@ public class Team {
     public void startGame() {
     }
     public  String getName() {
-        return teamName;
+        return name;
     }
 
 
-    public void setTeamName(String newTeamName) {
-        this.teamName=newTeamName;
+    public void setName(String newTeamName) {
+        this.name =newTeamName;
     }
     public int getNumberOfPlayersPerTeam() {
         return players.size();
