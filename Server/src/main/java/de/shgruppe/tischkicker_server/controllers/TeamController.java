@@ -1,40 +1,58 @@
 package de.shgruppe.tischkicker_server.controllers;
 
+import de.shgruppe.tischkicker_server.repositories.SpielerRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tischkicker.models.Team;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
 public class TeamController {
 
     @Autowired
-    TeamRepository repository;
+    TeamRepository teamRepository;
+
+    @Autowired
+    SpielerRepository spielerRepository;
 
     @GetMapping("/teams")
     public List<Team> alleTeamsHolen() {
-        return repository.findAll();
+        return teamRepository.findAll();
     }
 
     @GetMapping("/teams/{id}")
     public Team bestimtesTeamsHolen(@PathVariable int id) {
-        return repository.getReferenceById(id);
+        return teamRepository.getReferenceById(id);
     }
 
     @PostMapping("/teams")
     public Team teamAnlegen(@RequestBody Team team) {
-        repository.save(team);
+        teamRepository.save(team);
 
-        team.setID(repository.findAll().size());
+        team.setID(teamRepository.findAll().size());
+
+        findAndSetSpieler(team);
 
         return team;
     }
 
+    private void findAndSetSpieler(Team team) {
+        int[] ids = Arrays.stream(team.spieler.split(","))
+                          .mapToInt(Integer::parseInt).toArray();
+
+        String[] spieler = (String[]) Arrays.stream(ids)
+                                            .mapToObj(id -> spielerRepository.getReferenceById(id))
+                                            .map(s -> s.getName()).toArray();
+
+        team.setPlayers(spieler);
+    }
+
     @DeleteMapping("/teams/{id}")
     public void teamLoeschen(int id) {
-        repository.deleteById(id);
+        teamRepository.deleteById(id);
     }
 
 }

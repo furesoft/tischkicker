@@ -1,13 +1,16 @@
 package tischkicker.models;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Entity
 public class Team {
     private String name;
+
+    public String spieler;
+
     @Transient
-    private ArrayList<Integer> spielerID = new ArrayList<>();
+    private String[] players;
+
     private int gesamttore;
     private int gegentore;
     private boolean aufgegeben;
@@ -33,12 +36,12 @@ public class Team {
         this.name = name;
     }
 
-    public ArrayList<Integer> getSpielerID() {
-        return spielerID;
+    public String[] getPlayers() {
+        return players;
     }
 
-    public void setSpielerID(ArrayList<Integer> spielerID) {
-        this.spielerID = spielerID;
+    public void setPlayers(String[] names) {
+        players = names;
     }
 
     public int getGesamttore() {
