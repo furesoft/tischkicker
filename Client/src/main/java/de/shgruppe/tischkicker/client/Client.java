@@ -38,7 +38,7 @@ public class Client {
             if (statusCode == 200) {
                 // Die JSON-Antwort verarbeiten
                 String responseBody = response.body();
-                System.out.println("API-Antwort:");
+
                 return gson.fromJson(responseBody, Team.class);
             } else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
