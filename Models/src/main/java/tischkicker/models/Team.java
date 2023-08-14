@@ -6,6 +6,7 @@ import java.util.ArrayList;
 @Entity
 public class Team {
     private String name;
+    @Transient
     private ArrayList<Integer> spielerID = new ArrayList<>();
     private int gesamttore;
     private int gegentore;
