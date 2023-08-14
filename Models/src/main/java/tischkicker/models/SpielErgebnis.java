@@ -7,4 +7,3 @@ public class SpielErgebnis {
 
     public Team[] teams;
 }
-

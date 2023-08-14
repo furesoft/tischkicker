@@ -84,7 +84,6 @@ public class SpielManager {
 
         if (maxTore == anzahltoreBisGewonnen) {
             Instance.runde.empfangeEndergebnis(ergebnis);
-            spielRepository.save(ergebnis.spiel);
         }
     }
 
@@ -123,6 +122,7 @@ public class SpielManager {
             }
         }
 
+        spielRepository.save(ergebnis.spiel);
         SocketHandler.broadcast(ergebnis);
     }
 
@@ -157,6 +157,7 @@ public class SpielManager {
             }
         }
 
+        spielRepository.save(ergebnis.spiel);
         SocketHandler.broadcast(ergebnis);
     }
 }
