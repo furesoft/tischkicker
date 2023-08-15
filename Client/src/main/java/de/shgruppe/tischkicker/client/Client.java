@@ -110,7 +110,7 @@ public class Client {
 
                     spiele = gson.fromJson(responseBody, List.class);
                     for (int i = 0; i < Team.getNumTeams() / 2; i++)
-                        Tunierbaum.spielfeldFuellen(spiele.get(i), 0, i);
+                        TurnierBaum.spielfeldFuellen(spiele.get(i), 0, i);
                 } else {
                     System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
                 }
@@ -144,7 +144,7 @@ public class Client {
 
     public static void turnierbaumGenereieren() {
         JFrame f=new JFrame();
-        Tunierbaum t = new Tunierbaum();
+        TurnierBaum t = new TurnierBaum();
         t.tunierbaumErstellen(f, Team.getNumTeams());
         f.setSize(1920,1080);
         f.setLayout(null);
