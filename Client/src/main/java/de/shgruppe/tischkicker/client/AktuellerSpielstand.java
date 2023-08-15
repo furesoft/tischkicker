@@ -1,5 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
+import tischkicker.models.SpielErgebnis;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,53 +18,45 @@ public class AktuellerSpielstand {
     JButton manuellerSeitenwechsel;
     JLabel seitenwechsel;
 
-    public AktuellerSpielstand(int width, int height){
-        JFrame frame = new JFrame();
+    JFrame frame = new JFrame();
 
+    public AktuellerSpielstand(int width, int height) {
         seitenwechsel = new JLabel("SEITENWECHSEL");
-        seitenwechsel.setBounds(0,0,width,(int)(height*0.2));
+        seitenwechsel.setBounds(0, 0, width, (int) (height * 0.2));
         seitenwechsel.setOpaque(true);
-        seitenwechsel.setBackground(Color.BLACK);
 
-        team1Name = new JLabel("FCB");
-        team1Name.setBounds(0, seitenwechsel.getHeight(),width/2, (int)(height*0.3));
+        team1Name = new JLabel();
+        team1Name.setBounds(0, seitenwechsel.getHeight(), width / 2, (int) (height * 0.3));
         team1Name.setOpaque(true);
-        team1Name.setBackground(Color.RED);
 
-        team2Name = new JLabel("BVB");
-        team2Name.setBounds(team1Name.getWidth(), seitenwechsel.getHeight(), width/2, (int)(height*0.3));
+        team2Name = new JLabel();
+        team2Name.setBounds(team1Name.getWidth(), seitenwechsel.getHeight(), width / 2, (int) (height * 0.3));
         team2Name.setOpaque(true);
-        team2Name.setBackground(Color.YELLOW);
 
         toreTeam1Erhoehen = new JButton("+");
-        toreTeam1Erhoehen.setBounds(0, team1Name.getY()+team1Name.getHeight(), (int)(width*0.1), (int)(height*0.25));
+        toreTeam1Erhoehen.setBounds(0, team1Name.getY() + team1Name.getHeight(), (int) (width * 0.1), (int) (height * 0.25));
         toreTeam1Erhoehen.setOpaque(true);
-        toreTeam1Erhoehen.setBackground(Color.BLUE);
 
         toreTeam1Verringern = new JButton("-");
-        toreTeam1Verringern.setBounds(0, toreTeam1Erhoehen.getY()+toreTeam1Erhoehen.getHeight(), (int)(width*0.1), (int)(height*0.25));
+        toreTeam1Verringern.setBounds(0, toreTeam1Erhoehen.getY() + toreTeam1Erhoehen.getHeight(), (int) (width * 0.1), (int) (height * 0.25));
         toreTeam1Verringern.setOpaque(true);
-        toreTeam1Verringern.setBackground(Color.GREEN);
 
-        team1Tore = new JLabel("0");
-        team1Tore.setBounds(toreTeam1Erhoehen.getWidth(), toreTeam1Erhoehen.getY(), (int)(width*0.4), (int)(height*0.5));
+        team1Tore = new JLabel();
+        team1Tore.setBounds(toreTeam1Erhoehen.getWidth(), toreTeam1Erhoehen.getY(), (int) (width * 0.4), (int) (height * 0.5));
         team1Tore.setOpaque(true);
-        team1Tore.setBackground(Color.PINK);
 
-        team2Tore = new JLabel("1");
-        team2Tore.setBounds(team1Tore.getX()+team1Tore.getWidth(), team1Tore.getY(), team1Tore.getWidth(), team1Tore.getHeight());
+        team2Tore = new JLabel();
+        team2Tore.setBounds(team1Tore.getX() + team1Tore.getWidth(), team1Tore.getY(), team1Tore.getWidth(), team1Tore.getHeight());
         team2Tore.setOpaque(true);
-        team2Tore.setBackground(Color.PINK);
 
         toreTeam2Erhoehen = new JButton("+");
-        toreTeam2Erhoehen.setBounds(team2Tore.getX()+team2Tore.getWidth(), team2Tore.getY(), team1Tore.getWidth(), team1Tore.getHeight());
+        toreTeam2Erhoehen.setBounds(width - toreTeam1Erhoehen.getWidth() - 10, toreTeam1Erhoehen.getY(), toreTeam1Erhoehen.getWidth(), toreTeam1Erhoehen.getHeight());
         toreTeam2Erhoehen.setOpaque(true);
-        toreTeam2Erhoehen.setBackground(Color.BLUE);
 
         toreTeam2Verringern = new JButton("-");
-        toreTeam2Verringern.setBounds(toreTeam2Erhoehen.getX(), toreTeam1Verringern.getY(), team1Tore.getWidth(), team1Tore.getHeight());
+        toreTeam2Verringern.setBounds(width - toreTeam1Verringern.getWidth() - 10, toreTeam1Verringern.getY(), toreTeam1Verringern.getWidth(),
+                toreTeam1Verringern.getHeight());
         toreTeam2Verringern.setOpaque(true);
-        toreTeam2Verringern.setBackground(Color.GREEN);
 
 
         frame.add(seitenwechsel);
@@ -76,11 +70,23 @@ public class AktuellerSpielstand {
         frame.add(team2Tore);
 
 
-        frame.setSize(width+6,height+37);
+        frame.setSize(width + 6, height + 37);
         frame.setLayout(null);
         frame.setResizable(false);
         frame.setVisible(true);
     }
 
+    public void aktualisiereDaten(SpielErgebnis ergebnis) {
+        team1Tore.setText(Integer.toString(ergebnis.toreTeam1));
+        team2Tore.setText(Integer.toString(ergebnis.toreTeam2));
 
+        String[] teamNames = ergebnis.spiel.getTeamNames();
+
+        team1Name.setText(teamNames[0]);
+        team1Name.setText(teamNames[1]);
+    }
+
+    public void show() {
+        frame.setVisible(true);
+    }
 }

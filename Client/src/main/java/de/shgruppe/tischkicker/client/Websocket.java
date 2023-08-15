@@ -31,9 +31,8 @@ public class Websocket extends WebSocketClient {
         if (deserializedMessage.type == MessageType.SpielErgebnis) {
             SpielErgebnis spielergebnis = gson.fromJson(message, SpielErgebnis.class);
             System.out.println("Received message: " + message);
-            gesamtTore neu = new gesamtTore();
 
-            neu.empfangeTor(spielergebnis);
+            Client.spielstandAnzeige.aktualisiereDaten(spielergebnis);
         }
         else if (deserializedMessage.type == MessageType.Phasenaenderung) {
             //ToDo: implementiere spiel in nächster phase anzeigen
