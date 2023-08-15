@@ -3,6 +3,7 @@ package de.shgruppe.tischkicker_server.logic;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 
@@ -11,10 +12,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+@Component
 public class TurnierManager {
     SpielPhase spielPhase;
 
-    public static TurnierManager Instance = new TurnierManager();
     @Autowired
     TeamRepository teamRepository;
 
@@ -33,7 +34,7 @@ public class TurnierManager {
         Collections.shuffle(teams);
         for (int i = 0 ; i < teams.size() ; i++)
         {
-            if (i%2==0)
+            if (i%2==0 && i < teams.size() - 2)
             {
                 Spiel spiel = new Spiel();
                 spiel.setTeams(teams.get(i).getID(),teams.get(i+1).getID());

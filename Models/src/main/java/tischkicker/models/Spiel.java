@@ -46,7 +46,7 @@ public class Spiel {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int spielID;
 
 

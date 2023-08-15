@@ -17,6 +17,8 @@ import java.util.List;
 
 @RestController
 public class SpielController {
+    @Autowired
+    SpielManager spielManager;
 
     @Autowired
     SpielRepository spielRepository;
@@ -43,26 +45,26 @@ public class SpielController {
 
     @PostMapping("/spiel/start/{id}")
     public void spielStarten(@PathVariable int id){
-        SpielManager.Instance.spielStarten(spielRepository.getReferenceById(id));
+        spielManager.spielStarten(spielRepository.getReferenceById(id));
     }
 
     @PostMapping("/spiel/aufgeben/{id}")
     public void spielAufgeben(@PathVariable int id){
-        SpielManager.Instance.reset();
+        spielManager.reset();
     }
 
     @PostMapping("/spiel/increment/{seite}")
     public void spielstandIncrementieren(@PathVariable Tor.Seite seite) throws Exception {
-        SpielManager.Instance.increment(seite);
+        spielManager.increment(seite);
     }
 
     @PostMapping("/spiel/decrement/{seite}")
     public void spielstandDecrementieren(@PathVariable Tor.Seite seite) throws Exception {
-        SpielManager.Instance.decrement(seite);
+        spielManager.decrement(seite);
     }
 
     @PostMapping("/spiel/seitenwechsel")
     public void seitenwechsel() throws IOException {
-        SpielManager.Instance.seitenWechsel();
+        spielManager.seitenWechsel();
     }
 }

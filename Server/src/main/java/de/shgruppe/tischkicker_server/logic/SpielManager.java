@@ -4,6 +4,7 @@ import de.shgruppe.tischkicker_server.SocketHandler;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import tischkicker.models.Spiel;
 import tischkicker.models.SpielErgebnis;
 import tischkicker.models.Team;
@@ -11,8 +12,9 @@ import tischkicker.models.Tor;
 
 import java.io.IOException;
 
+@Component
 public class SpielManager {
-    public static SpielManager Instance = new SpielManager();
+
     private final SpielErgebnis ergebnis = new SpielErgebnis();
 
     private boolean tauscheTeams = false;
@@ -26,6 +28,9 @@ public class SpielManager {
 
     @Autowired
     TeamRepository teamRepository;
+
+    @Autowired
+    TurnierManager turnierManager;
 
     private SpielManager() {
 
@@ -82,7 +87,7 @@ public class SpielManager {
         }
 
         if (maxTore == anzahltoreBisGewonnen) {
-            TurnierManager.Instance.spielPhase.empfangeEndergebnis(ergebnis);
+            turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
         }
     }
 

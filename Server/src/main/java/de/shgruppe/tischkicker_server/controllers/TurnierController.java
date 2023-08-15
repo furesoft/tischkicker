@@ -16,10 +16,9 @@ public class TurnierController {
     @Autowired
     TurnierRepository repository;
 
-    @GetMapping("/turniere")
-    public List<Turnier> alleTuniereHolen() {
-        return repository.findAll();
-    }
+    @Autowired
+    TurnierManager turnierManager;
+
 
     @GetMapping("/turniere/{id}")
     public Turnier einzelnesTurnierHolen(@PathVariable int id) {
@@ -33,7 +32,7 @@ public class TurnierController {
         return null;
     }
 
-    @GetMapping("/turniere")
-    public List<Spiel> turnierStarten() { return TurnierManager.Instance.turnierStarten();
+    @GetMapping("/turnier")
+    public List<Spiel> turnierStarten() { return turnierManager.turnierStarten();
     }
 }

@@ -90,8 +90,7 @@ public class Client {
             turnierbaumGenereieren();
             try {
                 HttpRequest request = createRequest("/turnier")
-
-                        .POST(HttpRequest.BodyPublishers.ofString("", StandardCharsets.UTF_8))
+                        .GET()
                         .build();
 
                 // Die Anfrage an die API senden und die Antwort erhalten
