@@ -49,7 +49,7 @@ public class Client {
         return null;
     }
 
-    private static HttpRequest.Builder createRequest(String ressource) {
+    public static HttpRequest.Builder createRequest(String ressource) {
         return HttpRequest.newBuilder()
                 .uri(URI.create(URL + ressource))
                 .header("Content-Type", "application/json")
@@ -84,6 +84,31 @@ public class Client {
             e.printStackTrace();
         }
 
+    }
+
+    public static Spiel[] startTurnier() {
+            turnierbaumGenereieren();
+            try {
+                HttpRequest request = createRequest("/turnier")
+
+                        .POST(HttpRequest.BodyPublishers.ofString("", StandardCharsets.UTF_8))
+                        .build();
+
+                // Die Anfrage an die API senden und die Antwort erhalten
+                HttpResponse<String> response = Client.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                int statusCode = response.statusCode();
+                if (statusCode == 200) {
+                    // Die JSON-Antwort verarbeiten
+                    String responseBody = response.body();
+                    System.out.println("API-Antwort:");
+                    return Client.gson.fromJson(responseBody, Spiel[].class);
+                } else {
+                    System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                }
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        return null;
     }
 
 

@@ -15,7 +15,6 @@ public class SpielManager {
     public static SpielManager Instance = new SpielManager();
     private final SpielErgebnis ergebnis = new SpielErgebnis();
 
-    private final SpielPhase runde = new SpielPhase();
     private boolean tauscheTeams = false;
     public boolean spielVorbei = false;
 
@@ -83,7 +82,7 @@ public class SpielManager {
         }
 
         if (maxTore == anzahltoreBisGewonnen) {
-            Instance.runde.empfangeEndergebnis(ergebnis);
+            TurnierManager.Instance.spielPhase.empfangeEndergebnis(ergebnis);
         }
     }
 

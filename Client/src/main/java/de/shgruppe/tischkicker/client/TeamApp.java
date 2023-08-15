@@ -1,14 +1,21 @@
 package de.shgruppe.tischkicker.client;
 
 import de.shgruppe.tischkicker.client.UI.DataButton;
+import tischkicker.models.Spiel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static de.shgruppe.tischkicker.client.Client.createRequest;
 
 public class TeamApp extends JFrame {
     private List<String> tempPlayers;
@@ -88,7 +95,7 @@ public class TeamApp extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startGame();
+                Client.startTurnier();
             }
         });
 
@@ -152,7 +159,6 @@ public class TeamApp extends JFrame {
     }
 
 
-
     // Methode zur Konfiguration von Spieler- und Teamnamen
     public void config() {
         bearbeitenFenster = new JFrame();
@@ -169,7 +175,7 @@ public class TeamApp extends JFrame {
                 teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
 
         int playerIndex = 0;
-                // Teamnamen hinzufügen
+        // Teamnamen hinzufügen
         for (Team team : teams) {
             JLabel teamLabel = new JLabel("Team " + team.getName());
 
@@ -224,7 +230,7 @@ public class TeamApp extends JFrame {
                     DataButton sender = (DataButton) e.getSource();
 
                     Team team2 = (Team) sender.getData();
-                   deleteTeams(team2);
+                    deleteTeams(team2);
                 }
             });
 
@@ -262,6 +268,7 @@ public class TeamApp extends JFrame {
             }
         }
     }
+
     // Methode zum Aktualisieren von Teamnamen
     private void updateTeamNames() {
         for (int i = 0; i < teams.size(); i++) {
@@ -272,7 +279,6 @@ public class TeamApp extends JFrame {
             team.setName(newTeamName);
         }
     }
-
 
 
     public void spielerHinzufuegenGUI() {
@@ -301,15 +307,16 @@ public class TeamApp extends JFrame {
     }
 
     //TODO Spieler zum Team hinzufügen
-    private void addPlayertoExistingTeam(){
+    private void addPlayertoExistingTeam() {
 
     }
+
     private void deletePlayerByString(DataButton btn) {
-        String playerNameToBeRemoved = (String)btn.getData();
+        String playerNameToBeRemoved = (String) btn.getData();
 
         for (int j = 0; j < teams.size(); j++) {
             Team team = teams.get(j);
-            List <String> playerNamesTeam1 = team.getPlayerNames();
+            List<String> playerNamesTeam1 = team.getPlayerNames();
             for (int i = 0; i < team.getNumberOfPlayersPerTeam(); i++) {
                 String playerName = playerNamesTeam1.get(i);
                 if (playerName.equals(playerNameToBeRemoved)) {
@@ -337,8 +344,9 @@ public class TeamApp extends JFrame {
 
 
     }
+
     //TODO Löschen der teams
-    private void deleteTeams(Team team){
+    private void deleteTeams(Team team) {
 
         Client.deleteTeam(team);
 
@@ -361,24 +369,4 @@ public class TeamApp extends JFrame {
 
     }
 
-
-    // Methode zum Starten des Spiels mit validierten Teams
-    private void startGame() {
-        if (team.getNumTeams() < 2) {
-            outputTextArea.append("Mindestens zwei Teams erforderlich!\n");
-        } else {
-            team.startGame();
-            Client.turnierbaumGenereieren();
-            for (int i = 0; i < teams.size(); i++) {
-                System.out.println(teams.get(i).name);
-            }
-            int anzahlSpielerallerTeams = teams.stream().mapToInt(team -> team.players.size()).sum();
-            /*for (int i = 0; i < anzahlSpielerallerTeams; i++) {
-                System.out.println(teams.get(i).players);
-            }
-
-             */
-            outputTextArea.append("Spiel gestartet!\n");
-        }
-    }
 }

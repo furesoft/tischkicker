@@ -21,8 +21,6 @@ public class Team {
         return counter;
     }
 
-    public void startGame() {
-    }
     public  String getName() {
         return name;
     }

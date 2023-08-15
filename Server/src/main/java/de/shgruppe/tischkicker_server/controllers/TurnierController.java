@@ -1,8 +1,10 @@
 package de.shgruppe.tischkicker_server.controllers;
 
+import de.shgruppe.tischkicker_server.logic.TurnierManager;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tischkicker.models.Spiel;
 import tischkicker.models.Turnier;
 
 import java.util.Date;
@@ -31,8 +33,7 @@ public class TurnierController {
         return null;
     }
 
-    @PostMapping("/turniere")
-    public void turnierAnlegen(@RequestBody Turnier turnier) {
-        repository.save(turnier);
+    @GetMapping("/turniere")
+    public List<Spiel> turnierStarten() { return TurnierManager.Instance.turnierStarten();
     }
 }
