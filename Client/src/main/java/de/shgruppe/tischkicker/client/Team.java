@@ -1,5 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Team {
@@ -7,6 +9,15 @@ public class Team {
 
     public List<String> players;
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    @SerializedName("id")
     public int ID;
     public String name;
     public static int counter;

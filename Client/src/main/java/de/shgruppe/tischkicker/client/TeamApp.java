@@ -142,10 +142,9 @@ public class TeamApp extends JFrame {
     private void addTeam() {
         String teamName = teamNameField.getText();
         if (!teamName.isEmpty() && !tempPlayers.isEmpty()) {
-            team = new Team(tempPlayers, teamName);// Erstellen eines neuen Teams
-            Client.sendTeamsToServer(team);// Senden des Teams an den Server (Annahme)
-            //TODO sobald Client Server verbindung aufgebaut ist teams.add(team entfernen)
+            team = Client.sendTeamsToServer(new Team(tempPlayers, teamName));// Senden des Teams an den Server (Annahme)
             teams.add(team);
+
             outputTextArea.append("Team '" + teamName + "' wurde hinzugefügt.\n");
             tempPlayers = new ArrayList<>();// Zurücksetzen der temporären Spielerliste
             playerField.setText("");
