@@ -1,6 +1,7 @@
 package de.shgruppe.tischkicker.client;
 import com.google.gson.Gson;
 import tischkicker.models.Spiel;
+import tischkicker.models.Tor;
 
 import javax.swing.*;
 import java.net.URISyntaxException;
@@ -55,12 +56,26 @@ public class Client {
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json");
     }
+
+    public enum Modus {
+        INCREMENT,
+        DECREMENT,
+    }
+
+    public static void spielstandAnpassen(Tor.Seite seite, Modus modus) throws IOException, InterruptedException {
+        HttpRequest request = createRequest("/" + modus + "/" + seite)
+                .POST(HttpRequest.BodyPublishers.ofString(""))
+                .build();
+
+       HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+       if(response.statusCode() != 200) {
+           System.out.println(modus + " ist für " + seite + " schiefgegangen.");
+       }
+    }
+
     public static void deleteTeam(Team team) {
         try {
-
-
-
-
             // HTTP-POST-Anfrage erstellen
             HttpRequest request = createRequest("/teams/"+ team.ID)
                     .DELETE()
@@ -143,9 +158,8 @@ public class Client {
             }
         }
 
+        public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(500,500);
     public static void main(String[] args) {
-
-
         try {
             URI serverURI = new URI("ws://localhost:8080/live");
             Websocket client = new Websocket(serverURI);
@@ -156,6 +170,7 @@ public class Client {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
                 public void run() {
+                    spielstandAnzeige.show();
                     new TeamApp().setVisible(true);
             }
         });

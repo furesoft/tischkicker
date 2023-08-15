@@ -1,5 +1,5 @@
 package tischkicker.messages;
 
-public abstract class Message {
+public class Message {
     public MessageType type;
 }

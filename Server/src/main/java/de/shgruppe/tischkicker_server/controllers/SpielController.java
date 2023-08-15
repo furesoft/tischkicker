@@ -53,14 +53,14 @@ public class SpielController {
         spielManager.reset();
     }
 
-    @PostMapping("/spiel/increment/{seite}")
-    public void spielstandIncrementieren(@PathVariable Tor.Seite seite) throws Exception {
-        spielManager.increment(seite);
+    @PostMapping("/spiel/increment/{teamID}")
+    public void spielstandIncrementieren(@PathVariable int teamID) throws Exception {
+        spielManager.increment(teamID);
     }
 
     @PostMapping("/spiel/decrement/{seite}")
-    public void spielstandDecrementieren(@PathVariable Tor.Seite seite) throws Exception {
-        spielManager.decrement(seite);
+    public void spielstandDecrementieren(@PathVariable int teamID) throws Exception {
+        spielManager.decrement(teamID);
     }
 
     @PostMapping("/spiel/seitenwechsel")
