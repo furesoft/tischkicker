@@ -40,7 +40,7 @@ public class TeamController {
     }
 
     private void addSpielerToDb(Team team) {
-        List ids = new ArrayList();
+        List<String> ids = new ArrayList();
         for (String name : team.getPlayers()) {
             Spieler s = new Spieler();
             s.setName(name);
@@ -49,7 +49,7 @@ public class TeamController {
 
             s.setID((int)spielerRepository.count());
 
-            ids.add(s.getID());
+            ids.add(Integer.toString(s.getID()));
         }
 
         team.spieler = String.join(",", ids);
