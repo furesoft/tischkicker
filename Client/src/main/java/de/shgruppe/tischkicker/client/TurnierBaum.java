@@ -42,7 +42,7 @@ public class TurnierBaum {
         } while (spielfelderAnzahlDouble > 0.5);
 
         for(int reihe = 0; reihe < reihen.size(); reihe++){
-            for(int spalte = 0; spalte < reihen.get(reihe).size();spalte++){
+            for(int spalte = 0; spalte < reihen.get(reihe).size(); spalte++){
                if(reihe > 0) {
                    if(spalte * 2 + 1 < reihen.get(reihe - 1).size()) {
                        ArrayList<Spielfeld> tmpSpielfelder = reihen.get(reihe - 1);
