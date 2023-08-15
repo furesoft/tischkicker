@@ -24,8 +24,7 @@ public class TurnierManager {
 
     public List<Spiel> turnierStarten(){
         List<Spiel> spiele = generiereSpiele();
-        spielRepository.saveAllAndFlush(spiele);
-        return spiele;
+        return spielRepository.saveAllAndFlush(spiele);
     }
     private List<Spiel> generiereSpiele()
     {
@@ -34,13 +33,15 @@ public class TurnierManager {
         Collections.shuffle(teams);
         for (int i = 0 ; i < teams.size() ; i++)
         {
-            if (i%2==0 && i < teams.size() - 2)
+            if (i%2==0)
             {
                 Spiel spiel = new Spiel();
                 spiel.setTeams(teams.get(i).getID(),teams.get(i+1).getID());
+                spiel.setTeamNames(teams.get(i).getName(), teams.get(i + 1).getName());
                 spiele[i/2] = spiel;
             }
         }
+        // TODO Fall abdecken für ungerade Anzahl an Teams
         return Arrays.asList(spiele);
     }
 }

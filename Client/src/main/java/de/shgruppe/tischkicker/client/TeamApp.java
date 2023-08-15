@@ -7,15 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static de.shgruppe.tischkicker.client.Client.createRequest;
+import static de.shgruppe.tischkicker.client.Client.turnierbaumGenerieren;
 
 public class TeamApp extends JFrame {
     private List<String> tempPlayers;
@@ -95,7 +91,9 @@ public class TeamApp extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Client.startTurnier();
+              Spiel[] spiele =  Client.startTurnier();
+
+              turnierbaumGenerieren(spiele);
             }
         });
 

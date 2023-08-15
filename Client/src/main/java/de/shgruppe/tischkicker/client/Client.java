@@ -13,18 +13,15 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 public class Client {
-    public static List <Spiel> spiele;
+    public static List<Spiel> spiele;
 
     private static final String URL = "http://localhost:8080";
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     private static final Gson gson = new Gson();
 
     public static Team sendTeamsToServer(Team team) {
-
         try {
-
             String jsonData = gson.toJson(team);
-
 
             // HTTP-POST-Anfrage erstellen
             HttpRequest request = createRequest("/teams")
@@ -55,14 +52,11 @@ public class Client {
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json");
     }
+
     public static void deleteTeam(Team team) {
         try {
-
-
-
-
             // HTTP-POST-Anfrage erstellen
-            HttpRequest request = createRequest("/teams/"+ team.ID)
+            HttpRequest request = createRequest("/teams/" + team.ID)
                     .DELETE()
                     .build();
 
@@ -74,7 +68,7 @@ public class Client {
                 // Die JSON-Antwort verarbeiten
                 String responseBody = response.body();
                 System.out.println("API-Antwort:");
-                Team teams= gson.fromJson(responseBody, Team.class);
+                Team teams = gson.fromJson(responseBody, Team.class);
                 TeamApp.teams.add(teams);
                 System.out.println(responseBody);
             } else {
@@ -87,65 +81,85 @@ public class Client {
     }
 
     public static Spiel[] startTurnier() {
-            turnierbaumGenereieren();
-            try {
-                HttpRequest request = createRequest("/turnier")
-                        .GET()
-                        .build();
+        try {
+            HttpRequest request = createRequest("/turnier")
+                    .GET()
+                    .build();
 
-                // Die Anfrage an die API senden und die Antwort erhalten
-                HttpResponse<String> response = Client.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-                int statusCode = response.statusCode();
-                if (statusCode == 200) {
-                    // Die JSON-Antwort verarbeiten
-                    String responseBody = response.body();
-                    System.out.println("API-Antwort:");
-                    return Client.gson.fromJson(responseBody, Spiel[].class);
-                } else {
-                    System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
-                }
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = Client.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                // Die JSON-Antwort verarbeiten
+                String responseBody = response.body();
+                System.out.println("API-Antwort:");
+
+                return Client.gson.fromJson(responseBody, Spiel[].class);
+            } else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
             }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Team[] getTeams() {
+        try {
+            HttpRequest request = createRequest("/teams")
+                    .GET()
+                    .build();
+
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = Client.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                // Die JSON-Antwort verarbeiten
+                String responseBody = response.body();
+                System.out.println("API-Antwort:");
+                return Client.gson.fromJson(responseBody, Team[].class);
+            } else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
 
-        public static void getSpieleFromServer () {
+    public static Spiel[] getSpieleFromServer() {
 
-            try {
-                HttpRequest request = createRequest("/spiele")
+        try {
+            HttpRequest request = createRequest("/spiele")
 
-                        .GET()
-                        .build();
+                    .GET()
+                    .build();
 
-                // Die Anfrage an die API senden und die Antwort erhalten
-                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-                int statusCode = response.statusCode();
-                if (statusCode == 200) {
-                    // Die JSON-Antwort verarbeiten
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                // Die JSON-Antwort verarbeiten
 
-                    String responseBody = response.body();
-                    System.out.println("API-Antwort:");
-                    System.out.println(responseBody);
+                String responseBody = response.body();
+                System.out.println("API-Antwort:");
+                System.out.println(responseBody);
 
-                    // Spiele-Array parsen und in die Liste setzen
+                return gson.fromJson(responseBody, Spiel[].class);
 
-                    spiele = gson.fromJson(responseBody, List.class);
-                    for (int i = 0; i < Team.getNumTeams() / 2; i++)
-                        TurnierBaum.spielfeldFuellen(spiele.get(i), 0, i);
-                } else {
-                    System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
-                }
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
+            } else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
             }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
 
+        return null;
+    }
+
     public static void main(String[] args) {
-
-
         try {
             URI serverURI = new URI("ws://localhost:8080/live");
             Websocket client = new Websocket(serverURI);
@@ -155,24 +169,29 @@ public class Client {
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-                public void run() {
-                    new TeamApp().setVisible(true);
+            public void run() {
+                new TeamApp().setVisible(true);
             }
         });
-
 
 
         //in Bearbeitung
         //Siegertreppchen sieger = new Siegertreppchen(f, 1400, 900, 150, 100, 28);
     }
 
-    public static void turnierbaumGenereieren() {
-        JFrame f=new JFrame();
-        TurnierBaum t = new TurnierBaum();
-        t.tunierbaumErstellen(f, Team.getNumTeams());
-        f.setSize(1920,1080);
-        f.setLayout(null);
-        f.setVisible(true);
+    public static void turnierbaumGenerieren(Spiel[] spiele) {
+        Team[] teams = getTeams();
+
+        if (teams != null) {
+            TurnierBaum t = new TurnierBaum();
+            t.tunierbaumErstellen(teams.length);
+            for (int i = 0 ; i < spiele.length ; i++)
+            {
+                t.spielfeldFuellen(spiele[i],0,i);
+            }
+        } else {
+            // TODO Fehlermeldung ausgeben, falls keine Teams vorhanden sind (null), zum Beispiel mit Exception werfen
+        }
     }
 }
 

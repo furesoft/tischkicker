@@ -8,10 +8,17 @@ import java.util.ArrayList;
 public class TurnierBaum {
 
     static ArrayList<ArrayList<Spielfeld>> reihen = new ArrayList<>();
+    JFrame frame = new JFrame();
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
 
-    public void tunierbaumErstellen(JFrame frame, double anzahlTeams){
+    public TurnierBaum() {
+        frame.setSize(1920, 1080);
+        frame.setLayout(null);
+        frame.setVisible(true);
+    }
+
+    public void tunierbaumErstellen(double anzahlTeams){
 
         int spielfelderAnzahl = (int)Math.round(anzahlTeams/2);
         int teamAnzahl = (int) anzahlTeams;
@@ -25,7 +32,7 @@ public class TurnierBaum {
         spielfeldList.clear();
 
         do {
-            spielfeldListeFuellen(frame, x, y, spielfelderAnzahl);
+            spielfeldListeFuellen(x, y, spielfelderAnzahl);
             reihen.add(new ArrayList<>(spielfeldList));
 
             if(teamAnzahl % 2 != 0 && teamAnzahl > 2){
@@ -72,13 +79,13 @@ public class TurnierBaum {
     }
 
 
-    public void spielfeldListeFuellen(JFrame frame, int x, int y, int anzhalSpiele){
-        for(int i = 0; i < anzhalSpiele; i++){
+    public void spielfeldListeFuellen(int x, int y, int anzahlReihen){
+        for(int i = 0; i < anzahlReihen; i++){
             spielfeldList.add(new Spielfeld(frame, x, y, 150, 100));
             y += 125;
         }
     }
-    public static void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld){
+    public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld){
         reihen.get(reihe).get(spielfeld).setTeams(spiel);
     }
 }

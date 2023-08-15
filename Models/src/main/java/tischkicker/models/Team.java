@@ -1,6 +1,7 @@
 package tischkicker.models;
 
 import javax.persistence.*;
+import java.util.Arrays;
 
 @Entity
 public class Team {
@@ -42,6 +43,12 @@ public class Team {
 
     public void setPlayers(String[] names) {
         players = names;
+    }
+
+    public int[] getspielerIDs() {
+        String [] ids = spieler.split(",");
+
+        return Arrays.stream(ids).mapToInt(Integer::parseInt).toArray();
     }
 
     public int getGesamttore() {

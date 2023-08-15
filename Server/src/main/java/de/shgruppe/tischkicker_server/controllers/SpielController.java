@@ -1,5 +1,6 @@
 package de.shgruppe.tischkicker_server.controllers;
 
+import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.logic.SpielManager;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
@@ -14,6 +15,7 @@ import tischkicker.models.Tor;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class SpielController {
@@ -33,19 +35,28 @@ public class SpielController {
 
     @GetMapping("/spiele/{id}")
     public Spiel betimmtesSpieleHolen(@PathVariable int id) {
-        Spiel spiel = spielRepository.getReferenceById(id);
-        int[] teamIDs = spiel.getTeamIDs();
-        Team team1 = teamRepository.getReferenceById(teamIDs[0]);
-        Team team2 = teamRepository.getReferenceById(teamIDs[2]);
+        Optional <Spiel> spiel = spielRepository.findById(id);
 
-        spiel.setTeamNames(team1.getName(), team2.getName());
+        Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel,id);
 
-        return spiel;
+        int[] teamIDs = spiel1.getTeamIDs();
+
+        Optional<Team> team1 = teamRepository.findById(teamIDs[0]);
+        Optional<Team> team2 = teamRepository.findById(teamIDs[2]);
+
+        Team t1 = Hilfsmethoden.optionalCheck(team1,teamIDs[0]);
+        Team t2 = Hilfsmethoden.optionalCheck(team2,teamIDs[2]);
+
+        spiel1.setTeamNames(t1.getName(), t2.getName());
+
+        return spiel1;
     }
 
     @PostMapping("/spiel/start/{id}")
     public void spielStarten(@PathVariable int id){
-        spielManager.spielStarten(spielRepository.getReferenceById(id));
+        Optional <Spiel> spiel = spielRepository.findById(id);
+        Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel,id);
+        spielManager.spielStarten(spiel1);
     }
 
     @PostMapping("/spiel/aufgeben/{id}")

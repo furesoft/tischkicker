@@ -1,5 +1,6 @@
 package de.shgruppe.tischkicker_server.controllers;
 
+import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.logic.TurnierManager;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import tischkicker.models.Turnier;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class TurnierController {
@@ -22,7 +24,8 @@ public class TurnierController {
 
     @GetMapping("/turniere/{id}")
     public Turnier einzelnesTurnierHolen(@PathVariable int id) {
-        return repository.getReferenceById(id);
+        Optional <Turnier> turnier = repository.findById(id);
+        return Hilfsmethoden.optionalCheck(turnier,id);
     }
 
     @GetMapping("/turniere/{datum}")
