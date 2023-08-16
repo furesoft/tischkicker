@@ -15,6 +15,7 @@ public class TurnierBaum {
     JFrame frame = new JFrame();
     Spielfeld selectedSpielfeld;
     Spielfeld aktuellesSpiel;
+    JLabel hinweis = new JLabel();
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
     JButton starteSpiel = new JButton("Spiel starten");
@@ -25,9 +26,13 @@ public class TurnierBaum {
         frame.setVisible(true);
         starteSpiel.setBounds(50,20,150,50);
         frame.add(starteSpiel);
+        hinweis.setBounds(300,20,250,50);
+        hinweis.setText("* = Bester Verlierer dieser Spiel-Phase");
+        frame.add(hinweis);
         starteSpiel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 Client.spielStarten(aktuellesSpiel.spiel);
             }
         });

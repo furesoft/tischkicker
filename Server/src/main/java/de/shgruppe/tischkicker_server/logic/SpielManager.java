@@ -59,6 +59,9 @@ public class SpielManager {
 
         ergebnis.spiel = spiel;
         ergebnis.teams = getTeamsForSpiel(spiel);
+
+        rot.teamID = spiel.getTeamIDs()[0];
+        weiss.teamID = spiel.getTeamIDs()[1];
     }
 
     private Team[] getTeamsForSpiel(Spiel spiel) {
@@ -138,6 +141,8 @@ public class SpielManager {
         triggerSpielMode();
 
         getInfoByID(teamID).tore++;
+        ergebnis.toreTeam1 = rot.tore;
+        ergebnis.toreTeam2 = weiss.tore;
 
         SocketHandler.broadcast(ergebnis);
     }

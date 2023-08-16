@@ -55,6 +55,7 @@ public class SpielController {
     @PostMapping("/spiel/start/{id}")
     public void spielStarten(@PathVariable int id){
         Optional <Spiel> spiel = spielRepository.findById(id);
+
         Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel,id);
         spielManager.spielStarten(spiel1);
     }

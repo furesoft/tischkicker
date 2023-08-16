@@ -2,6 +2,7 @@ package de.shgruppe.tischkicker.client;
 
 import de.shgruppe.tischkicker.client.ui.DataButton;
 import tischkicker.models.SpielErgebnis;
+import tischkicker.models.Team;
 
 import javax.swing.*;
 import java.awt.*;
@@ -113,19 +114,19 @@ public class AktuellerSpielstand {
     public void aktualisiereDaten(SpielErgebnis ergebnis) {
         setTore(ergebnis.toreTeam1 + " : " + ergebnis.toreTeam2);
 
-        String[] teamNames = ergebnis.spiel.getTeamNames();
+        Team[] teamNames = ergebnis.teams;
 
-        team1Name.setText("<html>" + teamNames[0] + "</html>");
-        team2Name.setText("<html>" + teamNames[1] + "</html>");
+        team1Name.setText("<html>" + teamNames[0].getName() + "</html>");
+        team2Name.setText("<html>" + teamNames[1].getName() + "</html>");
 
         team1ID = ergebnis.teams[0].getID();
-        team2ID = ergebnis.teams[0].getID();
+        team2ID = ergebnis.teams[1].getID();
 
         toreTeam1Erhoehen.setData(team1ID);
         toreTeam1Verringern.setData(team1ID);
 
-        toreTeam2Erhoehen.setData(team1ID);
-        toreTeam2Verringern.setData(team1ID);
+        toreTeam2Erhoehen.setData(team2ID);
+        toreTeam2Verringern.setData(team2ID);
     }
 
     public void show() {
