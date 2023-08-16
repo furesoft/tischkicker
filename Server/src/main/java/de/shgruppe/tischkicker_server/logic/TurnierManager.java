@@ -28,17 +28,30 @@ public class TurnierManager {
     }
     private List<Spiel> generiereSpiele()
     {
+        int teamfaktor = 0;
         List<Team> teams = teamRepository.findAll();
-        Spiel[] spiele = new Spiel[teams.size()/2];
+        if (teams.size()%2 != 0)
+        {
+            teamfaktor = 1;
+        }
+
+        Spiel[] spiele = new Spiel[teams.size()/2+teamfaktor];
         Collections.shuffle(teams);
         for (int i = 0 ; i < teams.size() ; i++)
         {
-            if (i%2==0)
+            if (i%2==0 && i<teams.size()-2)
             {
                 Spiel spiel = new Spiel();
                 spiel.setTeams(teams.get(i).getID(),teams.get(i+1).getID());
                 spiel.setTeamNames(teams.get(i).getName(), teams.get(i + 1).getName());
                 spiele[i/2] = spiel;
+            }
+            if (teams.size()%2 != 0 && i== teams.size()-1)
+            {
+                Spiel spielUngerade = new Spiel();
+                spielUngerade.setTeams(teams.get(i).getID(),-1);
+                spielUngerade.setTeamNames(teams.get(i).getName(),null);
+                spiele[i/2] = spielUngerade;
             }
         }
         // TODO Fall abdecken für ungerade Anzahl an Teams

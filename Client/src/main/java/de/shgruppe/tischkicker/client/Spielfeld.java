@@ -6,14 +6,17 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Spielfeld {
-    JLabel background;
+    public JLabel background;
     JLabel team1;
     JLabel team2;
     JLabel toreTeam1;
     JLabel toreTeam2;
+    Color selected = new Color(36,157,255);
+    Color normal = new Color(149, 157, 158);
     boolean besterVerlierer = false;
     Spiel spiel;
     int spielId;
+    boolean selectedSpielfeld = false;
 
     public Spielfeld(JFrame frame, int x, int y, int width, int height) {
         background = new JLabel(" ");
@@ -24,7 +27,7 @@ public class Spielfeld {
 
         background.setBounds(x, y, width, height);
         background.setOpaque(true);
-        background.setBackground(new Color(149, 157, 158));
+        background.setBackground(normal);
 
         team1.setBounds(x + 5, y + 5, width - 10, ((height - 10) / 2));
         team1.setOpaque(true);
@@ -61,12 +64,15 @@ public class Spielfeld {
     }
 
     public void setTeams(Spiel spiel) {
+        String teamName = spiel.getTeamNames()[1];
+        if (teamName == null) {
+            teamName = "";
+        }
         this.spiel = spiel;
         team1.setText(spiel.getTeamNames()[0]);
         if (besterVerlierer) {
-            team2.setText(" * " + spiel.getTeamNames()[1]);
-        }
-        else {
+            team2.setText(" * " + teamName);
+        } else {
             team2.setText(spiel.getTeamNames()[1]);
 
         }
