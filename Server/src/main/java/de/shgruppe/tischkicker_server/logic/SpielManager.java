@@ -4,6 +4,7 @@ import de.shgruppe.tischkicker_server.SocketHandler;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import tischkicker.models.Spiel;
 import tischkicker.models.SpielErgebnis;
 import tischkicker.models.Team;
@@ -11,22 +12,35 @@ import tischkicker.models.Tor;
 
 import java.io.IOException;
 
+class SpielHolder {
+    public int teamID;
+
+    public int tore;
+
+}
+
+@Component
 public class SpielManager {
-    public static SpielManager Instance = new SpielManager();
+
     private final SpielErgebnis ergebnis = new SpielErgebnis();
 
-    private final SpielPhase runde = new SpielPhase();
     private boolean tauscheTeams = false;
     public boolean spielVorbei = false;
 
     public int anzahltoreBisGewonnen = 10;
     public boolean beachteSeitenwechsel = false;
 
+    private SpielHolder rot = new SpielHolder();
+    private SpielHolder weiss = new SpielHolder();
+
     @Autowired
     SpielRepository spielRepository;
 
     @Autowired
     TeamRepository teamRepository;
+
+    @Autowired
+    TurnierManager turnierManager;
 
     private SpielManager() {
 
@@ -50,8 +64,8 @@ public class SpielManager {
     private Team[] getTeamsForSpiel(Spiel spiel) {
         int[] teamIDs = spiel.getTeamIDs();
 
-        Team team1 = teamRepository.getReferenceById(teamIDs[0]);
-        Team team2 = teamRepository.getReferenceById(teamIDs[2]);
+        Team team1 = teamRepository.findById(teamIDs[0]).get();
+        Team team2 = teamRepository.findById(teamIDs[1]).get();
 
         return new Team[]{team1, team2};
     }
@@ -66,7 +80,23 @@ public class SpielManager {
             return;
         }
 
-        increment(tor.seite);
+        increment(getIdVonSeite(tor.seite));
+    }
+
+    private int getIdVonSeite(Tor.Seite seite) {
+        return getInfo(seite).teamID;
+    }
+
+    private SpielHolder getInfo(Tor.Seite seite) {
+       return seite == Tor.Seite.ROT ? rot : weiss;
+    }
+
+    private SpielHolder getInfoByID(int id) {
+        if(rot.teamID == id){
+            return rot;
+        }
+
+        return weiss;
     }
 
     /***
@@ -83,12 +113,14 @@ public class SpielManager {
         }
 
         if (maxTore == anzahltoreBisGewonnen) {
-            Instance.runde.empfangeEndergebnis(ergebnis);
+            turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
         }
     }
 
     public void seitenWechsel() {
-        tauscheTeams = !tauscheTeams;
+       SpielHolder tmp = rot;
+       rot = weiss;
+       weiss = tmp;
     }
 
     public SpielErgebnis getErgebnis() {
@@ -97,32 +129,16 @@ public class SpielManager {
 
     /***
      * Erhöht die entsprechende Toranzahl und sendet den aktuellen Zwischenstand an die Clients.
-     * @param seite
+     * @param teamID
      * @throws IOException
      */
-    public void increment(Tor.Seite seite) throws Exception {
+    public void increment(int teamID) throws Exception {
         sicherstellungSpielGestartet();
 
         triggerSpielMode();
 
-        if (seite == Tor.Seite.ROT) {
-            if (tauscheTeams) {
-                ergebnis.toreTeam2 += 1;
-            }
-            else {
-                ergebnis.toreTeam1 += 1;
-            }
-        }
-        else if (seite == Tor.Seite.WEISS) {
-            if (tauscheTeams) {
-                ergebnis.toreTeam1 += 1;
-            }
-            else {
-                ergebnis.toreTeam2 += 1;
-            }
-        }
+        getInfoByID(teamID).tore++;
 
-        spielRepository.save(ergebnis.spiel);
         SocketHandler.broadcast(ergebnis);
     }
 
@@ -134,28 +150,13 @@ public class SpielManager {
 
     /***
      * Verringert die entsprechende Toranzahl und sendet den aktuellen Zwischenstand an die Clients.
-     * @param seite
+     * @param teamID
      * @throws IOException
      */
-    public void decrement(Tor.Seite seite) throws Exception {
+    public void decrement(int teamID) throws Exception {
         sicherstellungSpielGestartet();
 
-        if (seite == Tor.Seite.ROT) {
-            if (tauscheTeams) {
-                ergebnis.toreTeam2 -= 1;
-            }
-            else {
-                ergebnis.toreTeam1 -= 1;
-            }
-        }
-        else if (seite == Tor.Seite.WEISS) {
-            if (tauscheTeams) {
-                ergebnis.toreTeam1 -= 1;
-            }
-            else {
-                ergebnis.toreTeam2 -= 1;
-            }
-        }
+        getInfoByID(teamID).tore--;
 
         spielRepository.save(ergebnis.spiel);
         SocketHandler.broadcast(ergebnis);

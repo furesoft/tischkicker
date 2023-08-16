@@ -1,14 +1,18 @@
 package de.shgruppe.tischkicker.client;
-
-import de.shgruppe.tischkicker.client.UI.DataButton;
+import de.shgruppe.tischkicker.client.ui.DataButton;
+import tischkicker.models.Spiel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static de.shgruppe.tischkicker.client.Client.getTeams;
+import static de.shgruppe.tischkicker.client.Client.turnierbaumGenerieren;
 
 public class TeamApp extends JFrame {
     private List<String> tempPlayers;
@@ -54,6 +58,7 @@ public class TeamApp extends JFrame {
     }
 
     public TeamApp() {
+        teams.addAll(List.of(getTeams()));
         setTitle("Team App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 500);
@@ -88,7 +93,9 @@ public class TeamApp extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startGame();
+              Spiel[] spiele =  Client.startTurnier();
+
+              turnierbaumGenerieren(spiele);
             }
         });
 
@@ -135,10 +142,9 @@ public class TeamApp extends JFrame {
     private void addTeam() {
         String teamName = teamNameField.getText();
         if (!teamName.isEmpty() && !tempPlayers.isEmpty()) {
-            team = new Team(tempPlayers, teamName);// Erstellen eines neuen Teams
-            Client.sendTeamsToServer(team);// Senden des Teams an den Server (Annahme)
-            //TODO sobald Client Server verbindung aufgebaut ist teams.add(team entfernen)
+            team = Client.sendTeamsToServer(new Team(tempPlayers, teamName));// Senden des Teams an den Server (Annahme)
             teams.add(team);
+
             outputTextArea.append("Team '" + teamName + "' wurde hinzugefügt.\n");
             tempPlayers = new ArrayList<>();// Zurücksetzen der temporären Spielerliste
             playerField.setText("");
@@ -150,7 +156,6 @@ public class TeamApp extends JFrame {
         }
         addTeamButton.setEnabled(false);
     }
-
 
 
     // Methode zur Konfiguration von Spieler- und Teamnamen
@@ -169,7 +174,7 @@ public class TeamApp extends JFrame {
                 teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
 
         int playerIndex = 0;
-                // Teamnamen hinzufügen
+        // Teamnamen hinzufügen
         for (Team team : teams) {
             JLabel teamLabel = new JLabel("Team " + team.getName());
 
@@ -224,7 +229,7 @@ public class TeamApp extends JFrame {
                     DataButton sender = (DataButton) e.getSource();
 
                     Team team2 = (Team) sender.getData();
-                   deleteTeams(team2);
+                    deleteTeams(team2);
                 }
             });
 
@@ -262,6 +267,7 @@ public class TeamApp extends JFrame {
             }
         }
     }
+
     // Methode zum Aktualisieren von Teamnamen
     private void updateTeamNames() {
         for (int i = 0; i < teams.size(); i++) {
@@ -272,7 +278,6 @@ public class TeamApp extends JFrame {
             team.setName(newTeamName);
         }
     }
-
 
 
     public void spielerHinzufuegenGUI() {
@@ -301,15 +306,16 @@ public class TeamApp extends JFrame {
     }
 
     //TODO Spieler zum Team hinzufügen
-    private void addPlayertoExistingTeam(){
+    private void addPlayertoExistingTeam() {
 
     }
+
     private void deletePlayerByString(DataButton btn) {
-        String playerNameToBeRemoved = (String)btn.getData();
+        String playerNameToBeRemoved = (String) btn.getData();
 
         for (int j = 0; j < teams.size(); j++) {
             Team team = teams.get(j);
-            List <String> playerNamesTeam1 = team.getPlayerNames();
+            List<String> playerNamesTeam1 = team.getPlayerNames();
             for (int i = 0; i < team.getNumberOfPlayersPerTeam(); i++) {
                 String playerName = playerNamesTeam1.get(i);
                 if (playerName.equals(playerNameToBeRemoved)) {
@@ -337,8 +343,9 @@ public class TeamApp extends JFrame {
 
 
     }
+
     //TODO Löschen der teams
-    private void deleteTeams(Team team){
+    private void deleteTeams(Team team) {
 
         Client.deleteTeam(team);
 
@@ -361,24 +368,4 @@ public class TeamApp extends JFrame {
 
     }
 
-
-    // Methode zum Starten des Spiels mit validierten Teams
-    private void startGame() {
-        if (team.getNumTeams() < 2) {
-            outputTextArea.append("Mindestens zwei Teams erforderlich!\n");
-        } else {
-            team.startGame();
-            Client.turnierbaumGenereieren();
-            for (int i = 0; i < teams.size(); i++) {
-                System.out.println(teams.get(i).name);
-            }
-            int anzahlSpielerallerTeams = teams.stream().mapToInt(team -> team.players.size()).sum();
-            /*for (int i = 0; i < anzahlSpielerallerTeams; i++) {
-                System.out.println(teams.get(i).players);
-            }
-
-             */
-            outputTextArea.append("Spiel gestartet!\n");
-        }
-    }
 }

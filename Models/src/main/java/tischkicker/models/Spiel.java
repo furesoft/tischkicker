@@ -41,11 +41,12 @@ public class Spiel {
     @Column(name = "qualifikation")
     private int qualifikation;
 
+    @Transient
     private String[] teamNames;
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int spielID;
 
 

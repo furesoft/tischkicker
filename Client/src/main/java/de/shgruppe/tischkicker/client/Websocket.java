@@ -1,11 +1,12 @@
 package de.shgruppe.tischkicker.client;
+
 import com.google.gson.Gson;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import tischkicker.messages.Message;
+import tischkicker.messages.MessageType;
 import tischkicker.models.SpielErgebnis;
-
-
 
 
 import java.net.URI;
@@ -24,11 +25,19 @@ public class Websocket extends WebSocketClient {
     @Override
     public void onMessage(String message) {
         Gson gson = new Gson();
-        SpielErgebnis spielergebnis = gson.fromJson(message, SpielErgebnis.class);
-        System.out.println("Received message: " + message);
-        gesamtTore neu = new gesamtTore();
 
-        neu.empfangeTor(spielergebnis);
+        Message deserializedMessage = gson.fromJson(message, Message.class);
+
+        if (deserializedMessage.type == MessageType.SpielErgebnis) {
+            SpielErgebnis spielergebnis = gson.fromJson(message, SpielErgebnis.class);
+            System.out.println("Received message: " + message);
+
+            Client.spielstandAnzeige.aktualisiereDaten(spielergebnis);
+        }
+        else if (deserializedMessage.type == MessageType.Phasenaenderung) {
+            //ToDo: implementiere spiel in nächster phase anzeigen
+        }
+
     }
 
     @Override
