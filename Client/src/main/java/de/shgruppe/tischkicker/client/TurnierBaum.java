@@ -14,13 +14,23 @@ public class TurnierBaum {
     static ArrayList<ArrayList<Spielfeld>> reihen = new ArrayList<>();
     JFrame frame = new JFrame();
     Spielfeld selectedSpielfeld;
+    Spielfeld aktuellesSpiel;
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
+    JButton starteSpiel = new JButton("Spiel starten");
 
     public TurnierBaum() {
         frame.setSize(1920, 1080);
         frame.setLayout(null);
         frame.setVisible(true);
+        starteSpiel.setBounds(50,20,150,50);
+        frame.add(starteSpiel);
+        starteSpiel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.spielStarten(aktuellesSpiel.spiel);
+            }
+        });
     }
 
     public void tunierbaumErstellen(double anzahlTeams){
@@ -37,6 +47,7 @@ public class TurnierBaum {
         spielfeldList.clear();
 
         do {
+            starteSpiel.setVisible(false);
             spielfeldListeFuellen(x, y, spielfelderAnzahl);
             reihen.add(new ArrayList<>(spielfeldList));
 
@@ -96,19 +107,7 @@ public class TurnierBaum {
             spielfeld.background.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    if(spielfeld.spiel == null) {
-                        return;
-                    }
-
-                    if(selectedSpielfeld != null) {
-                        selectedSpielfeld.background.setBackground(spielfeld.normal);
-                    }
-                    else {
-                        spielfeld.background.setBackground(spielfeld.normal);
-                    }
-
-                    selectedSpielfeld = spielfeld;
-                    Spielfeldclicked(spielfeld);
+                    spielfeldClicked(spielfeld);
                 }
             });
         }
@@ -117,21 +116,29 @@ public class TurnierBaum {
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld){
         reihen.get(reihe).get(spielfeld).setTeams(spiel);
     }
-
-    public void Spielfeldclicked(Spielfeld spielfeld)
+    public void spielfeldClicked (Spielfeld spielfeld)
     {
-        JButton starteSpiel = new JButton("Spiel starten");
-        starteSpiel.setBounds(50,20,150,50);
-        frame.add(starteSpiel);
-        starteSpiel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Client.spielStarten(spielfeld.spiel);
-            }
-        });
-        spielfeld.spielfeldSelected = true;
-        spielfeld.background.setBackground(spielfeld.selected);
+        aktuellesSpiel = spielfeld;
 
+        if (spielfeld.spiel == null || spielfeld.spiel.getTeamNames()[1] == null) {
+            return;
+        }
+
+        if (selectedSpielfeld != null) {
+            selectedSpielfeld.background.setBackground(spielfeld.normal);
+        } else {
+            spielfeld.background.setBackground(spielfeld.normal);
+        }
+        if (selectedSpielfeld == spielfeld) {
+            selectedSpielfeld.background.setBackground(spielfeld.normal);
+            starteSpiel.setVisible(false);
+            selectedSpielfeld = null;
+
+        } else {
+            selectedSpielfeld = spielfeld;
+            starteSpiel.setVisible(true);
+            spielfeld.background.setBackground(spielfeld.selected);
+        }
         frame.repaint();
         frame.revalidate();
     }

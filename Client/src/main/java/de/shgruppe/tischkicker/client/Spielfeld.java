@@ -16,7 +16,6 @@ public class Spielfeld {
     boolean besterVerlierer = false;
     Spiel spiel;
     int spielId;
-    boolean spielfeldSelected = false;
 
     public Spielfeld(JFrame frame, int x, int y, int width, int height) {
         background = new JLabel(" ");
