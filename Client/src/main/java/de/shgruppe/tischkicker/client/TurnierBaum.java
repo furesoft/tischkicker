@@ -96,6 +96,10 @@ public class TurnierBaum {
             spielfeld.background.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    if(spielfeld.spiel == null) {
+                        return;
+                    }
+
                     if(selectedSpielfeld != null) {
                         selectedSpielfeld.background.setBackground(spielfeld.normal);
                     }
