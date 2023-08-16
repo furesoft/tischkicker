@@ -59,15 +59,15 @@ public class Client {
         DECREMENT,
     }
 
-    public static void spielstandAnpassen(Tor.Seite seite, Modus modus) throws IOException, InterruptedException {
-        HttpRequest request = createRequest("/" + modus + "/" + seite)
+    public static void spielstandAnpassen(int id, Modus modus) throws IOException, InterruptedException {
+        HttpRequest request = createRequest("/" + modus + "/" + id)
                 .POST(HttpRequest.BodyPublishers.ofString(""))
                 .build();
 
        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
        if(response.statusCode() != 200) {
-           System.out.println(modus + " ist für " + seite + " schiefgegangen.");
+           System.out.println(modus + " ist für " + id + " schiefgegangen.");
        }
     }
 

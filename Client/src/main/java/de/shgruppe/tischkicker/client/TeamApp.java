@@ -1,6 +1,5 @@
 package de.shgruppe.tischkicker.client;
-
-import de.shgruppe.tischkicker.client.UI.DataButton;
+import de.shgruppe.tischkicker.client.ui.DataButton;
 import tischkicker.models.Spiel;
 
 import javax.swing.*;
