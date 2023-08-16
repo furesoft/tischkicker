@@ -22,36 +22,32 @@ public class TurnierManager {
     @Autowired
     SpielRepository spielRepository;
 
-    public List<Spiel> turnierStarten(){
+    public List<Spiel> turnierStarten() {
         List<Spiel> spiele = generiereSpiele();
         return spielRepository.saveAllAndFlush(spiele);
     }
-    private List<Spiel> generiereSpiele()
-    {
+
+    private List<Spiel> generiereSpiele() {
         int teamfaktor = 0;
         List<Team> teams = teamRepository.findAll();
-        if (teams.size()%2 != 0)
-        {
+        if (teams.size() % 2 != 0) {
             teamfaktor = 1;
         }
 
-        Spiel[] spiele = new Spiel[teams.size()/2+teamfaktor];
+        Spiel[] spiele = new Spiel[teams.size() / 2 + teamfaktor];
         Collections.shuffle(teams);
-        for (int i = 0 ; i < teams.size() ; i++)
-        {
-            if (i%2==0 && i<teams.size()-2)
-            {
+        for (int i = 0; i < teams.size(); i++) {
+            if (i % 2 == 0 && i < teams.size() - 1) {
                 Spiel spiel = new Spiel();
-                spiel.setTeams(teams.get(i).getID(),teams.get(i+1).getID());
+                spiel.setTeams(teams.get(i).getID(), teams.get(i + 1).getID());
                 spiel.setTeamNames(teams.get(i).getName(), teams.get(i + 1).getName());
-                spiele[i/2] = spiel;
+                spiele[i / 2] = spiel;
             }
-            if (teams.size()%2 != 0 && i== teams.size()-1)
-            {
+            if (teams.size() % 2 != 0 && i == teams.size() - 1) {
                 Spiel spielUngerade = new Spiel();
-                spielUngerade.setTeams(teams.get(i).getID(),-1);
-                spielUngerade.setTeamNames(teams.get(i).getName(),null);
-                spiele[i/2] = spielUngerade;
+                spielUngerade.setTeams(teams.get(i).getID(), -1);
+                spielUngerade.setTeamNames(teams.get(i).getName(), null);
+                spiele[i / 2] = spielUngerade;
             }
         }
         // TODO Fall abdecken für ungerade Anzahl an Teams
