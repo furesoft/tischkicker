@@ -3,7 +3,8 @@ package de.shgruppe.tischkicker.client;
 import tischkicker.models.Spiel;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class TurnierBaum {
 
     static ArrayList<ArrayList<Spielfeld>> reihen = new ArrayList<>();
     JFrame frame = new JFrame();
+    Spielfeld selectedSpielfeld;
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
 
@@ -81,7 +83,7 @@ public class TurnierBaum {
         }
     }
 
-Spielfeld selectedSpielfeld;
+
     public void spielfeldListeFuellen(int x, int y, int anzahlReihen){
 
         for(int i = 0; i < anzahlReihen; i++){
@@ -102,7 +104,7 @@ Spielfeld selectedSpielfeld;
                     }
 
                     selectedSpielfeld = spielfeld;
-                    isSpielfeldclicked(spielfeld);
+                    Spielfeldclicked(spielfeld);
                 }
             });
         }
@@ -112,9 +114,20 @@ Spielfeld selectedSpielfeld;
         reihen.get(reihe).get(spielfeld).setTeams(spiel);
     }
 
-    public void isSpielfeldclicked (Spielfeld spielfeld)
+    public void Spielfeldclicked(Spielfeld spielfeld)
     {
+        JButton starteSpiel = new JButton("Spiel starten");
+        starteSpiel.setBounds(50,20,150,50);
+        frame.add(starteSpiel);
+        starteSpiel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client.spielStarten(spielfeld.spiel);
+            }
+        });
+        spielfeld.spielfeldSelected = true;
         spielfeld.background.setBackground(spielfeld.selected);
+
         frame.repaint();
         frame.revalidate();
     }

@@ -16,7 +16,7 @@ public class Spielfeld {
     boolean besterVerlierer = false;
     Spiel spiel;
     int spielId;
-    boolean selectedSpielfeld = false;
+    boolean spielfeldSelected = false;
 
     public Spielfeld(JFrame frame, int x, int y, int width, int height) {
         background = new JLabel(" ");
@@ -50,10 +50,6 @@ public class Spielfeld {
         frame.add(background);
     }
 
-    public Spiel aktuellesSpiel() {
-        background.setBackground(Color.RED);
-        return spiel;
-    }
 
     public void gewinnerTeam1() {
         team1.setBackground(Color.GREEN);

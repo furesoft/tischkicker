@@ -39,7 +39,7 @@ public class TurnierManager {
         Collections.shuffle(teams);
         for (int i = 0 ; i < teams.size() ; i++)
         {
-            if (i%2==0 && i<teams.size()-2)
+            if (i%2==0 && i<teams.size()-1)
             {
                 Spiel spiel = new Spiel();
                 spiel.setTeams(teams.get(i).getID(),teams.get(i+1).getID());
@@ -54,7 +54,7 @@ public class TurnierManager {
                 spiele[i/2] = spielUngerade;
             }
         }
-        // TODO Fall abdecken für ungerade Anzahl an Teams
+
         return Arrays.asList(spiele);
     }
 }

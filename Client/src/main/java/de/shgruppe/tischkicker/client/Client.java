@@ -146,6 +146,56 @@ public class Client {
         return null;
     }
 
+    public static void spielStarten (Spiel spiel)
+    {
+        try {
+            String jsonData = gson.toJson(spiel);
+
+            // HTTP-POST-Anfrage erstellen
+            HttpRequest request = createRequest("/spiel/start/"+spiel.getSpielID())
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+                    .build();
+
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                // Die JSON-Antwort verarbeiten
+                String responseBody = response.body();
+            } else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void spielAufgeben (Spiel spiel)
+    {
+        try {
+        String jsonData = gson.toJson(spiel);
+
+        // HTTP-POST-Anfrage erstellen
+        HttpRequest request = createRequest("/spiel/aufgeben/"+spiel.getSpielID())
+                .POST(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+                .build();
+
+        // Die Anfrage an die API senden und die Antwort erhalten
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        int statusCode = response.statusCode();
+        if (statusCode == 200) {
+            // Die JSON-Antwort verarbeiten
+            String responseBody = response.body();
+        } else {
+            System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+        }
+    } catch (IOException | InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+
 
     public static Spiel[] getSpieleFromServer() {
 
