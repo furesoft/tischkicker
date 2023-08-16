@@ -111,7 +111,7 @@ public class Client {
             if (statusCode == 200) {
                 // Die JSON-Antwort verarbeiten
                 String responseBody = response.body();
-                System.out.println("API-Antwort:");
+                System.out.println("API-Antwort:"+responseBody);
 
                 return Client.gson.fromJson(responseBody, Spiel[].class);
             } else {

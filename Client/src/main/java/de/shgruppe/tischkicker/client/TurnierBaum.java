@@ -3,6 +3,9 @@ package de.shgruppe.tischkicker.client;
 import tischkicker.models.Spiel;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class TurnierBaum {
@@ -78,15 +81,42 @@ public class TurnierBaum {
         }
     }
 
-
+Spielfeld selectedSpielfeld;
     public void spielfeldListeFuellen(int x, int y, int anzahlReihen){
+
         for(int i = 0; i < anzahlReihen; i++){
-            spielfeldList.add(new Spielfeld(frame, x, y, 150, 100));
+            Spielfeld spielfeld = new Spielfeld(frame, x, y, 150, 100);
+            spielfeldList.add(spielfeld);
+
             y += 125;
         }
+        for (Spielfeld spielfeld:spielfeldList) {
+            spielfeld.background.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if(selectedSpielfeld != null) {
+                        selectedSpielfeld.background.setBackground(spielfeld.normal);
+                    }
+                    else {
+                        spielfeld.background.setBackground(spielfeld.normal);
+                    }
+
+                    selectedSpielfeld = spielfeld;
+                    isSpielfeldclicked(spielfeld);
+                }
+            });
+        }
+
     }
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld){
         reihen.get(reihe).get(spielfeld).setTeams(spiel);
+    }
+
+    public void isSpielfeldclicked (Spielfeld spielfeld)
+    {
+        spielfeld.background.setBackground(spielfeld.selected);
+        frame.repaint();
+        frame.revalidate();
     }
 }
 
