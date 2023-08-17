@@ -25,8 +25,10 @@ public class AktuellerSpielstand {
     JPanel farbanzeigeTeam1 = new JPanel();
     JPanel farbanzeigeTeam2 = new JPanel();
 
-    JButton manuellerSeitenwechsel;
     JLabel seitenwechsel;
+
+    DataButton aufgebenTeam1Btn = new DataButton("X");
+    DataButton aufgebenTeam2Btn = new DataButton("X");
 
     JFrame frame = new JFrame();
 
@@ -58,7 +60,7 @@ public class AktuellerSpielstand {
         toreTeam1Erhoehen.addActionListener(AktuellerSpielstand::buttonClick);
 
         toreTeam1Verringern = new DataButton("-");
-        toreTeam1Verringern.setBounds(0, toreTeam1Erhoehen.getY() + toreTeam1Erhoehen.getHeight(), (int) (width * 0.1), (int) (height * 0.25));
+        toreTeam1Verringern.setBounds(0, toreTeam1Erhoehen.getY() + toreTeam1Erhoehen.getHeight(), (int) (width * 0.1), (int) (height * 0.25) - 50);
         toreTeam1Verringern.setOpaque(true);
         toreTeam1Verringern.addActionListener(AktuellerSpielstand::buttonClick);
 
@@ -79,6 +81,14 @@ public class AktuellerSpielstand {
         toreTeam2Verringern.setOpaque(true);
         toreTeam2Verringern.addActionListener(AktuellerSpielstand::buttonClick);
 
+        aufgebenTeam1Btn.setToolTipText("aufgeben");
+        aufgebenTeam1Btn.setBounds(toreTeam1Verringern.getX(), height - 50, toreTeam1Erhoehen.getWidth(), 50);
+        aufgebenTeam1Btn.setOpaque(true);
+
+        aufgebenTeam2Btn.setToolTipText("aufgeben");
+        aufgebenTeam2Btn.setBounds(toreTeam2Verringern.getX(), height - 50, toreTeam2Erhoehen.getWidth(), 50);
+        aufgebenTeam2Btn.setOpaque(true);
+
 
         frame.add(seitenwechsel);
         frame.add(team1Name);
@@ -91,6 +101,9 @@ public class AktuellerSpielstand {
 
         frame.add(farbanzeigeTeam1);
         frame.add(farbanzeigeTeam2);
+
+        frame.add(aufgebenTeam1Btn);
+        frame.add(aufgebenTeam2Btn);
 
         frame.setSize(width + 6, height + 37);
         frame.setLayout(null);
@@ -137,9 +150,13 @@ public class AktuellerSpielstand {
 
         toreTeam1Erhoehen.setData(team1ID);
         toreTeam1Verringern.setData(team1ID);
+        aufgebenTeam1Btn.setData(team1ID);
+        aufgebenTeam1Btn.addActionListener(e -> aufgebenClick(e));
 
         toreTeam2Erhoehen.setData(team2ID);
         toreTeam2Verringern.setData(team2ID);
+        aufgebenTeam2Btn.setData(team1ID);
+        aufgebenTeam2Btn.addActionListener(e -> aufgebenClick(e));
 
         farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam1));
         farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam2));
@@ -147,15 +164,26 @@ public class AktuellerSpielstand {
         frame.repaint();
     }
 
+    private void aufgebenClick(ActionEvent e) {
+        DataButton btn = (DataButton)e.getSource();
+
+        try {
+            Client.aufgeben((int)btn.getData());
+        } catch (IOException ex) {
+        } catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     private static Color getTeamFarbe(Tor.Seite seite) {
         return seite == Tor.Seite.ROT ? Color.RED : Color.white;
     }
 
-    public void aktualisiereDaten(Spiel ergebnis) {
+    public void aktualisiereDaten(Spiel spiel) {
         setTore("0 : 0");
 
-        String[] teamNames = ergebnis.getTeamNames();
-        int[] teamIds = ergebnis.getTeamIDs();
+        String[] teamNames = spiel.getTeamNames();
+        int[] teamIds = spiel.getTeamIDs();
 
         team1Name.setText("<html>" + teamNames[0] + "</html>");
         team2Name.setText("<html>" + teamNames[1] + "</html>");

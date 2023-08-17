@@ -62,11 +62,24 @@ public class Client {
                 .POST(HttpRequest.BodyPublishers.ofString(""))
                 .build();
 
-       HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-       if(response.statusCode() != 200) {
-           System.out.println(modus + " ist für " + id + " schiefgegangen.");
-       }
+        if(response.statusCode() != 200) {
+            System.out.println(modus + " ist für " + id + " schiefgegangen.");
+        }
+    }
+
+
+    public static void aufgeben(int id) throws IOException, InterruptedException {
+        HttpRequest request = createRequest("/spiel/aufgeben" + id)
+                .POST(HttpRequest.BodyPublishers.ofString(""))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if(response.statusCode() != 200) {
+            System.out.println("Aufgeben ist für " + id + " schiefgegangen.");
+        }
     }
 
 
