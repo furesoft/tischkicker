@@ -15,7 +15,6 @@ public class Spielfeld {
     Color normal = new Color(149, 157, 158);
     boolean besterVerlierer = false;
     Spiel spiel;
-    int spielId;
 
     public Spielfeld(JFrame frame, int x, int y, int width, int height) {
         background = new JLabel(" ");

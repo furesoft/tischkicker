@@ -22,7 +22,7 @@ class SpielHolder {
 @Component
 public class SpielManager {
 
-    private final SpielErgebnis ergebnis = new SpielErgebnis();
+    private SpielErgebnis ergebnis = new SpielErgebnis();
 
     private boolean tauscheTeams = false;
     public boolean spielVorbei = false;
@@ -47,9 +47,10 @@ public class SpielManager {
     }
 
     public void reset() {
-        ergebnis.toreTeam2 = 0;
-        ergebnis.toreTeam1 = 0;
-        ergebnis.spiel = null;
+        ergebnis = new SpielErgebnis();
+        rot = new SpielHolder();
+        weiss = new SpielHolder();
+
         tauscheTeams = false;
         spielVorbei = false;
     }

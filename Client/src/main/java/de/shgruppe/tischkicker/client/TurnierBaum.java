@@ -108,6 +108,7 @@ public class TurnierBaum {
 
             y += 125;
         }
+
         for (Spielfeld spielfeld:spielfeldList) {
             spielfeld.background.addMouseListener(new MouseAdapter() {
                 @Override
