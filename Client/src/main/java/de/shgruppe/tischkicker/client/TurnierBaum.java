@@ -1,11 +1,9 @@
 package de.shgruppe.tischkicker.client;
 
 import tischkicker.models.Spiel;
-import tischkicker.models.SpielErgebnis;
+import tischkicker.messages.SpielErgebnis;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -153,6 +151,10 @@ public class TurnierBaum {
     }
 
     public void ergebnisUebertragen(SpielErgebnis spielergebnis) {
+        if(spielergebnis.spiel == null) {
+            return;
+        }
+
         for (Spielfeld feld : alleSpielfelder) {
             if (feld.spiel.getSpielID() == spielergebnis.spiel.getSpielID()) {
                 feld.spiel = spielergebnis.spiel;

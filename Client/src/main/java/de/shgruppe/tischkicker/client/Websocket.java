@@ -6,10 +6,9 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import tischkicker.messages.Message;
 import tischkicker.messages.MessageType;
-import tischkicker.models.SpielErgebnis;
+import tischkicker.messages.SpielErgebnis;
 
 
-import javax.swing.*;
 import java.net.URI;
 
 

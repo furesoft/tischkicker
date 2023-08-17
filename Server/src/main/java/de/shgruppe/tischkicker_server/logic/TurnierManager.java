@@ -14,7 +14,7 @@ import java.util.List;
 
 @Component
 public class TurnierManager {
-    SpielPhase spielPhase;
+    SpielPhase spielPhase = new SpielPhase();
 
     @Autowired
     TeamRepository teamRepository;

@@ -1,7 +1,10 @@
-package tischkicker.models;
+package tischkicker.messages;
 
 import tischkicker.messages.Message;
 import tischkicker.messages.MessageType;
+import tischkicker.models.Spiel;
+import tischkicker.models.Team;
+import tischkicker.models.Tor;
 
 public class SpielErgebnis extends Message {
     public Spiel spiel;

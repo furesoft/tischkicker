@@ -6,7 +6,7 @@ import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tischkicker.models.Spiel;
-import tischkicker.models.SpielErgebnis;
+import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Team;
 import tischkicker.models.Tor;
 
@@ -118,8 +118,11 @@ public class SpielManager {
             }
         }
 
-        if (maxTore == anzahltoreBisGewonnen) {
+        if (maxTore >= anzahltoreBisGewonnen) {
             turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+            reset();
+
+            spielVorbei = true;
         }
     }
 
@@ -142,7 +145,9 @@ public class SpielManager {
      * @throws IOException
      */
     public void increment(int teamID) throws Exception {
-        sicherstellungSpielGestartet();
+        if (!spielVorbei && ergebnis.spiel == null) {
+            return;
+        }
 
         triggerSpielMode();
 
@@ -157,19 +162,15 @@ public class SpielManager {
         ergebnis.toreTeam2 = weiss.tore;
     }
 
-    private void sicherstellungSpielGestartet() throws Exception {
-        if (ergebnis.spiel == null) {
-            throw new Exception("Es wurde kein Spiel gestartet");
-        }
-    }
-
     /***
      * Verringert die entsprechende Toranzahl und sendet den aktuellen Zwischenstand an die Clients.
      * @param teamID
      * @throws IOException
      */
     public void decrement(int teamID) throws Exception {
-        sicherstellungSpielGestartet();
+        if (!spielVorbei && ergebnis.spiel == null) {
+            return;
+        }
 
         SpielHolder team = getInfoByID(teamID);
         if (team.tore == 0) {

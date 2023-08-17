@@ -2,7 +2,7 @@ package de.shgruppe.tischkicker.client;
 
 import de.shgruppe.tischkicker.client.ui.DataButton;
 import tischkicker.models.Spiel;
-import tischkicker.models.SpielErgebnis;
+import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Team;
 import tischkicker.models.Tor;
 
@@ -123,7 +123,8 @@ public class AktuellerSpielstand {
         toreLbl.setText(text);
 
         int fontWidth = getToreWidth();
-        toreLbl.setBounds(frame.getWidth() / 2 - fontWidth / 2, toreTeam1Erhoehen.getY(), fontWidth, (int) (frame.getHeight() * 0.5));
+
+        toreLbl.setBounds(frame.getWidth() / 2 - fontWidth / 2, toreTeam1Erhoehen.getY() - 13, fontWidth, (int) (frame.getHeight() * 0.5));
     }
 
     private static void buttonClick(ActionEvent e) {
@@ -146,6 +147,10 @@ public class AktuellerSpielstand {
 
         team1Name.setText("<html>" + teamNames[0].getName() + "</html>");
         team2Name.setText("<html>" + teamNames[1].getName() + "</html>");
+
+        if(ergebnis.spiel == null) {
+            return;
+        }
 
         int[] ids = ergebnis.spiel.getTeamIDs();
         team1ID = ids[0];
