@@ -9,6 +9,7 @@ import tischkicker.messages.MessageType;
 import tischkicker.models.SpielErgebnis;
 
 
+import javax.swing.*;
 import java.net.URI;
 
 
@@ -33,6 +34,9 @@ public class Websocket extends WebSocketClient {
             System.out.println("Received message: " + message);
 
             Client.spielstandAnzeige.aktualisiereDaten(spielergebnis);
+
+            System.out.printf(String.valueOf(Thread.currentThread().getId()));
+            Client.turnierbaum.ergebnisUebertragen(spielergebnis);
         }
         else if (deserializedMessage.type == MessageType.Phasenaenderung) {
             //ToDo: implementiere spiel in nächster phase anzeigen

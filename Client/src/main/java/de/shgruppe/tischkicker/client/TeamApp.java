@@ -336,19 +336,13 @@ public class TeamApp extends JFrame {
                         System.out.println("Zu wenig Spieler im Team!!");
                     }
                 }
-
             }
-
         }
-
-
     }
 
     //TODO Löschen der teams
     private void deleteTeams(Team team) {
-
         Client.deleteTeam(team);
-
     }
 
     // Methode zum Initialisieren des ActionListeners zum Speichern von Teamnamen

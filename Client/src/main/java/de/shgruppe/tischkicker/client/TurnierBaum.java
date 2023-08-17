@@ -1,6 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
 import tischkicker.models.Spiel;
+import tischkicker.models.SpielErgebnis;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,7 @@ public class TurnierBaum {
     Spielfeld aktuellesSpiel;
     JLabel hinweis = new JLabel();
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
+    ArrayList<Spielfeld> alleSpielfelder = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
     JButton starteSpiel = new JButton("Spiel starten");
 
@@ -33,6 +35,7 @@ public class TurnierBaum {
         starteSpiel.addActionListener(e -> {
             Client.spielstandAnzeige.show();
             Client.spielstandAnzeige.aktualisiereDaten(aktuellesSpiel.spiel);
+
             Client.spielStarten(aktuellesSpiel.spiel);
         });
     }
@@ -100,10 +103,10 @@ public class TurnierBaum {
 
 
     public void spielfeldListeFuellen(int x, int y, int anzahlReihen){
-
         for(int i = 0; i < anzahlReihen; i++){
             Spielfeld spielfeld = new Spielfeld(frame, x, y, 150, 100);
             spielfeldList.add(spielfeld);
+            alleSpielfelder.add(spielfeld);
 
             y += 125;
         }
@@ -133,6 +136,7 @@ public class TurnierBaum {
         } else {
             spielfeld.background.setBackground(spielfeld.normal);
         }
+
         if (selectedSpielfeld == spielfeld) {
             selectedSpielfeld.background.setBackground(spielfeld.normal);
             starteSpiel.setVisible(false);
@@ -143,8 +147,21 @@ public class TurnierBaum {
             starteSpiel.setVisible(true);
             spielfeld.background.setBackground(spielfeld.selected);
         }
+
         frame.repaint();
         frame.revalidate();
+    }
+
+    public void ergebnisUebertragen(SpielErgebnis spielergebnis) {
+        for (Spielfeld feld : alleSpielfelder) {
+            if (feld.spiel.getSpielID() == spielergebnis.spiel.getSpielID()) {
+                feld.spiel = spielergebnis.spiel;
+                feld.toreTeam1.setText(String.valueOf(spielergebnis.toreTeam1));
+                feld.toreTeam2.setText(String.valueOf(spielergebnis.toreTeam2));
+
+                break;
+            }
+        }
     }
 }
 
