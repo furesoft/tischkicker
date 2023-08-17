@@ -1,6 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
 import de.shgruppe.tischkicker.client.ui.DataButton;
+import tischkicker.models.Spiel;
 import tischkicker.models.SpielErgebnis;
 import tischkicker.models.Team;
 
@@ -80,9 +81,6 @@ public class AktuellerSpielstand {
         frame.setSize(width + 6, height + 37);
         frame.setLayout(null);
         frame.setResizable(false);
-        frame.setVisible(true);
-
-        setTore("0 : 0");
     }
 
     private int getToreWidth() {
@@ -101,7 +99,7 @@ public class AktuellerSpielstand {
     private static void buttonClick(ActionEvent e) {
         DataButton btn = (DataButton) e.getSource();
 
-        Client.Modus modus = btn.getText() == "+" ? Client.Modus.INCREMENT : Client.Modus.DECREMENT;
+        Client.Modus modus = btn.getText() == "+" ? Client.Modus.increment : Client.Modus.decrement;
 
         try {
             Client.spielstandAnpassen((int) btn.getData(), modus);
@@ -119,8 +117,30 @@ public class AktuellerSpielstand {
         team1Name.setText("<html>" + teamNames[0].getName() + "</html>");
         team2Name.setText("<html>" + teamNames[1].getName() + "</html>");
 
-        team1ID = ergebnis.teams[0].getID();
-        team2ID = ergebnis.teams[1].getID();
+        int[] ids = ergebnis.spiel.getTeamIDs();
+        team1ID = ids[0];
+        team2ID = ids[1];
+
+        toreTeam1Erhoehen.setData(team1ID);
+        toreTeam1Verringern.setData(team1ID);
+
+        toreTeam2Erhoehen.setData(team2ID);
+        toreTeam2Verringern.setData(team2ID);
+
+        frame.repaint();
+    }
+
+    public void aktualisiereDaten(Spiel ergebnis) {
+        setTore("0 : 0 ");
+
+        String[] teamNames = ergebnis.getTeamNames();
+        int[] teamIds = ergebnis.getTeamIDs();
+
+        team1Name.setText("<html>" + teamNames[0] + "</html>");
+        team2Name.setText("<html>" + teamNames[1] + "</html>");
+
+        team1ID = teamIds[0];
+        team2ID = teamIds[1];
 
         toreTeam1Erhoehen.setData(team1ID);
         toreTeam1Verringern.setData(team1ID);
@@ -131,5 +151,11 @@ public class AktuellerSpielstand {
 
     public void show() {
         frame.setVisible(true);
+
+        setTore("0 : 0");
+    }
+
+    public void hide() {
+        frame.setVisible(false);
     }
 }

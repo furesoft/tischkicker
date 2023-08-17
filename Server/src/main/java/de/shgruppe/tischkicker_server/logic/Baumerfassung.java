@@ -68,7 +68,6 @@ public class Baumerfassung {
         ArrayList<Spiel> spiele = generiereSpielList();
         ArrayList<Integer> ids = generiereIDList();
 
-        Spiel test = new Spiel(ids.get(0) + "," + ids.get(1));
 
         //ToDo: implementiere durchgang
         return 0;

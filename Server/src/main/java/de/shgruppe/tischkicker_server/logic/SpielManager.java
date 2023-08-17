@@ -141,10 +141,14 @@ public class SpielManager {
         triggerSpielMode();
 
         getInfoByID(teamID).tore++;
-        ergebnis.toreTeam1 = rot.tore;
-        ergebnis.toreTeam2 = weiss.tore;
+        setzeTorErgebnisse();
 
         SocketHandler.broadcast(ergebnis);
+    }
+
+    private void setzeTorErgebnisse() {
+        ergebnis.toreTeam1 = rot.tore;
+        ergebnis.toreTeam2 = weiss.tore;
     }
 
     private void sicherstellungSpielGestartet() throws Exception {
@@ -161,9 +165,17 @@ public class SpielManager {
     public void decrement(int teamID) throws Exception {
         sicherstellungSpielGestartet();
 
-        getInfoByID(teamID).tore--;
+        SpielHolder team = getInfoByID(teamID);
+        if(team.tore == 0) {
+            return;
+        }
+
+        team.tore--;
 
         spielRepository.save(ergebnis.spiel);
+
+        setzeTorErgebnisse();
+
         SocketHandler.broadcast(ergebnis);
     }
 }

@@ -36,6 +36,7 @@ public class TurnierController {
     }
 
     @GetMapping("/turnier")
-    public List<Spiel> turnierStarten() { return turnierManager.turnierStarten();
+    public List<Spiel> turnierStarten() {
+        return turnierManager.turnierStarten();
     }
 }

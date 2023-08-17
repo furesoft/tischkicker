@@ -70,7 +70,7 @@ public class SpielController {
         spielManager.increment(teamID);
     }
 
-    @PostMapping("/spiel/decrement/{seite}")
+    @PostMapping("/spiel/decrement/{teamID}")
     public void spielstandDecrementieren(@PathVariable int teamID) throws Exception {
         spielManager.decrement(teamID);
     }

@@ -29,12 +29,11 @@ public class TurnierBaum {
         hinweis.setBounds(300,20,250,50);
         hinweis.setText("* = Bester Verlierer dieser Spiel-Phase");
         frame.add(hinweis);
-        starteSpiel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-                Client.spielStarten(aktuellesSpiel.spiel);
-            }
+        starteSpiel.addActionListener(e -> {
+            Client.spielstandAnzeige.show();
+            Client.spielstandAnzeige.aktualisiereDaten(aktuellesSpiel.spiel);
+            Client.spielStarten(aktuellesSpiel.spiel);
         });
     }
 

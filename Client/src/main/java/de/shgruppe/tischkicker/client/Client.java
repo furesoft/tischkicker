@@ -1,7 +1,6 @@
 package de.shgruppe.tischkicker.client;
 import com.google.gson.Gson;
 import tischkicker.models.Spiel;
-import tischkicker.models.Tor;
 
 import javax.swing.*;
 import java.net.URISyntaxException;
@@ -55,12 +54,11 @@ public class Client {
     }
 
     public enum Modus {
-        INCREMENT,
-        DECREMENT,
+        increment, decrement,
     }
 
     public static void spielstandAnpassen(int id, Modus modus) throws IOException, InterruptedException {
-        HttpRequest request = createRequest("/" + modus + "/" + id)
+        HttpRequest request = createRequest("/spiel/" + modus + "/" + id)
                 .POST(HttpRequest.BodyPublishers.ofString(""))
                 .build();
 
@@ -228,7 +226,8 @@ public class Client {
         return null;
     }
 
-        public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(500,500);
+    public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(500,500);
+
     public static void main(String[] args) {
         try {
             URI serverURI = new URI("ws://localhost:8080/live");
@@ -240,7 +239,6 @@ public class Client {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
                 public void run() {
-                spielstandAnzeige.show();
                 new TeamApp().setVisible(true);
             }
         });
