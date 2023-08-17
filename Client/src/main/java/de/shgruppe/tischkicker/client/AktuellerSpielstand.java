@@ -4,6 +4,7 @@ import de.shgruppe.tischkicker.client.ui.DataButton;
 import tischkicker.models.Spiel;
 import tischkicker.models.SpielErgebnis;
 import tischkicker.models.Team;
+import tischkicker.models.Tor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,10 @@ public class AktuellerSpielstand {
     DataButton toreTeam1Verringern;
     DataButton toreTeam2Erhoehen;
     DataButton toreTeam2Verringern;
+
+    JPanel farbanzeigeTeam1 = new JPanel();
+    JPanel farbanzeigeTeam2 = new JPanel();
+
     JButton manuellerSeitenwechsel;
     JLabel seitenwechsel;
 
@@ -40,6 +45,12 @@ public class AktuellerSpielstand {
         team2Name = new JLabel("b");
         team2Name.setBounds(width - 150, seitenwechsel.getHeight(), width / 2, (int) (height * 0.3));
         team2Name.setOpaque(true);
+
+        farbanzeigeTeam1.setBounds(team1Name.getX() - 25, team1Name.getY() + 70, 15, 15);
+        farbanzeigeTeam1.setBackground(Color.WHITE);
+
+        farbanzeigeTeam2.setBounds(team2Name.getX() - 25, team2Name.getY() + 70, 15, 15);
+        farbanzeigeTeam2.setBackground(Color.RED);
 
         toreTeam1Erhoehen = new DataButton("+");
         toreTeam1Erhoehen.setBounds(0, team1Name.getY() + team1Name.getHeight(), (int) (width * 0.1), (int) (height * 0.25));
@@ -77,6 +88,9 @@ public class AktuellerSpielstand {
         frame.add(toreTeam1Verringern);
         frame.add(toreTeam2Verringern);
         frame.add(toreLbl);
+
+        frame.add(farbanzeigeTeam1);
+        frame.add(farbanzeigeTeam2);
 
         frame.setSize(width + 6, height + 37);
         frame.setLayout(null);
@@ -127,11 +141,18 @@ public class AktuellerSpielstand {
         toreTeam2Erhoehen.setData(team2ID);
         toreTeam2Verringern.setData(team2ID);
 
+        farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam1));
+        farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam2));
+
         frame.repaint();
     }
 
+    private static Color getTeamFarbe(Tor.Seite seite) {
+        return seite == Tor.Seite.ROT ? Color.RED : Color.white;
+    }
+
     public void aktualisiereDaten(Spiel ergebnis) {
-        setTore("0 : 0 ");
+        setTore("0 : 0");
 
         String[] teamNames = ergebnis.getTeamNames();
         int[] teamIds = ergebnis.getTeamIDs();

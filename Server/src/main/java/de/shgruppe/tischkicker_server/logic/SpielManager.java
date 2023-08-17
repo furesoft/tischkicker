@@ -62,6 +62,9 @@ public class SpielManager {
 
         rot.teamID = spiel.getTeamIDs()[0];
         weiss.teamID = spiel.getTeamIDs()[1];
+
+        ergebnis.seiteTeam1 = Tor.Seite.ROT;
+        ergebnis.seiteTeam2 = Tor.Seite.WEISS;
     }
 
     private Team[] getTeamsForSpiel(Spiel spiel) {
@@ -91,11 +94,11 @@ public class SpielManager {
     }
 
     private SpielHolder getInfo(Tor.Seite seite) {
-       return seite == Tor.Seite.ROT ? rot : weiss;
+        return seite == Tor.Seite.ROT ? rot : weiss;
     }
 
     private SpielHolder getInfoByID(int id) {
-        if(rot.teamID == id){
+        if (rot.teamID == id) {
             return rot;
         }
 
@@ -121,9 +124,12 @@ public class SpielManager {
     }
 
     public void seitenWechsel() {
-       SpielHolder tmp = rot;
-       rot = weiss;
-       weiss = tmp;
+        SpielHolder tmp = rot;
+        rot = weiss;
+        weiss = tmp;
+
+        ergebnis.seiteTeam1 = Tor.Seite.WEISS;
+        ergebnis.seiteTeam2 = Tor.Seite.ROT;
     }
 
     public SpielErgebnis getErgebnis() {
@@ -166,7 +172,7 @@ public class SpielManager {
         sicherstellungSpielGestartet();
 
         SpielHolder team = getInfoByID(teamID);
-        if(team.tore == 0) {
+        if (team.tore == 0) {
             return;
         }
 

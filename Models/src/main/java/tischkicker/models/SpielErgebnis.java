@@ -10,6 +10,9 @@ public class SpielErgebnis extends Message {
 
     public Team[] teams;
 
+    public Tor.Seite seiteTeam1;
+    public Tor.Seite seiteTeam2;
+
     public SpielErgebnis() {
         this.type = MessageType.SpielErgebnis;
     }
