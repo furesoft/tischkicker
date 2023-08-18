@@ -4,7 +4,9 @@ import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.logic.TurnierManager;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import tischkicker.models.Spiel;
 import tischkicker.models.Turnier;
 
@@ -24,13 +26,13 @@ public class TurnierController {
 
     @GetMapping("/turniere/{id}")
     public Turnier einzelnesTurnierHolen(@PathVariable int id) {
-        Optional <Turnier> turnier = repository.findById(id);
-        return Hilfsmethoden.optionalCheck(turnier,id);
+        Optional<Turnier> turnier = repository.findById(id);
+        return Hilfsmethoden.optionalCheck(turnier, id);
     }
 
     @GetMapping("/turniere/{datum}")
     public Turnier turnierbyDatum(@PathVariable Date datum) {
-       // return repository.findByDate(datum);
+        // return repository.findByDate(datum);
         //ToDo: Nicht implementiert
         return null;
     }

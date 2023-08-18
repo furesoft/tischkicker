@@ -1,8 +1,8 @@
 package de.shgruppe.tischkicker.client;
 
 import de.shgruppe.tischkicker.client.ui.DataButton;
-import tischkicker.models.Spiel;
 import tischkicker.messages.SpielErgebnis;
+import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Tor;
 
@@ -80,15 +80,13 @@ public class AktuellerSpielstand {
 
         toreTeam2Erhoehen = new DataButton("+");
         toreTeam2Erhoehen.setToolTipText("Spielstand erhöhen");
-        toreTeam2Erhoehen.setBounds(width - toreTeam1Erhoehen.getWidth() - 10, toreTeam1Erhoehen.getY(),
-                toreTeam1Erhoehen.getWidth(), toreTeam1Erhoehen.getHeight());
+        toreTeam2Erhoehen.setBounds(width - toreTeam1Erhoehen.getWidth() - 10, toreTeam1Erhoehen.getY(), toreTeam1Erhoehen.getWidth(), toreTeam1Erhoehen.getHeight());
         toreTeam2Erhoehen.setOpaque(true);
         toreTeam2Erhoehen.addActionListener(AktuellerSpielstand::buttonClick);
 
         toreTeam2Verringern = new DataButton("-");
         toreTeam2Erhoehen.setToolTipText("Spielstand verringern");
-        toreTeam2Verringern.setBounds(width - toreTeam1Verringern.getWidth() - 10, toreTeam1Verringern.getY(),
-                toreTeam1Verringern.getWidth(), toreTeam1Verringern.getHeight());
+        toreTeam2Verringern.setBounds(width - toreTeam1Verringern.getWidth() - 10, toreTeam1Verringern.getY(), toreTeam1Verringern.getWidth(), toreTeam1Verringern.getHeight());
         toreTeam2Verringern.setOpaque(true);
         toreTeam2Verringern.addActionListener(AktuellerSpielstand::buttonClick);
 
@@ -121,6 +119,23 @@ public class AktuellerSpielstand {
         frame.setResizable(false);
     }
 
+    private static void buttonClick(ActionEvent e) {
+        DataButton btn = (DataButton) e.getSource();
+
+        Client.Modus modus = btn.getText() == "+" ? Client.Modus.increment : Client.Modus.decrement;
+
+        try {
+            Client.spielstandAnpassen((int) btn.getData(), modus);
+        } catch (IOException ex) {
+        } catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private static Color getTeamFarbe(Tor.Seite seite) {
+        return seite == Tor.Seite.ROT ? Color.RED : Color.white;
+    }
+
     private int getToreWidth() {
         FontMetrics metrics = frame.getGraphics().getFontMetrics(toreLbl.getFont());
 
@@ -135,19 +150,6 @@ public class AktuellerSpielstand {
         toreLbl.setBounds(frame.getWidth() / 2 - fontWidth / 2, toreTeam1Erhoehen.getY() - 13, fontWidth, (int) (frame.getHeight() * 0.5));
     }
 
-    private static void buttonClick(ActionEvent e) {
-        DataButton btn = (DataButton) e.getSource();
-
-        Client.Modus modus = btn.getText() == "+" ? Client.Modus.increment : Client.Modus.decrement;
-
-        try {
-            Client.spielstandAnpassen((int) btn.getData(), modus);
-        } catch (IOException ex) {
-        } catch (InterruptedException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
     public void aktualisiereDaten(SpielErgebnis ergebnis) {
         setTore(ergebnis.toreTeam1 + " : " + ergebnis.toreTeam2);
 
@@ -156,7 +158,7 @@ public class AktuellerSpielstand {
         team1Name.setText("<html>" + teamNames[0].getName() + "</html>");
         team2Name.setText("<html>" + teamNames[1].getName() + "</html>");
 
-        if(ergebnis.spiel == null) {
+        if (ergebnis.spiel == null) {
             return;
         }
 
@@ -181,18 +183,14 @@ public class AktuellerSpielstand {
     }
 
     private void aufgebenClick(ActionEvent e) {
-        DataButton btn = (DataButton)e.getSource();
+        DataButton btn = (DataButton) e.getSource();
 
         try {
-            Client.aufgeben((int)btn.getData());
+            Client.aufgeben((int) btn.getData());
         } catch (IOException ex) {
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    private static Color getTeamFarbe(Tor.Seite seite) {
-        return seite == Tor.Seite.ROT ? Color.RED : Color.white;
     }
 
     public void aktualisiereDaten(Spiel spiel) {

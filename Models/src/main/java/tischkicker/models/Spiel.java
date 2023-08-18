@@ -9,6 +9,25 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "spiel")
 public class Spiel {
+    @Column(name = "datum")
+    private Date spieldatum;
+    @Column(name = "teams")
+    private String teams;
+    @Column(name = "TORET1")
+    private int toreteam1;
+    @Column(name = "TORET2")
+    private int toreteam2;
+    @Column(name = "qualifikation")
+    private int qualifikation;
+    @Transient
+    private String[] teamNames;
+    @Transient
+    private int[] teamIDs;
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int spielID;
+
     public Spiel(Date spieldatum, String teams, int toreteam1, int toreteam2, int qualifikation, int ID) {
         this.spieldatum = spieldatum;
         this.teams = teams;
@@ -21,33 +40,6 @@ public class Spiel {
     public Spiel() {
 
     }
-
-    @Column(name = "datum")
-    private Date spieldatum;
-
-    @Column(name = "teams")
-    private String teams;
-
-    @Column(name = "TORET1")
-    private int toreteam1;
-
-    @Column(name = "TORET2")
-    private int toreteam2;
-
-    @Column(name = "qualifikation")
-    private int qualifikation;
-
-    @Transient
-    private String[] teamNames;
-
-    @Transient
-    private int[] teamIDs;
-
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int spielID;
-
 
     public int getSpielID() {
         return spielID;
@@ -102,7 +94,7 @@ public class Spiel {
     }
 
     public int[] getTeamIDs() {
-        if(teamIDs == null) {
+        if (teamIDs == null) {
             return Arrays.stream(teams.split(",")).mapToInt(Integer::parseInt).toArray();
         }
 

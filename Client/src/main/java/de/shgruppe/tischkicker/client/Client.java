@@ -4,21 +4,23 @@ import com.google.gson.Gson;
 import tischkicker.models.Spiel;
 
 import javax.swing.*;
-import java.net.URISyntaxException;
-import java.util.List;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class Client {
-    public static List<Spiel> spiele;
-
     private static final String URL = "http://localhost:8080";
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     private static final Gson gson = new Gson();
+    public static List<Spiel> spiele;
+    public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(500, 500);
+    public static TurnierBaum turnierbaum = new TurnierBaum();
+    public static Gewinner gewinner = new Gewinner();
 
     public static Team sendTeamsToServer(Team team) {
         try {
@@ -52,10 +54,6 @@ public class Client {
                           .header("Accept", "application/json");
     }
 
-    public enum Modus {
-        increment, decrement,
-    }
-
     public static void spielstandAnpassen(int id, Modus modus) throws IOException, InterruptedException {
         HttpRequest request = createRequest("/spiel/" + modus + "/" + id).POST(HttpRequest.BodyPublishers.ofString(""))
                                                                          .build();
@@ -69,7 +67,7 @@ public class Client {
 
     public static void seitenwechsel() throws IOException, InterruptedException {
         HttpRequest request = createRequest("/spiel/seitenwechsel").POST(HttpRequest.BodyPublishers.ofString(""))
-                                                                         .build();
+                                                                   .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -78,10 +76,9 @@ public class Client {
         }
     }
 
-
     public static void aufgeben(int id) throws IOException, InterruptedException {
         HttpRequest request = createRequest("/spiel/aufgeben/" + id).POST(HttpRequest.BodyPublishers.ofString(""))
-                                                                   .build();
+                                                                    .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -89,7 +86,6 @@ public class Client {
             System.out.println("Aufgeben ist für " + id + " schiefgegangen.");
         }
     }
-
 
     public static void deleteTeam(Team team) {
         try {
@@ -210,7 +206,6 @@ public class Client {
         }
     }
 
-
     public static Spiel[] getSpieleFromServer() {
 
         try {
@@ -241,11 +236,6 @@ public class Client {
 
         return null;
     }
-
-    public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(500, 500);
-    public static TurnierBaum turnierbaum = new TurnierBaum();
-
-    public static Gewinner gewinner = new Gewinner();
 
     public static void main(String[] args) {
         try {
@@ -283,6 +273,10 @@ public class Client {
         else {
             // TODO Fehlermeldung ausgeben, falls keine Teams vorhanden sind (null), zum Beispiel mit Exception werfen
         }
+    }
+
+    public enum Modus {
+        increment, decrement,
     }
 }
 

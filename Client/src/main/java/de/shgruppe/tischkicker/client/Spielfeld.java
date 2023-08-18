@@ -11,7 +11,7 @@ public class Spielfeld {
     JLabel team2;
     JLabel toreTeam1;
     JLabel toreTeam2;
-    Color selected = new Color(36,157,255);
+    Color selected = new Color(36, 157, 255);
     Color normal = new Color(149, 157, 158);
     boolean besterVerlierer = false;
     Spiel spiel;
@@ -52,7 +52,7 @@ public class Spielfeld {
 
 
     public void setGewinner(int id) {
-        if(spiel.getTeamIDs()[0] == id) {
+        if (spiel.getTeamIDs()[0] == id) {
             team1.setBackground(Color.GREEN);
         }
         else {
@@ -71,7 +71,8 @@ public class Spielfeld {
         team1.setText(spiel.getTeamNames()[0]);
         if (besterVerlierer) {
             team2.setText(" * " + teamName);
-        } else {
+        }
+        else {
             team2.setText(spiel.getTeamNames()[1]);
 
         }

@@ -24,8 +24,7 @@ public class TeamController {
     @GetMapping("/teams")
     public List<Team> alleTeamsHolen() {
         List<Team> teams = teamRepository.findAll();
-        for (int i = 0 ; i < teams.size()-1 ; i++)
-        {
+        for (int i = 0; i < teams.size() - 1; i++) {
             teamUmwandeln(teams.get(i).getId());
         }
         return teams;
@@ -35,26 +34,26 @@ public class TeamController {
     public Team bestimtesTeamsHolen(@PathVariable int id) {
         return teamUmwandeln(id);
     }
-    public Team teamUmwandeln (int id)
-    {
+
+    public Team teamUmwandeln(int id) {
         Optional<Team> team = teamRepository.findById(id);
-        Team team1 = Hilfsmethoden.optionalCheck(team,id);
-            int [] ids = team1.getspielerIDs();
-            String [] names = new String[ids.length];
-            for (int i = 0 ; i < ids.length ; i++) {
-                Optional<Spieler> spieler = spielerRepository.findById(ids[i]);
-                Spieler spieler1 = Hilfsmethoden.optionalCheck(spieler,ids[i]);
-                names [i] = spieler1.getName();
-            }
-            team1.setPlayers(names);
-            return team1;
+        Team team1 = Hilfsmethoden.optionalCheck(team, id);
+        int[] ids = team1.getspielerIDs();
+        String[] names = new String[ids.length];
+        for (int i = 0; i < ids.length; i++) {
+            Optional<Spieler> spieler = spielerRepository.findById(ids[i]);
+            Spieler spieler1 = Hilfsmethoden.optionalCheck(spieler, ids[i]);
+            names[i] = spieler1.getName();
+        }
+        team1.setPlayers(names);
+        return team1;
     }
 
     @PostMapping("/teams")
     public Team teamAnlegen(@RequestBody Team team) {
-       addSpielerToDb(team);
+        addSpielerToDb(team);
 
-       team = teamRepository.saveAndFlush(team);
+        team = teamRepository.saveAndFlush(team);
 
         return team;
     }
@@ -67,7 +66,7 @@ public class TeamController {
 
             spielerRepository.saveAndFlush(s);
 
-            s.setID((int)spielerRepository.count());
+            s.setID((int) spielerRepository.count());
 
             ids.add(Integer.toString(s.getID()));
         }

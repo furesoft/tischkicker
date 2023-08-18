@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
-import tischkicker.models.Tor;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,17 +34,17 @@ public class SpielController {
 
     @GetMapping("/spiele/{id}")
     public Spiel betimmtesSpieleHolen(@PathVariable int id) {
-        Optional <Spiel> spiel = spielRepository.findById(id);
+        Optional<Spiel> spiel = spielRepository.findById(id);
 
-        Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel,id);
+        Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel, id);
 
         int[] teamIDs = spiel1.getTeamIDs();
 
         Optional<Team> team1 = teamRepository.findById(teamIDs[0]);
         Optional<Team> team2 = teamRepository.findById(teamIDs[2]);
 
-        Team t1 = Hilfsmethoden.optionalCheck(team1,teamIDs[0]);
-        Team t2 = Hilfsmethoden.optionalCheck(team2,teamIDs[2]);
+        Team t1 = Hilfsmethoden.optionalCheck(team1, teamIDs[0]);
+        Team t2 = Hilfsmethoden.optionalCheck(team2, teamIDs[2]);
 
         spiel1.setTeamNames(t1.getName(), t2.getName());
 
@@ -53,10 +52,10 @@ public class SpielController {
     }
 
     @PostMapping("/spiel/start/{id}")
-    public void spielStarten(@PathVariable int id){
-        Optional <Spiel> spiel = spielRepository.findById(id);
+    public void spielStarten(@PathVariable int id) {
+        Optional<Spiel> spiel = spielRepository.findById(id);
 
-        Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel,id);
+        Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel, id);
         spielManager.spielStarten(spiel1);
     }
 

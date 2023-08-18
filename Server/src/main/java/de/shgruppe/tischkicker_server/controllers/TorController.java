@@ -12,7 +12,7 @@ public class TorController {
     @Autowired
     SpielManager spielManager;
 
-    @PostMapping ("/tor")
+    @PostMapping("/tor")
     public void torgeschossen(@RequestBody Tor tor) throws Exception {
         spielManager.empfangeTor(tor);
     }

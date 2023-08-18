@@ -13,13 +13,20 @@ import java.util.ArrayList;
 @Component
 public class SocketHandler extends TextWebSocketHandler {
 
-     static ArrayList<WebSocketSession> sessions = new ArrayList();
+    static ArrayList<WebSocketSession> sessions = new ArrayList();
+
+    public static void broadcast(Object message) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        for (WebSocketSession webSocketSession : sessions) {
+            webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
+        }
+    }
 
     @Override
-    public void handleTextMessage(WebSocketSession session, TextMessage message)
-            throws IOException {
+    public void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
 
-        for(WebSocketSession webSocketSession : sessions) {
+        for (WebSocketSession webSocketSession : sessions) {
             webSocketSession.sendMessage(message);
         }
     }
@@ -27,15 +34,6 @@ public class SocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         sessions.add(session);
-    }
-
-
-    public  static void broadcast(Object message) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        for(WebSocketSession webSocketSession : sessions) {
-            webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
-        }
     }
 
     @Override

@@ -1,7 +1,5 @@
 package tischkicker.messages;
 
-import tischkicker.messages.Message;
-import tischkicker.messages.MessageType;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Tor;

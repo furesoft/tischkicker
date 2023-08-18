@@ -10,6 +10,10 @@ public class Turnier {
     private Date enddatum;
     private ArrayList<Integer> spieleID = new ArrayList<>();
     private ArrayList<Integer> teamsID = new ArrayList<>();
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int ID;
 
     public Date getStartdatum() {
         return startdatum;
@@ -18,11 +22,6 @@ public class Turnier {
     public void setStartdatum(Date startdatum) {
         this.startdatum = startdatum;
     }
-
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
 
     public int getID() {
         return ID;
