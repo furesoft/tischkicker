@@ -6,8 +6,8 @@ import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tischkicker.messages.SpielBeendetMessage;
-import tischkicker.models.Spiel;
 import tischkicker.messages.SpielErgebnis;
+import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Tor;
 
@@ -24,24 +24,18 @@ class SpielHolder {
 @Component
 public class SpielManager {
 
-    private SpielErgebnis ergebnis = new SpielErgebnis();
-
-    private boolean tauscheTeams = false;
     public boolean spielVorbei = false;
-
     public int anzahltoreBisGewonnen = 10;
-
-    private SpielHolder rot = new SpielHolder();
-    private SpielHolder weiss = new SpielHolder();
-
     @Autowired
     SpielRepository spielRepository;
-
     @Autowired
     TeamRepository teamRepository;
-
     @Autowired
     TurnierManager turnierManager;
+    private SpielErgebnis ergebnis = new SpielErgebnis();
+    private boolean tauscheTeams = false;
+    private SpielHolder team1 = new SpielHolder();
+    private SpielHolder team2 = new SpielHolder();
 
     private SpielManager() {
 
@@ -49,8 +43,8 @@ public class SpielManager {
 
     public void reset() {
         ergebnis = new SpielErgebnis();
-        rot = new SpielHolder();
-        weiss = new SpielHolder();
+        team1 = new SpielHolder();
+        team2 = new SpielHolder();
 
         tauscheTeams = false;
         spielVorbei = false;
@@ -62,8 +56,8 @@ public class SpielManager {
         ergebnis.spiel = spiel;
         ergebnis.teams = getTeamsForSpiel(spiel);
 
-        rot.teamID = spiel.getTeamIDs()[0];
-        weiss.teamID = spiel.getTeamIDs()[1];
+        team1.teamID = spiel.getTeamIDs()[0];
+        team2.teamID = spiel.getTeamIDs()[1];
 
         ergebnis.seiteTeam2 = Tor.Seite.ROT;
         ergebnis.seiteTeam1 = Tor.Seite.WEISS;
@@ -96,15 +90,15 @@ public class SpielManager {
     }
 
     private SpielHolder getInfo(Tor.Seite seite) {
-        return seite == Tor.Seite.ROT ? rot : weiss;
+        return seite == Tor.Seite.ROT ? team1 : team2;
     }
 
     private SpielHolder getInfoByID(int id) {
-        if (rot.teamID == id) {
-            return rot;
+        if (team1.teamID == id) {
+            return team1;
         }
 
-        return weiss;
+        return team2;
     }
 
     /***
@@ -115,10 +109,12 @@ public class SpielManager {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
 
         if (maxTore == anzahltoreBisGewonnen) {
-            turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+            Spiel neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+
             SpielBeendetMessage msg = new SpielBeendetMessage();
             msg.setGewinner(getGewinner(ergebnis.spiel));
             msg.setSpiel(ergebnis.spiel);
+            msg.setNeuesSpiel(neuesSpiel);
 
             SocketHandler.broadcast(msg);
 
@@ -143,10 +139,6 @@ public class SpielManager {
     }
 
     public void seitenWechsel() throws IOException {
-       // SpielHolder tmp = rot;
-      //  rot = weiss;
-       // weiss = tmp;
-
         Tor.Seite tmpSeite = ergebnis.seiteTeam1;
 
         ergebnis.seiteTeam1 = ergebnis.seiteTeam2;
@@ -174,8 +166,8 @@ public class SpielManager {
     }
 
     private void setzeTorErgebnisse() {
-        ergebnis.toreTeam1 = rot.tore;
-        ergebnis.toreTeam2 = weiss.tore;
+        ergebnis.toreTeam1 = team1.tore;
+        ergebnis.toreTeam2 = team2.tore;
     }
 
     /***
@@ -218,7 +210,7 @@ public class SpielManager {
     }
 
     private Team getGewinnerWennAufgegeben(int id) {
-        if(ergebnis.spiel.getTeamIDs()[0] == id) {
+        if (ergebnis.spiel.getTeamIDs()[0] == id) {
             return ergebnis.teams[1];
         }
 

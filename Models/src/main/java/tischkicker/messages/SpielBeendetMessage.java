@@ -4,6 +4,14 @@ import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 
 public class SpielBeendetMessage extends Message {
+    Team gewinner;
+    Spiel spiel;
+    Spiel neuesSpiel;
+
+    public SpielBeendetMessage() {
+        this.type = MessageType.SpielBeendet;
+    }
+
     public Team getGewinner() {
         return gewinner;
     }
@@ -11,8 +19,6 @@ public class SpielBeendetMessage extends Message {
     public void setGewinner(Team gewinner) {
         this.gewinner = gewinner;
     }
-
-    Team gewinner;
 
     public Spiel getSpiel() {
         return spiel;
@@ -22,9 +28,11 @@ public class SpielBeendetMessage extends Message {
         this.spiel = spiel;
     }
 
-    Spiel spiel;
+    public Spiel getNeuesSpiel() {
+        return neuesSpiel;
+    }
 
-    public SpielBeendetMessage() {
-        this.type = MessageType.SpielBeendet;
+    public void setNeuesSpiel(Spiel neuesSpiel) {
+        this.neuesSpiel = neuesSpiel;
     }
 }

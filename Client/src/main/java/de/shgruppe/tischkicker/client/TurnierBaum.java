@@ -1,7 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
-import tischkicker.models.Spiel;
 import tischkicker.messages.SpielErgebnis;
+import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 
 import javax.swing.*;
@@ -25,12 +25,11 @@ public class TurnierBaum {
         frame.setSize(1920, 1080);
         frame.setLayout(null);
         frame.setVisible(true);
-        starteSpiel.setBounds(50,20,150,50);
+        starteSpiel.setBounds(50, 20, 150, 50);
 
         frame.add(starteSpiel);
-        hinweis.setBounds(300,20,250,50);
+        hinweis.setBounds(300, 20, 250, 50);
         hinweis.setText("* = Bester Verlierer dieser Spiel-Phase");
-
 
 
         frame.add(hinweis);
@@ -43,9 +42,9 @@ public class TurnierBaum {
         });
     }
 
-    public void tunierbaumErstellen(double anzahlTeams){
+    public void tunierbaumErstellen(double anzahlTeams) {
 
-        int spielfelderAnzahl = (int)Math.round(anzahlTeams/2);
+        int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
         int teamAnzahl = (int) anzahlTeams;
         double spielfelderAnzahlDouble;
 
@@ -61,62 +60,63 @@ public class TurnierBaum {
             spielfeldListeFuellen(x, y, spielfelderAnzahl);
             reihen.add(new ArrayList<>(spielfeldList));
 
-            if(teamAnzahl % 2 != 0 && teamAnzahl > 2){
-                reihen.get(reihen.size()-1).get(spielfeldList.size()-1).besterVerlierer();
+            if (teamAnzahl % 2 != 0 && teamAnzahl > 2) {
+                reihen.get(reihen.size() - 1).get(spielfeldList.size() - 1).besterVerlierer();
             }
 
             spielfeldList.clear(); // Zurücksetzen der spielfeldList für die nächste Reihe
             x += 200;
 
-            teamAnzahl = Math.round((float) teamAnzahl /2);
+            teamAnzahl = Math.round((float) teamAnzahl / 2);
             spielfelderAnzahlDouble = (double) spielfelderAnzahl / 2;
             spielfelderAnzahl = (int) Math.round(spielfelderAnzahlDouble);
 
         } while (spielfelderAnzahlDouble > 0.5);
 
-        for(int reihe = 0; reihe < reihen.size(); reihe++){
-            for(int spalte = 0; spalte < reihen.get(reihe).size(); spalte++){
-               if(reihe > 0) {
-                   if(spalte * 2 + 1 < reihen.get(reihe - 1).size()) {
-                       ArrayList<Spielfeld> tmpSpielfelder = reihen.get(reihe - 1);
-                       int index = spalte * 2;
-                       Spielfeld nSpielfeld = tmpSpielfelder.get(index + 1);
+        for (int reihe = 0; reihe < reihen.size(); reihe++) {
+            for (int spalte = 0; spalte < reihen.get(reihe).size(); spalte++) {
+                if (reihe > 0) {
+                    if (spalte * 2 + 1 < reihen.get(reihe - 1).size()) {
+                        ArrayList<Spielfeld> tmpSpielfelder = reihen.get(reihe - 1);
+                        int index = spalte * 2;
+                        Spielfeld nSpielfeld = tmpSpielfelder.get(index + 1);
 
-                       int newY = (tmpSpielfelder.get(index).background.getY() + nSpielfeld.background.getY() + nSpielfeld.background.getHeight()) / 2
-                               - reihen.get(reihe).get(spalte).background.getHeight() / 2;
+                        int newY = (tmpSpielfelder.get(index).background.getY() + nSpielfeld.background.getY() + nSpielfeld.background.getHeight()) / 2 - reihen.get(reihe)
+                                                                                                                                                                .get(spalte).background.getHeight() / 2;
 
-                       reihen.get(reihe).get(spalte).setY(newY);
+                        reihen.get(reihe).get(spalte).setY(newY);
 
-                       linienListe.add(new Verbindungslinie(frame, tmpSpielfelder.get(index),
-                               tmpSpielfelder.get(index + 1), reihen.get(reihe).get(spalte),3));
-                   }
-                   else if(reihen.get(reihe).get(spalte).isBesterVerlierer()){
-                       ArrayList<Spielfeld> tmpSpielfelder = reihen.get(reihe);
-                       Spielfeld spielfeld = tmpSpielfelder.get(spalte - 1);
+                        linienListe.add(new Verbindungslinie(frame, tmpSpielfelder.get(index), tmpSpielfelder.get(index + 1), reihen.get(reihe)
+                                                                                                                                    .get(spalte), 3));
+                    }
+                    else if (reihen.get(reihe).get(spalte).isBesterVerlierer()) {
+                        ArrayList<Spielfeld> tmpSpielfelder = reihen.get(reihe);
+                        Spielfeld spielfeld = tmpSpielfelder.get(spalte - 1);
 
-                       tmpSpielfelder.get(spalte).setY(spielfeld.background.getY() + spielfeld.background.getHeight() + 25);
+                        tmpSpielfelder.get(spalte)
+                                      .setY(spielfeld.background.getY() + spielfeld.background.getHeight() + 25);
 
-                       linienListe.add(new Verbindungslinie(frame, reihen.get(reihe - 1).get(reihen.get(reihe - 1).size() - 1),
-                               tmpSpielfelder.get(spalte), 3));
-                   }
-               }
+                        linienListe.add(new Verbindungslinie(frame, reihen.get(reihe - 1).get(reihen.get(reihe - 1)
+                                                                                                    .size() - 1), tmpSpielfelder.get(spalte), 3));
+                    }
+                }
             }
         }
     }
 
-    public Spielfeld getNaechstesSpielfeld(Spielfeld aktuellesSpielfeld){
+    public Spielfeld getNaechstesSpielfeld() {
         for (Verbindungslinie linie : linienListe) {
-           if(linie.quellSpielFeld1 == aktuellesSpielfeld || linie.quellSpielfeld2 == aktuellesSpielfeld) {
-               return linie.ankunftsSpielfeld;
-           }
+            if (linie.quellSpielFeld1 == aktuellesSpiel || linie.quellSpielfeld2 == aktuellesSpiel) {
+                return linie.ankunftsSpielfeld;
+            }
         }
 
         return null;
     }
 
 
-    public void spielfeldListeFuellen(int x, int y, int anzahlReihen){
-        for(int i = 0; i < anzahlReihen; i++){
+    public void spielfeldListeFuellen(int x, int y, int anzahlReihen) {
+        for (int i = 0; i < anzahlReihen; i++) {
             Spielfeld spielfeld = new Spielfeld(frame, x, y, 150, 100);
             spielfeldList.add(spielfeld);
             alleSpielfelder.add(spielfeld);
@@ -124,7 +124,7 @@ public class TurnierBaum {
             y += 125;
         }
 
-        for (Spielfeld spielfeld:spielfeldList) {
+        for (Spielfeld spielfeld : spielfeldList) {
             spielfeld.background.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -135,8 +135,8 @@ public class TurnierBaum {
     }
 
     /*
-    * Blockiert das aktuell angeklickte Spielfeld
-    */
+     * Blockiert das aktuell angeklickte Spielfeld
+     */
     public void lock() {
         selectedSpielfeld.background.setBackground(selectedSpielfeld.normal);
 
@@ -145,11 +145,11 @@ public class TurnierBaum {
         starteSpiel.setVisible(false);
     }
 
-    public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld){
+    public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld) {
         reihen.get(reihe).get(spielfeld).setTeams(spiel);
     }
-    public void spielfeldClicked (Spielfeld spielfeld)
-    {
+
+    public void spielfeldClicked(Spielfeld spielfeld) {
         aktuellesSpiel = spielfeld;
 
         if (spielfeld.spiel == null || spielfeld.spiel.getTeamNames()[1] == null) {
@@ -158,7 +158,8 @@ public class TurnierBaum {
 
         if (selectedSpielfeld != null) {
             selectedSpielfeld.background.setBackground(spielfeld.normal);
-        } else {
+        }
+        else {
             spielfeld.background.setBackground(spielfeld.normal);
         }
 
@@ -167,7 +168,8 @@ public class TurnierBaum {
             starteSpiel.setVisible(false);
             selectedSpielfeld = null;
 
-        } else {
+        }
+        else {
             selectedSpielfeld = spielfeld;
             starteSpiel.setVisible(true);
             spielfeld.background.setBackground(spielfeld.selected);
@@ -178,7 +180,7 @@ public class TurnierBaum {
     }
 
     public void ergebnisUebertragen(SpielErgebnis spielergebnis) {
-        if(spielergebnis.spiel == null) {
+        if (spielergebnis.spiel == null) {
             return;
         }
 
@@ -193,10 +195,25 @@ public class TurnierBaum {
         }
     }
 
-    public void setGewinner(Team gewinner, Spiel spiel) {
-       Spielfeld feld = getSpielfeld(spiel.getSpielID());
+    public void feldInitialisieren(Spiel spiel, Team team1) {
+        for (Spielfeld feld : alleSpielfelder) {
+            if (feld.spiel.getSpielID() == spiel.getSpielID()) {
+                if (spiel.getTeamIDs()[1] == -1) {
+                    feld.team1.setText(String.valueOf(team1.getName()));
+                }
+                else {
+                    feld.team2.setText(String.valueOf(team1.getName()));
+                }
 
-       feld.setGewinner(gewinner.getId());
+                break;
+            }
+        }
+    }
+
+    public void setGewinner(Team gewinner, Spiel spiel) {
+        Spielfeld feld = getSpielfeld(spiel.getSpielID());
+
+        feld.setGewinner(gewinner.getId());
     }
 
     private Spielfeld getSpielfeld(int spielID) {

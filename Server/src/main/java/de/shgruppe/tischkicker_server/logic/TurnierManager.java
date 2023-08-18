@@ -13,7 +13,8 @@ import java.util.List;
 
 @Component
 public class TurnierManager {
-    SpielPhase spielPhase = new SpielPhase();
+    @Autowired
+    SpielPhase spielPhase;
 
     @Autowired
     TeamRepository teamRepository;
@@ -24,7 +25,9 @@ public class TurnierManager {
     public List<Spiel> turnierStarten() {
         List<Spiel> spiele = generiereSpiele();
 
-        return spielRepository.saveAllAndFlush(spiele);
+        spiele = spielRepository.saveAllAndFlush(spiele);
+
+        return spiele;
     }
 
     private List<Spiel> generiereSpiele() {
