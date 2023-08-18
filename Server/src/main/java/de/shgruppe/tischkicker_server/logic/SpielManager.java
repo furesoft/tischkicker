@@ -143,9 +143,9 @@ public class SpielManager {
     }
 
     public void seitenWechsel() throws IOException {
-        SpielHolder tmp = rot;
-        rot = weiss;
-        weiss = tmp;
+       // SpielHolder tmp = rot;
+      //  rot = weiss;
+       // weiss = tmp;
 
         Tor.Seite tmpSeite = ergebnis.seiteTeam1;
 

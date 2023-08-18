@@ -104,6 +104,16 @@ public class TurnierBaum {
         }
     }
 
+    public Spielfeld getNaechstesSpielfeld(Spielfeld aktuellesSpielfeld){
+        for (Verbindungslinie linie : linienListe) {
+           if(linie.quellSpielFeld1 == aktuellesSpielfeld || linie.quellSpielfeld2 == aktuellesSpielfeld) {
+               return linie.ankunftsSpielfeld;
+           }
+        }
+
+        return null;
+    }
+
 
     public void spielfeldListeFuellen(int x, int y, int anzahlReihen){
         for(int i = 0; i < anzahlReihen; i++){
