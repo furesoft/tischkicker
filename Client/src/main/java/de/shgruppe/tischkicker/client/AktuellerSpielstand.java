@@ -25,7 +25,7 @@ public class AktuellerSpielstand {
     JPanel farbanzeigeTeam1 = new JPanel();
     JPanel farbanzeigeTeam2 = new JPanel();
 
-    JLabel seitenwechsel;
+    JButton seitenwechsel;
 
     DataButton aufgebenTeam1Btn = new DataButton("X");
     DataButton aufgebenTeam2Btn = new DataButton("X");
@@ -36,9 +36,17 @@ public class AktuellerSpielstand {
     int team2ID;
 
     public AktuellerSpielstand(int width, int height) {
-        seitenwechsel = new JLabel("SEITENWECHSEL");
+        seitenwechsel = new JButton("<-->");
+        seitenwechsel.setToolTipText("Seitenwechsel");
         seitenwechsel.setBounds(0, 0, width, (int) (height * 0.2));
         seitenwechsel.setOpaque(true);
+        seitenwechsel.addActionListener(e -> {
+            try {
+                Client.seitenwechsel();
+            } catch (IOException | InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         team1Name = new JLabel("a");
         team1Name.setBounds(50, seitenwechsel.getHeight(), width / 2, (int) (height * 0.3));

@@ -12,6 +12,7 @@ import tischkicker.models.Team;
 import tischkicker.models.Tor;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 class SpielHolder {
     public int teamID;
@@ -195,5 +196,28 @@ public class SpielManager {
         setzeTorErgebnisse();
 
         SocketHandler.broadcast(ergebnis);
+    }
+
+    public void aufgeben(int id) throws IOException {
+        // Team als aufgegeben markieren und in Datenbank schreiben, sowie dem client mitteilen
+        Team aufgegebenTeam = Arrays.stream(ergebnis.teams).filter(team -> team.getId() == id).findFirst().get();
+        aufgegebenTeam.setAufgegeben(true);
+        teamRepository.saveAndFlush(aufgegebenTeam);
+
+        SpielBeendetMessage msg = new SpielBeendetMessage();
+        msg.setGewinner(getGewinnerWennAufgegeben(id));
+        msg.setSpiel(ergebnis.spiel);
+
+        SocketHandler.broadcast(msg);
+
+        reset();
+    }
+
+    private Team getGewinnerWennAufgegeben(int id) {
+        if(ergebnis.spiel.getTeamIDs()[0] == id) {
+            return ergebnis.teams[1];
+        }
+
+        return ergebnis.teams[0];
     }
 }

@@ -61,8 +61,8 @@ public class SpielController {
     }
 
     @PostMapping("/spiel/aufgeben/{id}")
-    public void spielAufgeben(@PathVariable int id){
-        spielManager.reset();
+    public void spielAufgeben(@PathVariable int id) throws IOException {
+        spielManager.aufgeben(id);
     }
 
     @PostMapping("/spiel/increment/{teamID}")

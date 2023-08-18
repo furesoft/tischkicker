@@ -67,9 +67,20 @@ public class Client {
         }
     }
 
+    public static void seitenwechsel() throws IOException, InterruptedException {
+        HttpRequest request = createRequest("/spiel/seitenwechsel").POST(HttpRequest.BodyPublishers.ofString(""))
+                                                                         .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            System.out.println("Seitenwechsel ist schief gegangen");
+        }
+    }
+
 
     public static void aufgeben(int id) throws IOException, InterruptedException {
-        HttpRequest request = createRequest("/spiel/aufgeben" + id).POST(HttpRequest.BodyPublishers.ofString(""))
+        HttpRequest request = createRequest("/spiel/aufgeben/" + id).POST(HttpRequest.BodyPublishers.ofString(""))
                                                                    .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
