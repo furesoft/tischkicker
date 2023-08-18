@@ -48,6 +48,7 @@ public class Websocket extends WebSocketClient {
 
             Client.gewinner.show(spielergebnis.getGewinner().getName());
             Client.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
+            Client.turnierbaum.lock();
         }
 
     }

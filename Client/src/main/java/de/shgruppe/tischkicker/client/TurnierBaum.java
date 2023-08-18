@@ -122,8 +122,19 @@ public class TurnierBaum {
                 }
             });
         }
-
     }
+
+    /*
+    * Blockiert das aktuell angeklickte Spielfeld
+    */
+    public void lock() {
+        selectedSpielfeld.background.setBackground(selectedSpielfeld.normal);
+
+        aktuellesSpiel = null;
+        selectedSpielfeld = null;
+        starteSpiel.setVisible(false);
+    }
+
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld){
         reihen.get(reihe).get(spielfeld).setTeams(spiel);
     }
