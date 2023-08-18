@@ -175,7 +175,7 @@ public class AktuellerSpielstand {
         aufgebenTeam2Btn.addActionListener(e -> aufgebenClick(e));
 
         farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam1));
-        farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam2));
+        farbanzeigeTeam2.setBackground(getTeamFarbe(ergebnis.seiteTeam2));
 
         frame.repaint();
     }

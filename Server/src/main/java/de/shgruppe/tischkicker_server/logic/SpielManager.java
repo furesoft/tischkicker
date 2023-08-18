@@ -65,8 +65,8 @@ public class SpielManager {
         rot.teamID = spiel.getTeamIDs()[0];
         weiss.teamID = spiel.getTeamIDs()[1];
 
-        ergebnis.seiteTeam1 = Tor.Seite.ROT;
-        ergebnis.seiteTeam2 = Tor.Seite.WEISS;
+        ergebnis.seiteTeam2 = Tor.Seite.ROT;
+        ergebnis.seiteTeam1 = Tor.Seite.WEISS;
     }
 
     private Team[] getTeamsForSpiel(Spiel spiel) {
@@ -142,13 +142,17 @@ public class SpielManager {
         return team;
     }
 
-    public void seitenWechsel() {
+    public void seitenWechsel() throws IOException {
         SpielHolder tmp = rot;
         rot = weiss;
         weiss = tmp;
 
-        ergebnis.seiteTeam1 = Tor.Seite.WEISS;
-        ergebnis.seiteTeam2 = Tor.Seite.ROT;
+        Tor.Seite tmpSeite = ergebnis.seiteTeam1;
+
+        ergebnis.seiteTeam1 = ergebnis.seiteTeam2;
+        ergebnis.seiteTeam2 = tmpSeite;
+
+        SocketHandler.broadcast(ergebnis);
     }
 
     public SpielErgebnis getErgebnis() {
