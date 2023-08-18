@@ -5,12 +5,14 @@ import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tischkicker.messages.SpielBeendetMessage;
+import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
-import tischkicker.models.SpielErgebnis;
 import tischkicker.models.Team;
 import tischkicker.models.Tor;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 class SpielHolder {
     public int teamID;
@@ -22,34 +24,28 @@ class SpielHolder {
 @Component
 public class SpielManager {
 
-    private final SpielErgebnis ergebnis = new SpielErgebnis();
-
-    private boolean tauscheTeams = false;
     public boolean spielVorbei = false;
-
     public int anzahltoreBisGewonnen = 10;
-    public boolean beachteSeitenwechsel = false;
-
-    private SpielHolder rot = new SpielHolder();
-    private SpielHolder weiss = new SpielHolder();
-
     @Autowired
     SpielRepository spielRepository;
-
     @Autowired
     TeamRepository teamRepository;
-
     @Autowired
     TurnierManager turnierManager;
+    private SpielErgebnis ergebnis = new SpielErgebnis();
+    private boolean tauscheTeams = false;
+    private SpielHolder team1 = new SpielHolder();
+    private SpielHolder team2 = new SpielHolder();
 
     private SpielManager() {
 
     }
 
     public void reset() {
-        ergebnis.toreTeam2 = 0;
-        ergebnis.toreTeam1 = 0;
-        ergebnis.spiel = null;
+        ergebnis = new SpielErgebnis();
+        team1 = new SpielHolder();
+        team2 = new SpielHolder();
+
         tauscheTeams = false;
         spielVorbei = false;
     }
@@ -59,6 +55,12 @@ public class SpielManager {
 
         ergebnis.spiel = spiel;
         ergebnis.teams = getTeamsForSpiel(spiel);
+
+        team1.teamID = spiel.getTeamIDs()[0];
+        team2.teamID = spiel.getTeamIDs()[1];
+
+        ergebnis.seiteTeam2 = Tor.Seite.ROT;
+        ergebnis.seiteTeam1 = Tor.Seite.WEISS;
     }
 
     private Team[] getTeamsForSpiel(Spiel spiel) {
@@ -88,39 +90,61 @@ public class SpielManager {
     }
 
     private SpielHolder getInfo(Tor.Seite seite) {
-       return seite == Tor.Seite.ROT ? rot : weiss;
+        return seite == Tor.Seite.ROT ? team1 : team2;
     }
 
     private SpielHolder getInfoByID(int id) {
-        if(rot.teamID == id){
-            return rot;
+        if (team1.teamID == id) {
+            return team1;
         }
 
-        return weiss;
+        return team2;
     }
 
     /***
      * Wenn Seitenwechsel aktiviert ist, wird bei der hälfte des maximums der Spiele um zu gewinnen ein Seitenwechsel durchgeführt.
      * Wenn diese erreicht ist, ist das Spiel vorbei und wird in die Datenbank gespeichert.
      */
-    private void triggerSpielMode() {
+    private void triggerSpielMode() throws IOException {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
 
-        if (beachteSeitenwechsel) {
-            if (maxTore == anzahltoreBisGewonnen / 2) {
-                seitenWechsel();
-            }
-        }
-
         if (maxTore == anzahltoreBisGewonnen) {
-            turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+            Spiel neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+
+            SpielBeendetMessage msg = new SpielBeendetMessage();
+            msg.setGewinner(getGewinner(ergebnis.spiel));
+            msg.setSpiel(ergebnis.spiel);
+            msg.setNeuesSpiel(neuesSpiel);
+
+            SocketHandler.broadcast(msg);
+
+            reset();
+
+            spielVorbei = true;
         }
     }
 
-    public void seitenWechsel() {
-       SpielHolder tmp = rot;
-       rot = weiss;
-       weiss = tmp;
+    private Team getGewinner(Spiel spiel) {
+        Team team = ergebnis.teams[1];
+
+        if (ergebnis.toreTeam1 > ergebnis.toreTeam2) {
+            team = ergebnis.teams[0];
+            team.setId(spiel.getTeamIDs()[0]);
+            return team;
+        }
+
+        team.setId(spiel.getTeamIDs()[1]);
+
+        return team;
+    }
+
+    public void seitenWechsel() throws IOException {
+        Tor.Seite tmpSeite = ergebnis.seiteTeam1;
+
+        ergebnis.seiteTeam1 = ergebnis.seiteTeam2;
+        ergebnis.seiteTeam2 = tmpSeite;
+
+        SocketHandler.broadcast(ergebnis);
     }
 
     public SpielErgebnis getErgebnis() {
@@ -133,19 +157,17 @@ public class SpielManager {
      * @throws IOException
      */
     public void increment(int teamID) throws Exception {
-        sicherstellungSpielGestartet();
-
-        triggerSpielMode();
-
         getInfoByID(teamID).tore++;
+        setzeTorErgebnisse();
 
         SocketHandler.broadcast(ergebnis);
+
+        triggerSpielMode();
     }
 
-    private void sicherstellungSpielGestartet() throws Exception {
-        if (ergebnis.spiel == null) {
-            throw new Exception("Es wurde kein Spiel gestartet");
-        }
+    private void setzeTorErgebnisse() {
+        ergebnis.toreTeam1 = team1.tore;
+        ergebnis.toreTeam2 = team2.tore;
     }
 
     /***
@@ -154,11 +176,44 @@ public class SpielManager {
      * @throws IOException
      */
     public void decrement(int teamID) throws Exception {
-        sicherstellungSpielGestartet();
+        if (!spielVorbei && ergebnis.spiel == null) {
+            return;
+        }
 
-        getInfoByID(teamID).tore--;
+        SpielHolder team = getInfoByID(teamID);
+        if (team.tore == 0) {
+            return;
+        }
+
+        team.tore--;
 
         spielRepository.save(ergebnis.spiel);
+
+        setzeTorErgebnisse();
+
         SocketHandler.broadcast(ergebnis);
+    }
+
+    public void aufgeben(int id) throws IOException {
+        // Team als aufgegeben markieren und in Datenbank schreiben, sowie dem client mitteilen
+        Team aufgegebenTeam = Arrays.stream(ergebnis.teams).filter(team -> team.getId() == id).findFirst().get();
+        aufgegebenTeam.setAufgegeben(true);
+        teamRepository.saveAndFlush(aufgegebenTeam);
+
+        SpielBeendetMessage msg = new SpielBeendetMessage();
+        msg.setGewinner(getGewinnerWennAufgegeben(id));
+        msg.setSpiel(ergebnis.spiel);
+
+        SocketHandler.broadcast(msg);
+
+        reset();
+    }
+
+    private Team getGewinnerWennAufgegeben(int id) {
+        if (ergebnis.spiel.getTeamIDs()[0] == id) {
+            return ergebnis.teams[1];
+        }
+
+        return ergebnis.teams[0];
     }
 }

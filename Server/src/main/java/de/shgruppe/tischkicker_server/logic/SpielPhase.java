@@ -1,16 +1,19 @@
 package de.shgruppe.tischkicker_server.logic;
 
+import de.shgruppe.tischkicker_server.repositories.SpielRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
-import tischkicker.models.SpielErgebnis;
 import tischkicker.models.Team;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Component
 public class SpielPhase {
-    public List<Spiel> aktuelleSpiele = new ArrayList<>();
-    public List<Spiel> naechstenSpiele = new ArrayList<>();
 
+    Spiel naechstesSpiel;
+
+    @Autowired
+    SpielRepository spielRepository;
 
     /***
      * Diese Methode generiert die Liste der nächsten Spielphase sukzessiv basierend auf den aktuellen Gewinner des zuletzt gespielten Spiel.
@@ -19,39 +22,32 @@ public class SpielPhase {
      *
      * @param ergebnis Das Spielergebnis des zuletzt gespielten Spiels
      */
-    public void empfangeEndergebnis(SpielErgebnis ergebnis) {
-        for (Spiel spiel : aktuelleSpiele) {
-            if (spiel.getSpielID() == ergebnis.spiel.getSpielID()) {
-                Team gewinnerTeam = ermittleGewinnerTeam(ergebnis);
+    public Spiel empfangeEndergebnis(SpielErgebnis ergebnis) {
+        Team gewinnerTeam = ermittleGewinnerTeam(ergebnis);
 
-                Spiel letztesSpiel = naechstenSpiele.get(naechstenSpiele.size() - 1);
-
-                if (letztesSpiel.getTeamIDs()[1] == -1) {
-                    letztesSpiel.setTeams(letztesSpiel.getTeamIDs()[0], gewinnerTeam.getID());
-                }
-                else {
-                    Spiel naechstesSpiel = new Spiel();
-                    naechstesSpiel.setTeams(gewinnerTeam.getID(), -1); // -1 wird später durch ein anderes Team ersetzt
-
-                    naechstenSpiele.add(spiel);
-                }
-                break;
-            }
+        if (naechstesSpiel != null && naechstesSpiel.getTeamIDs()[1] != -1) {
+            naechstesSpiel = null;
         }
+
+        if (naechstesSpiel == null) {
+            naechstesSpiel = new Spiel();
+
+            naechstesSpiel.setTeams(gewinnerTeam.getId(), -1); // -1 wird später durch ein anderes Team ersetzt
+            naechstesSpiel.setTeamNames(gewinnerTeam.getName(), null);
+
+            naechstesSpiel = spielRepository.saveAndFlush(naechstesSpiel);
+
+            return naechstesSpiel;
+        }
+
+        naechstesSpiel.setTeams(naechstesSpiel.getTeamIDs()[0], gewinnerTeam.getId());
+        naechstesSpiel.setTeamNames(naechstesSpiel.getTeamNames()[0], gewinnerTeam.getName());
+
+        naechstesSpiel = spielRepository.saveAndFlush(naechstesSpiel);
+
+        return naechstesSpiel;
     }
 
-    /***
-     * Bereitet interne Liste vor für die nächste Spielphase
-     * @return Gibt die Spiele der nächsten Spielphase zurück
-     */
-    public List<Spiel> naechstePhase() {
-        List<Spiel> tmp = naechstenSpiele;
-
-        aktuelleSpiele = naechstenSpiele;
-        naechstenSpiele.clear();
-
-        return tmp;
-    }
 
     private Team ermittleGewinnerTeam(SpielErgebnis ergebnis) {
         if (ergebnis.toreTeam1 > ergebnis.toreTeam2) {

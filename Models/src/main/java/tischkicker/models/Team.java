@@ -5,28 +5,25 @@ import java.util.Arrays;
 
 @Entity
 public class Team {
-    private String name;
-
     public String spieler;
-
+    private String name;
     @Transient
     private String[] players;
 
     private int gesamttore;
     private int gegentore;
     private boolean aufgegeben;
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
+    private int id;
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -46,7 +43,7 @@ public class Team {
     }
 
     public int[] getspielerIDs() {
-        String [] ids = spieler.split(",");
+        String[] ids = spieler.split(",");
 
         return Arrays.stream(ids).mapToInt(Integer::parseInt).toArray();
     }

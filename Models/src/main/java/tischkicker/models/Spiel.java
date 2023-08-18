@@ -9,6 +9,25 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "spiel")
 public class Spiel {
+    @Column(name = "datum")
+    private Date spieldatum;
+    @Column(name = "teams")
+    private String teams;
+    @Column(name = "TORET1")
+    private int toreteam1;
+    @Column(name = "TORET2")
+    private int toreteam2;
+    @Column(name = "qualifikation")
+    private int qualifikation;
+    @Transient
+    private String[] teamNames;
+    @Transient
+    private int[] teamIDs;
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int spielID;
+
     public Spiel(Date spieldatum, String teams, int toreteam1, int toreteam2, int qualifikation, int ID) {
         this.spieldatum = spieldatum;
         this.teams = teams;
@@ -18,37 +37,9 @@ public class Spiel {
         this.spielID = ID;
     }
 
-    public Spiel(String teams) {
-        this.teams = teams;
-    }
-
     public Spiel() {
 
     }
-
-    @Column(name = "datum")
-    private Date spieldatum;
-
-    @Column(name = "teams")
-    private String teams;
-
-    @Column(name = "TORET1")
-    private int toreteam1;
-
-    @Column(name = "TORET2")
-    private int toreteam2;
-
-    @Column(name = "qualifikation")
-    private int qualifikation;
-
-    @Transient
-    private String[] teamNames;
-
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int spielID;
-
 
     public int getSpielID() {
         return spielID;
@@ -62,18 +53,16 @@ public class Spiel {
         this.spieldatum = spieldatum;
     }
 
-    public int[] getTeamIDs() {
-        return Arrays.stream(teams.split(",")).map(id -> Integer.parseInt(id)).mapToInt(id -> id).toArray();
-    }
 
     public String[] getTeamNames() {
         return teamNames;
     }
 
     public void setTeams(int teamID1, int teamID2) {
-        List<String> strings = Arrays.stream(new int[]{ teamID1, teamID2 }).boxed().map(id -> Integer.toString(id))
+        List<String> strings = Arrays.stream(new int[]{teamID1, teamID2}).boxed().map(id -> Integer.toString(id))
                                      .collect(Collectors.toList());
         this.teams = String.join(",", strings);
+        this.teamIDs = new int[]{teamID1, teamID2};
     }
 
     public int getQualifikation() {
@@ -102,5 +91,13 @@ public class Spiel {
 
     public void setTeamNames(String team1, String team2) {
         teamNames = new String[]{team1, team2};
+    }
+
+    public int[] getTeamIDs() {
+        if (teamIDs == null) {
+            return Arrays.stream(teams.split(",")).mapToInt(Integer::parseInt).toArray();
+        }
+
+        return teamIDs;
     }
 }

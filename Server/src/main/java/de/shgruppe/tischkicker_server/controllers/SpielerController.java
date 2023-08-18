@@ -22,16 +22,13 @@ class SpielerController {
     @GetMapping("/spieler/{id}")
     public Spieler einzelnenSpielerHolen(@PathVariable int id) {
         Optional<Spieler> spieler = repository.findById(id);
-        return Hilfsmethoden.optionalCheck(spieler,id);
+        return Hilfsmethoden.optionalCheck(spieler, id);
     }
 
     @PostMapping("/spieler")
     public void spielerAnlegen(@RequestBody Spieler spieler) {
         repository.save(spieler);
     }
-
-
-
 
 
 }
