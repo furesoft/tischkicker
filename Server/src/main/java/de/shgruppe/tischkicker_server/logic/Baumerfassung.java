@@ -46,7 +46,7 @@ public class Baumerfassung {
         //Erstellen einer Liste mit den ID´s der Teams für die Spiellisten
         ArrayList<Integer> idlist = new ArrayList<Integer>();
         for (int i = 0; i < teamManager.size(); i++) {
-            idlist.add(teamManager.get(i).getID());
+            idlist.add(teamManager.get(i).getId());
         }
 
         return idlist;

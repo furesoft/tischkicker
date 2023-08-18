@@ -2,6 +2,7 @@ package de.shgruppe.tischkicker.client;
 
 import tischkicker.models.Spiel;
 import tischkicker.messages.SpielErgebnis;
+import tischkicker.models.Team;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -25,9 +26,13 @@ public class TurnierBaum {
         frame.setLayout(null);
         frame.setVisible(true);
         starteSpiel.setBounds(50,20,150,50);
+
         frame.add(starteSpiel);
         hinweis.setBounds(300,20,250,50);
         hinweis.setText("* = Bester Verlierer dieser Spiel-Phase");
+
+
+
         frame.add(hinweis);
 
         starteSpiel.addActionListener(e -> {
@@ -165,6 +170,22 @@ public class TurnierBaum {
                 break;
             }
         }
+    }
+
+    public void setGewinner(Team gewinner, Spiel spiel) {
+       Spielfeld feld = getSpielfeld(spiel.getSpielID());
+
+       feld.setGewinner(gewinner.getId());
+    }
+
+    private Spielfeld getSpielfeld(int spielID) {
+        for (Spielfeld feld : alleSpielfelder) {
+            if (feld.spiel.getSpielID() == spielID) {
+                return feld;
+            }
+        }
+
+        return null;
     }
 }
 

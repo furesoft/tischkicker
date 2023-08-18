@@ -20,3 +20,4 @@ public class SpielErgebnis extends Message {
         this.type = MessageType.SpielErgebnis;
     }
 }
+

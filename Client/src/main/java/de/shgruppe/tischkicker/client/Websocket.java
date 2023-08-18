@@ -6,6 +6,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import tischkicker.messages.Message;
 import tischkicker.messages.MessageType;
+import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.messages.SpielErgebnis;
 
 
@@ -39,6 +40,14 @@ public class Websocket extends WebSocketClient {
         }
         else if (deserializedMessage.type == MessageType.Phasenaenderung) {
             //ToDo: implementiere spiel in nächster phase anzeigen
+        }
+        else if(deserializedMessage.type == MessageType.SpielBeendet) {
+            SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);
+
+            Client.spielstandAnzeige.hide();
+
+            Client.gewinner.show(spielergebnis.getGewinner().getName());
+            Client.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
         }
 
     }

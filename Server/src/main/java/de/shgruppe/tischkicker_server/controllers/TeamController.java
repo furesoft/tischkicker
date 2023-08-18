@@ -9,7 +9,6 @@ import tischkicker.models.Spieler;
 import tischkicker.models.Team;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +26,7 @@ public class TeamController {
         List<Team> teams = teamRepository.findAll();
         for (int i = 0 ; i < teams.size()-1 ; i++)
         {
-            teamUmwandeln(teams.get(i).getID());
+            teamUmwandeln(teams.get(i).getId());
         }
         return teams;
     }

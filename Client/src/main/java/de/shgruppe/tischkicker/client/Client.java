@@ -234,6 +234,8 @@ public class Client {
     public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(500, 500);
     public static TurnierBaum turnierbaum = new TurnierBaum();
 
+    public static Gewinner gewinner = new Gewinner();
+
     public static void main(String[] args) {
         try {
             URI serverURI = new URI("ws://localhost:8080/live");

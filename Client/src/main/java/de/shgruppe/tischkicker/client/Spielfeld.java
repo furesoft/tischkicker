@@ -15,8 +15,10 @@ public class Spielfeld {
     Color normal = new Color(149, 157, 158);
     boolean besterVerlierer = false;
     Spiel spiel;
+    Frame frame;
 
     public Spielfeld(JFrame frame, int x, int y, int width, int height) {
+        this.frame = frame;
         background = new JLabel(" ");
         team1 = new JLabel(" ");
         team2 = new JLabel(" ");
@@ -49,12 +51,15 @@ public class Spielfeld {
     }
 
 
-    public void gewinnerTeam1() {
-        team1.setBackground(Color.GREEN);
-    }
+    public void setGewinner(int id) {
+        if(spiel.getTeamIDs()[0] == id) {
+            team1.setBackground(Color.GREEN);
+        }
+        else {
+            team2.setBackground(Color.GREEN);
+        }
 
-    public void gewinnerTeam2() {
-        team2.setBackground(Color.GREEN);
+        frame.repaint();
     }
 
     public void setTeams(Spiel spiel) {

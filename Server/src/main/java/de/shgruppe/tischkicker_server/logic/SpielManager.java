@@ -5,6 +5,7 @@ import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.models.Spiel;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Team;
@@ -28,7 +29,6 @@ public class SpielManager {
     public boolean spielVorbei = false;
 
     public int anzahltoreBisGewonnen = 10;
-    public boolean beachteSeitenwechsel = false;
 
     private SpielHolder rot = new SpielHolder();
     private SpielHolder weiss = new SpielHolder();
@@ -110,21 +110,35 @@ public class SpielManager {
      * Wenn Seitenwechsel aktiviert ist, wird bei der hälfte des maximums der Spiele um zu gewinnen ein Seitenwechsel durchgeführt.
      * Wenn diese erreicht ist, ist das Spiel vorbei und wird in die Datenbank gespeichert.
      */
-    private void triggerSpielMode() {
+    private void triggerSpielMode() throws IOException {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
 
-        if (beachteSeitenwechsel) {
-            if (maxTore == anzahltoreBisGewonnen / 2) {
-                seitenWechsel();
-            }
-        }
-
-        if (maxTore >= anzahltoreBisGewonnen) {
+        if (maxTore == anzahltoreBisGewonnen) {
             turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+            SpielBeendetMessage msg = new SpielBeendetMessage();
+            msg.setGewinner(getGewinner(ergebnis.spiel));
+            msg.setSpiel(ergebnis.spiel);
+
+            SocketHandler.broadcast(msg);
+
             reset();
 
             spielVorbei = true;
         }
+    }
+
+    private Team getGewinner(Spiel spiel) {
+        Team team = ergebnis.teams[1];
+
+        if (ergebnis.toreTeam1 > ergebnis.toreTeam2) {
+            team = ergebnis.teams[0];
+            team.setId(spiel.getTeamIDs()[0]);
+            return team;
+        }
+
+        team.setId(spiel.getTeamIDs()[1]);
+
+        return team;
     }
 
     public void seitenWechsel() {
@@ -146,16 +160,12 @@ public class SpielManager {
      * @throws IOException
      */
     public void increment(int teamID) throws Exception {
-        if (!spielVorbei && ergebnis.spiel == null) {
-            return;
-        }
-
-        triggerSpielMode();
-
         getInfoByID(teamID).tore++;
         setzeTorErgebnisse();
 
         SocketHandler.broadcast(ergebnis);
+
+        triggerSpielMode();
     }
 
     private void setzeTorErgebnisse() {

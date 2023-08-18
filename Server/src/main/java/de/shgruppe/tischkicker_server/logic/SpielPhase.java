@@ -27,11 +27,11 @@ public class SpielPhase {
                 Spiel letztesSpiel = naechstenSpiele.get(naechstenSpiele.size() - 1);
 
                 if (letztesSpiel.getTeamIDs()[1] == -1) {
-                    letztesSpiel.setTeams(letztesSpiel.getTeamIDs()[0], gewinnerTeam.getID());
+                    letztesSpiel.setTeams(letztesSpiel.getTeamIDs()[0], gewinnerTeam.getId());
                 }
                 else {
                     Spiel naechstesSpiel = new Spiel();
-                    naechstesSpiel.setTeams(gewinnerTeam.getID(), -1); // -1 wird später durch ein anderes Team ersetzt
+                    naechstesSpiel.setTeams(gewinnerTeam.getId(), -1); // -1 wird später durch ein anderes Team ersetzt
 
                     naechstenSpiele.add(spiel);
                 }
