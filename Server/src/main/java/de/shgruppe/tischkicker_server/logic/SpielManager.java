@@ -139,10 +139,15 @@ public class SpielManager {
     }
 
     public void seitenWechsel() throws IOException {
-        Tor.Seite tmpSeite = ergebnis.seiteTeam1;
+        ergebnis.seiteTeam2 = Tor.Seite.WEISS;
+        ergebnis.seiteTeam1 = Tor.Seite.ROT;
 
+        /*Tor.Seite tmpSeite = ergebnis.seiteTeam1;
         ergebnis.seiteTeam1 = ergebnis.seiteTeam2;
-        ergebnis.seiteTeam2 = tmpSeite;
+        ergebnis.seiteTeam2 = tmpSeite;*/
+
+
+
 
         SocketHandler.broadcast(ergebnis);
     }
