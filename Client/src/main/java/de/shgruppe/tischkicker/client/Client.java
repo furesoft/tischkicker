@@ -187,7 +187,7 @@ public class Client {
             String jsonData = gson.toJson(spiel);
 
             // HTTP-POST-Anfrage erstellen
-            HttpRequest request = createRequest("/spiel/aufgeben/" + spiel.getSpielID()).POST(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+            HttpRequest request = createRequest( "/spiel/aufgeben/" + spiel.getSpielID()).POST(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
                                                                                         .build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
