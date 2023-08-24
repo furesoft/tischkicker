@@ -86,11 +86,13 @@ public class SpielManager {
     }
 
     private int getIdVonSeite(Tor.Seite seite) {
-        return getInfo(seite).teamID;
-    }
+        if(this.ergebnis.seiteTeam1 == seite) {
+            return team1.teamID;
+        }
+        else{
+            return team2.teamID;
+        }
 
-    private SpielHolder getInfo(Tor.Seite seite) {
-        return seite == Tor.Seite.ROT ? team1 : team2;
     }
 
     private SpielHolder getInfoByID(int id) {
@@ -101,6 +103,7 @@ public class SpielManager {
         return team2;
     }
 
+    //TODO: Automatischer Seitenwechsel????
     /***
      * Wenn Seitenwechsel aktiviert ist, wird bei der hälfte des maximums der Spiele um zu gewinnen ein Seitenwechsel durchgeführt.
      * Wenn diese erreicht ist, ist das Spiel vorbei und wird in die Datenbank gespeichert.
@@ -139,12 +142,10 @@ public class SpielManager {
     }
 
     public void seitenWechsel() throws IOException {
-        ergebnis.seiteTeam2 = Tor.Seite.WEISS;
-        ergebnis.seiteTeam1 = Tor.Seite.ROT;
 
-        /*Tor.Seite tmpSeite = ergebnis.seiteTeam1;
+        Tor.Seite tmpSeite = ergebnis.seiteTeam1;
         ergebnis.seiteTeam1 = ergebnis.seiteTeam2;
-        ergebnis.seiteTeam2 = tmpSeite;*/
+        ergebnis.seiteTeam2 = tmpSeite;
 
 
 
