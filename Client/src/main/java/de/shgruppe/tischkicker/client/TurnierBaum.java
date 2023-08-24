@@ -5,6 +5,7 @@ import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -21,25 +22,46 @@ public class TurnierBaum {
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
     JButton starteSpiel = new JButton("Spiel starten");
 
+    JPanel panel ;
+
+
+
     public TurnierBaum() {
-        frame.setSize(1920, 1080);
-        frame.setLayout(null);
-        frame.setVisible(true);
+
+        panel = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(panel,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+
         starteSpiel.setBounds(50, 20, 150, 50);
 
-        frame.add(starteSpiel);
+
+        panel.add(starteSpiel);
         hinweis.setBounds(300, 20, 250, 50);
         hinweis.setText("* = Bester Verlierer dieser Spiel-Phase");
 
+        panel.add(hinweis);
 
-        frame.add(hinweis);
+
+
+        frame.setSize(1920, 1080);
+        setpenelsize(1000,1000);
+
+        panel.setBackground(Color.GREEN);
+        panel.setLayout(null);
+
+
+        frame.add(scrollPane);
+
 
         starteSpiel.addActionListener(e -> {
             Client.spielstandAnzeige.show();
             Client.spielstandAnzeige.aktualisiereDaten(aktuellesSpiel.spiel);
 
             Client.spielStarten(aktuellesSpiel.spiel);
+
         });
+
     }
 
     public void tunierbaumErstellen(double anzahlTeams) {
@@ -73,6 +95,8 @@ public class TurnierBaum {
 
         } while (spielfelderAnzahlDouble > 0.5);
 
+        //panel.setPreferredSize();
+
         for (int reihe = 0; reihe < reihen.size(); reihe++) {
             for (int spalte = 0; spalte < reihen.get(reihe).size(); spalte++) {
                 if (reihe > 0) {
@@ -86,7 +110,7 @@ public class TurnierBaum {
 
                         reihen.get(reihe).get(spalte).setY(newY);
 
-                        linienListe.add(new Verbindungslinie(frame, tmpSpielfelder.get(index), tmpSpielfelder.get(index + 1), reihen.get(reihe)
+                        linienListe.add(new Verbindungslinie(panel, tmpSpielfelder.get(index), tmpSpielfelder.get(index + 1), reihen.get(reihe)
                                                                                                                                     .get(spalte), 3));
                     }
                     else if (reihen.get(reihe).get(spalte).isBesterVerlierer()) {
@@ -96,12 +120,13 @@ public class TurnierBaum {
                         tmpSpielfelder.get(spalte)
                                       .setY(spielfeld.background.getY() + spielfeld.background.getHeight() + 25);
 
-                        linienListe.add(new Verbindungslinie(frame, reihen.get(reihe - 1).get(reihen.get(reihe - 1)
+                        linienListe.add(new Verbindungslinie(panel, reihen.get(reihe - 1).get(reihen.get(reihe - 1)
                                                                                                     .size() - 1), tmpSpielfelder.get(spalte), 3));
                     }
                 }
             }
         }
+
     }
 
     public Spielfeld getNaechstesSpielfeld() {
@@ -114,10 +139,16 @@ public class TurnierBaum {
         return null;
     }
 
+   public void  setpenelsize(int x ,int y ){
 
+        panel.setMinimumSize(new Dimension(x,y));
+        panel.setMaximumSize(new Dimension(x,y));
+        panel.setPreferredSize(new Dimension(x,y));
+        panel.repaint();
+   }
     public void spielfeldListeFuellen(int x, int y, int anzahlReihen) {
         for (int i = 0; i < anzahlReihen; i++) {
-            Spielfeld spielfeld = new Spielfeld(frame, x, y, 150, 100);
+            Spielfeld spielfeld = new Spielfeld(panel, x, y, 150, 100);
             spielfeldList.add(spielfeld);
             alleSpielfelder.add(spielfeld);
 
