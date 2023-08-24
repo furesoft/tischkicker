@@ -200,6 +200,7 @@ public class SpielManager {
         aufgegebenTeam.setAufgegeben(true);
         teamRepository.saveAndFlush(aufgegebenTeam);
 
+
         SpielBeendetMessage msg = new SpielBeendetMessage();
         msg.setGewinner(getGewinnerWennAufgegeben(id));
         msg.setSpiel(ergebnis.spiel);

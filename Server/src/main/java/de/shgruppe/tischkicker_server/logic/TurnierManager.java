@@ -23,11 +23,35 @@ public class TurnierManager {
     SpielRepository spielRepository;
 
     public List<Spiel> turnierStarten() {
-        List<Spiel> spiele = generiereSpiele();
+        List<Spiel> spiele1 = spielRepository.findAll();
+        if (spiele1.size() == 0)
+        {
+            spiele1 = generiereSpiele();
+            spiele1 = spielRepository.saveAllAndFlush(spiele1);
+        }
+        else
+        {
+            List<Team> teams = teamRepository.findAll();
+            for (int i = 0 ; i < spiele1.size() ; i++)
+            {
+                String [] namen = new String[2];
+                int [] teamids = spiele1.get(i).getTeamIDs();
+                for (int h = 0 ; h < 2 ; h++)
+                {
+                   if (teamids[h] < 0)
+                   {
+                       namen[h] = null;
+                   }
+                   else
+                   {
+                       namen[h] = teams.get(teamids[h]-1).getName();
+                   }
+                }
+                spiele1.get(i).setTeamNames(namen[0],namen[1]);
+            }
+        }
 
-        spiele = spielRepository.saveAllAndFlush(spiele);
-
-        return spiele;
+        return spiele1;
     }
 
     private List<Spiel> generiereSpiele() {
