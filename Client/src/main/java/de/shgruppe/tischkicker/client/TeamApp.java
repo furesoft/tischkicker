@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static de.shgruppe.tischkicker.client.Client.getTeams;
-import static de.shgruppe.tischkicker.client.Client.turnierbaumGenerieren;
+import static de.shgruppe.tischkicker.client.Client.*;
+import static de.shgruppe.tischkicker.client.Client.spiele;
 
 public class TeamApp extends JFrame {
     public static List<Team> teams = new ArrayList<>();// Liste aller Teams
@@ -74,9 +74,19 @@ public class TeamApp extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Spiel[] spiele = Client.startTurnier();
+                if (getSpieleFromServer() != null)
+                {
 
-                turnierbaumGenerieren(spiele);
+                    Spiel[] spiele = Client.startTurnier();
+                    turnierbaumGenerieren(spiele);
+                    turnierbaum.ergebnisAmAnfang(spiele);
+                }
+                else
+                {
+                    Spiel[] spiele = Client.startTurnier();
+                    turnierbaumGenerieren(spiele);
+                }
+
             }
         });
 

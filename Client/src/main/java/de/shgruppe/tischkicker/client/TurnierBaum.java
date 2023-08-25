@@ -194,6 +194,40 @@ public class TurnierBaum {
             }
         }
     }
+    public void ergebnisAmAnfang (Spiel[] spiels)
+    {
+        for (int i = 0 ; i < spiels.length ; i++)
+        {
+            for (int h = 0 ; h < alleSpielfelder.size();h++)
+            {
+                if (alleSpielfelder.get(h).spiel == null && i == h)
+                {
+                    alleSpielfelder.get(h).spiel = spiels[i];
+                }
+                if (alleSpielfelder.get(h).spiel == null)
+                {
+                    continue;
+                }
+                if (spiels[i].getSpielID() == alleSpielfelder.get(h).spiel.getSpielID())
+                {
+                        alleSpielfelder.get(h).setTeams(spiels[i]);
+                    if (spiels[i].getToreteam1() > 0 || spiels[i].getToreteam2() > 0)
+                    {
+                        alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
+                        alleSpielfelder.get(h).toreTeam2.setText(String.valueOf(spiels[i].getToreteam2()));
+                        if (spiels[i].getToreteam1() == 10 || Client.getTeam(spiels[i].getTeamIDs()[1]).isAufgegeben())
+                        {
+                            alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[0]);
+                        }
+                        if (spiels[i].getToreteam2() == 10 || Client.getTeam(spiels[i].getTeamIDs()[0]).isAufgegeben())
+                        {
+                            alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[1]);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public void feldInitialisieren(Spiel spiel, Team team1) {
         for (Spielfeld feld : alleSpielfelder) {

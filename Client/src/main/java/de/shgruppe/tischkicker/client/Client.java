@@ -113,6 +113,7 @@ public class Client {
 
     }
 
+
     public static Spiel[] startTurnier() {
         try {
             HttpRequest request = createRequest("/turnier").GET().build();
@@ -126,6 +127,27 @@ public class Client {
                 System.out.println("API-Antwort:" + responseBody);
 
                 return Client.gson.fromJson(responseBody, Spiel[].class);
+            }
+            else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static tischkicker.models.Team getTeam(int id) {
+        try {
+            HttpRequest request = createRequest("/teams/"+id).GET().build();
+
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = Client.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                // Die JSON-Antwort verarbeiten
+                String responseBody = response.body();
+                System.out.println("API-Antwort:");
+                return Client.gson.fromJson(responseBody, tischkicker.models.Team.class);
             }
             else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
