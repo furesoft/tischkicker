@@ -174,12 +174,10 @@ public class AktuellerSpielstand {
         toreTeam1Erhoehen.setData(team1ID);
         toreTeam1Verringern.setData(team1ID);
         aufgebenTeam1Btn.setData(team1ID);
-        //aufgebenTeam1Btn.addActionListener(e -> aufgebenClick(e));
 
         toreTeam2Erhoehen.setData(team2ID);
         toreTeam2Verringern.setData(team2ID);
         aufgebenTeam2Btn.setData(team1ID);
-        //aufgebenTeam2Btn.addActionListener(e -> aufgebenClick(e));
 
         farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam1));
         farbanzeigeTeam2.setBackground(getTeamFarbe(ergebnis.seiteTeam2));
