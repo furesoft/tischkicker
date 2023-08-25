@@ -51,6 +51,12 @@ public class SpielPhase {
 
 
     private Team ermittleGewinnerTeam(SpielErgebnis ergebnis) {
+        if (ergebnis.teams[0].isAufgegeben()) {
+            return ergebnis.teams[1];
+        }
+        if (ergebnis.teams[1].isAufgegeben()){
+            return ergebnis.teams[0];
+        }
         if (ergebnis.toreTeam1 > ergebnis.toreTeam2) {
             return ergebnis.teams[0];
         }
