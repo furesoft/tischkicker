@@ -12,6 +12,9 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+database.lock.db
+database.mv.db
+
 target/
 
 # AWS User-specific
