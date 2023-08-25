@@ -111,7 +111,8 @@ public class SpielManager {
     private void triggerSpielMode() throws IOException {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
 
-        if (maxTore == anzahltoreBisGewonnen) {
+            // Abfrage, ob die Gewinnbedingungen erfüllt wurden
+        if (maxTore == anzahltoreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben()) {
             Spiel neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
 
             SpielBeendetMessage msg = new SpielBeendetMessage();
@@ -121,7 +122,9 @@ public class SpielManager {
 
             SocketHandler.broadcast(msg);
 
-            reset();
+            if(!ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()){
+                reset();
+            }
 
             spielVorbei = true;
         }
@@ -206,20 +209,22 @@ public class SpielManager {
         aufgegebenTeam.setAufgegeben(true);
         teamRepository.saveAndFlush(aufgegebenTeam);
 
-        SpielBeendetMessage msg = new SpielBeendetMessage();
+        triggerSpielMode();
+
+        /*SpielBeendetMessage msg = new SpielBeendetMessage();
         msg.setGewinner(getGewinnerWennAufgegeben(id));
         msg.setSpiel(ergebnis.spiel);
 
         SocketHandler.broadcast(msg);
 
-        reset();
+        reset();*/
     }
 
-    private Team getGewinnerWennAufgegeben(int id) {
+    /*private Team getGewinnerWennAufgegeben(int id) {
         if (ergebnis.spiel.getTeamIDs()[0] == id) {
             return ergebnis.teams[1];
         }
 
         return ergebnis.teams[0];
-    }
+    }*/
 }
