@@ -181,8 +181,8 @@ public class TurnierBaum {
 
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld) {
         reihen.get(reihe).get(spielfeld).setTeams(spiel);
-    }
 
+    }
     public void spielfeldClicked(Spielfeld spielfeld) {
         aktuellesSpiel = spielfeld;
 
