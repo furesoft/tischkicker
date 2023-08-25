@@ -11,6 +11,7 @@ import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Tor;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -112,8 +113,11 @@ public class SpielManager {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
 
         if (maxTore == anzahltoreBisGewonnen) {
-            Spiel neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+            ergebnis.spiel.setToreteam1(team1.tore);
+            ergebnis.spiel.setToreteam2(team2.tore);
 
+            spielRepository.saveAndFlush(ergebnis.spiel);
+            Spiel neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
             SpielBeendetMessage msg = new SpielBeendetMessage();
             msg.setGewinner(getGewinner(ergebnis.spiel));
             msg.setSpiel(ergebnis.spiel);
@@ -205,6 +209,7 @@ public class SpielManager {
         Team aufgegebenTeam = Arrays.stream(ergebnis.teams).filter(team -> team.getId() == id).findFirst().get();
         aufgegebenTeam.setAufgegeben(true);
         teamRepository.saveAndFlush(aufgegebenTeam);
+
 
         SpielBeendetMessage msg = new SpielBeendetMessage();
         msg.setGewinner(getGewinnerWennAufgegeben(id));

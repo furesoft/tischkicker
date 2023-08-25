@@ -30,6 +30,7 @@ public class SpielPhase {
         }
 
         if (naechstesSpiel == null) {
+
             naechstesSpiel = new Spiel();
 
             naechstesSpiel.setTeams(gewinnerTeam.getId(), -1); // -1 wird später durch ein anderes Team ersetzt

@@ -260,12 +260,13 @@ public class Client {
 
     public static void turnierbaumGenerieren(Spiel[] spiele) {
         Team[] teams = getTeams();
-
         if (teams != null) {
+            double anzahlTeams = teams.length;
+            int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
             Client.turnierbaum.tunierbaumErstellen(teams.length);
-
-            for (int i = 0; i < spiele.length; i++) {
-                Client.turnierbaum.spielfeldFuellen(spiele[i], 0, i);
+            for (int i = 0; i < spielfelderAnzahl; i++) {
+                    // Problem falls Turnier gestartet wird, obwohl schon Spiele vorhanden sind
+                    Client.turnierbaum.spielfeldFuellen(spiele[i], 0, i);
             }
 
             Client.turnierbaum.frame.setVisible(true);
