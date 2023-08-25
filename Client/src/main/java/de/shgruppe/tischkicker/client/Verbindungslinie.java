@@ -7,7 +7,7 @@ public class Verbindungslinie {
 
     public Spielfeld quellSpielFeld1, quellSpielfeld2, ankunftsSpielfeld;
 
-    public Verbindungslinie(JFrame frame, Spielfeld spielfeld1, Spielfeld spielfeld2, Spielfeld spielfeld3, int linienStaerke) {
+    public Verbindungslinie(JPanel frame, Spielfeld spielfeld1, Spielfeld spielfeld2, Spielfeld spielfeld3, int linienStaerke) {
         verbindungslinie2(frame, spielfeld1, spielfeld3, linienStaerke);
         verbindungslinie1(frame, spielfeld2, spielfeld3, linienStaerke);
 
@@ -16,7 +16,7 @@ public class Verbindungslinie {
         ankunftsSpielfeld = spielfeld3;
     }
 
-    public Verbindungslinie(JFrame frame, Spielfeld spielfeld1, Spielfeld spielfeld2, int linienStaerke) {
+    public Verbindungslinie(JPanel frame, Spielfeld spielfeld1, Spielfeld spielfeld2, int linienStaerke) {
         if (spielfeld1.background.getY() < spielfeld2.background.getY()) {
             verbindungslinie2(frame, spielfeld1, spielfeld2, linienStaerke);
         }
@@ -25,7 +25,7 @@ public class Verbindungslinie {
         }
     }
 
-    public void verbindungslinie2(JFrame frame, Spielfeld spielfeld1, Spielfeld spielfeld3, int linienStaerke) {
+    public void verbindungslinie2(JPanel frame, Spielfeld spielfeld1, Spielfeld spielfeld3, int linienStaerke) {
         // die oberste linie ist immer Linie 3, Linie 2 ist immer in der Mitte und Linie 1 immer unten
         //  ---------- <- Linie 3
         //	         |
@@ -56,7 +56,7 @@ public class Verbindungslinie {
         frame.add(linie3);
     }
 
-    public void verbindungslinie1(JFrame frame, Spielfeld spielfeld2, Spielfeld spielfeld3, int linienStaerke) {
+    public void verbindungslinie1(JPanel frame, Spielfeld spielfeld2, Spielfeld spielfeld3, int linienStaerke) {
         // die oberste linie ist immer Linie 3, Linie 2 ist immer in der Mitte und Linie 1 immer unten
         //	       ------ <- Linie 3
         //	       |
