@@ -46,7 +46,7 @@ public class TurnierBaum {
 
         frame.setSize(1920, 1080);
        //                   x=                  y=Fertig
-        setpenelsize(anzahlspile*50,anzahlspile*150/2);
+        setpenelsize(anzahlspile*100,anzahlspile*150/2);
 
        // panel.setBackground(Color.GREEN);
         panel.setLayout(null);
@@ -142,6 +142,7 @@ public class TurnierBaum {
     }
 
    public void  setpenelsize(int x ,int y ){
+        // panel größe wird Festgelegt
 
         panel.setMinimumSize(new Dimension(x,y));
         panel.setMaximumSize(new Dimension(x,y));
