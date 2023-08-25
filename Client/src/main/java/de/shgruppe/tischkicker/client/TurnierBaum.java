@@ -21,8 +21,8 @@ public class TurnierBaum {
     ArrayList<Spielfeld> alleSpielfelder = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
     JButton starteSpiel = new JButton("Spiel starten");
-
     JPanel panel ;
+    int anzahlspile = Client.getTeams().length;
 
 
 
@@ -45,9 +45,10 @@ public class TurnierBaum {
 
 
         frame.setSize(1920, 1080);
-        setpenelsize(1000,1000);
+       //                   x=                  y=Fertig
+        setpenelsize(anzahlspile*50,anzahlspile*150/2);
 
-        panel.setBackground(Color.GREEN);
+       // panel.setBackground(Color.GREEN);
         panel.setLayout(null);
 
 
@@ -64,7 +65,8 @@ public class TurnierBaum {
 
     }
 
-    public void tunierbaumErstellen(double anzahlTeams) {
+    public int tunierbaumErstellen(double anzahlTeams) {
+
 
         int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
         int teamAnzahl = (int) anzahlTeams;
@@ -126,7 +128,7 @@ public class TurnierBaum {
                 }
             }
         }
-
+         return teamAnzahl;
     }
 
     public Spielfeld getNaechstesSpielfeld() {
