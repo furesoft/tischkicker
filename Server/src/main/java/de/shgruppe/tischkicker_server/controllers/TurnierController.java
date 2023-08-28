@@ -41,4 +41,5 @@ public class TurnierController {
     public List<Spiel> turnierStarten() {
         return turnierManager.turnierStarten();
     }
+
 }

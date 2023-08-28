@@ -7,6 +7,8 @@ import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 
+import java.util.List;
+
 @Component
 public class SpielPhase {
 
