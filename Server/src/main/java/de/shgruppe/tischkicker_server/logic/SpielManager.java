@@ -118,7 +118,12 @@ public class SpielManager {
             ergebnis.spiel.setToreteam2(team2.tore);
             spielRepository.saveAndFlush(ergebnis.spiel);
 
-            Spiel neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+            Spiel neuesSpiel = null;
+            try {
+                neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+            } catch (KeinSpielVerfuegbarWeilTurnierBeendetException e) {
+                //TODO was sende ich an den Client, wewnn das Spiel vorbei ist.
+            }
             SpielBeendetMessage msg = new SpielBeendetMessage();
             msg.setGewinner(getGewinner(ergebnis.spiel));
             msg.setSpiel(ergebnis.spiel);

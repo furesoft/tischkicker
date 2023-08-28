@@ -63,9 +63,16 @@ public class Spielfeld {
     }
 
     public void setTeams(Spiel spiel) {
-        String teamName = spiel.getTeamNames()[1];
-        if (teamName == null) {
+        String teamName;
+        if(spiel.getTeamNames() == null)
+        {
             teamName = "";
+        }
+        else {
+            teamName = spiel.getTeamNames()[1];
+            if (teamName == null) {
+                teamName = "";
+            }
         }
         this.spiel = spiel;
         team1.setText(spiel.getTeamNames()[0]);
