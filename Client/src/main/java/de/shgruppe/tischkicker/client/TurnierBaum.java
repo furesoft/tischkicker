@@ -194,10 +194,13 @@ public class TurnierBaum {
             }
         }
     }
+    // wird aufgerufen um bei einem bereits laufenden Turnier den Turnierbaum richtig zu laden
     public void ergebnisAmAnfang (Spiel[] spiels)
     {
+        // alle Spiele des Turniers
         for (int i = 0 ; i < spiels.length ; i++)
         {
+            // alle Spielfelder des Turnierbaums
             for (int h = 0 ; h < alleSpielfelder.size();h++)
             {
                 if (alleSpielfelder.get(h).spiel == null && i == h)
@@ -210,7 +213,7 @@ public class TurnierBaum {
                 }
                 if (spiels[i].getSpielID() == alleSpielfelder.get(h).spiel.getSpielID())
                 {
-                        alleSpielfelder.get(h).setTeams(spiels[i]);
+                    alleSpielfelder.get(h).setTeams(spiels[i]);
                     if (spiels[i].getToreteam1() > 0 || spiels[i].getToreteam2() > 0)
                     {
                         alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
