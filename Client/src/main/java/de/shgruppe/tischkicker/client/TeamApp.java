@@ -1,7 +1,9 @@
 package de.shgruppe.tischkicker.client;
 
+
 import de.shgruppe.tischkicker.client.ui.DataButton;
 import tischkicker.models.Spiel;
+import tischkicker.models.Spieler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,37 +11,56 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static de.shgruppe.tischkicker.client.Client.*;
-import static de.shgruppe.tischkicker.client.Client.spiele;
 
 public class TeamApp extends JFrame {
-    public static List<Team> teams = new ArrayList<>();// Liste aller Teams
-    public List<JTextField> teamNameFields = new ArrayList<>();// Liste der Textfelder für Teamnamen
-    public List<JTextField> playerNameFields = new ArrayList<>();// Liste der Textfelder für Spielernamen
-    JPanel deleteButtonundSpielernamen;
     private List<String> tempPlayers;
-    private final JTextField playerField = new JTextField(15);// Textfeld für Spielername
-    private final JTextField teamNameField = new JTextField(15);// Textfeld für Teamname
-    private final JButton saveButtonTeams = new JButton("Speichern");// Button zum Speichern der bearbeiteten Teamnamen
-    private final JButton saveButtonPlayers = new JButton("Speichern");// Button zum Speichern der bearbeiteten Spielernamen
-    private final JButton addPlayerButton;// Button zum Hinzufügen von Spielern
-    private final JButton addTeamButton;// Button zum Hinzufügen von Teams
-    private final JButton addConfigButton;// Button zum Öffnen der Konfigurationsansicht
-    private final JButton startButton;// Button zum Starten des Spiels
+    private JTextField playerField = new JTextField(15);// Textfeld für Spielername
+    private JTextField teamNameField = new JTextField(15);// Textfeld für Teamname
+    private JButton saveButtonTeams = new JButton("Speichern");// Button zum Speichern der bearbeiteten Teamnamen
+    private JButton saveButtonPlayers = new JButton("Speichern");// Button zum Speichern der bearbeiteten Spielernamen
+    private JButton addPlayerButton;// Button zum Hinzufügen von Spielern
+    private JButton addTeamButton;// Button zum Hinzufügen von Teams
+    private JButton addConfigButton;// Button zum Öffnen der Konfigurationsansicht
+    private JButton startButton;// Button zum Starten des Spiels
     private JButton addPlayertoteam;
+
+    private Spieler spieler;
     private DataButton deletePlayerButton;
     private JFrame bearbeitenFenster;
     private Team team;
-    private final JTextArea outputTextArea = new JTextArea(6, 21);// Textfeld für Ausgaben
-    private final JPanel hauptPanel = new JPanel();// Hauptpanel für die GUI
+    JPanel deleteButtonundSpielernamen;
+    public static List<Team> teams = new ArrayList<>();// Liste aller Teams
+    public List<JTextField> teamNameFields = new ArrayList<>();// Liste der Textfelder für Teamnamen
+    public List<JTextField> playerNameFields = new ArrayList<>();// Liste der Textfelder für Spielernamen
+    private JTextArea outputTextArea = new JTextArea(6, 21);// Textfeld für Ausgaben
+    private JPanel hauptPanel = new JPanel();// Hauptpanel für die GUI
     private JPanel spielerTab;
     private List<String> nameSpielerallerTeams;
 
 
+    private void initRows() {
+        outputTextArea.setEditable(false);
+        hauptPanel.setLayout(new GridLayout(9, 2, 11, 11));
+        add(hauptPanel);
+
+        JLabel label = new JLabel("Spieler:");
+        label.setForeground(new Color(0, 255, 255));
+        hauptPanel.add(label);
+        hauptPanel.add(playerField);
+
+        JLabel teamname = new JLabel("Teamname:");
+        teamname.setForeground(new Color(0, 255, 255));
+        hauptPanel.add(teamname);
+        hauptPanel.add(teamNameField);
+
+        teamNameField.setText("Erst alle Spieler hinzufügen");
+    }
+
     public TeamApp() {
-        teams.addAll(List.of(getTeams()));
         setTitle("Team App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 500);
@@ -90,6 +111,7 @@ public class TeamApp extends JFrame {
             }
         });
 
+
         addConfigButton = new JButton("Bearbeiten");
         addConfigButton.setEnabled(false);
         addConfigButton.addActionListener(new ActionListener() {
@@ -117,24 +139,6 @@ public class TeamApp extends JFrame {
         initActionListener();
     }
 
-    private void initRows() {
-        outputTextArea.setEditable(false);
-        hauptPanel.setLayout(new GridLayout(9, 2, 11, 11));
-        add(hauptPanel);
-
-        JLabel label = new JLabel("Spieler:");
-        label.setForeground(new Color(0, 255, 255));
-        hauptPanel.add(label);
-        hauptPanel.add(playerField);
-
-        JLabel teamname = new JLabel("Teamname:");
-        teamname.setForeground(new Color(0, 255, 255));
-        hauptPanel.add(teamname);
-        hauptPanel.add(teamNameField);
-
-        teamNameField.setText("Erst alle Spieler hinzufügen");
-    }
-
     private void addPlayer() {
         String player = playerField.getText();
         if (!player.isEmpty()) {
@@ -143,8 +147,7 @@ public class TeamApp extends JFrame {
             outputTextArea.append("Spieler '" + player + "' wurde hinzugefügt.\n");
             playerField.setText("");
             addTeamButton.setEnabled(true);
-        }
-        else {
+        } else {
             outputTextArea.append("Spielername erforderlich!\n");
         }
     }
@@ -152,17 +155,17 @@ public class TeamApp extends JFrame {
     private void addTeam() {
         String teamName = teamNameField.getText();
         if (!teamName.isEmpty() && !tempPlayers.isEmpty()) {
-            team = Client.sendTeamsToServer(new Team(tempPlayers, teamName));// Senden des Teams an den Server (Annahme)
+            team = new Team(tempPlayers, teamName);// Erstellen eines neuen Teams
+            Client.sendTeamsToServer(team);// Senden des Teams an den Server (Annahme)
+            //TODO sobald Client Server verbindung aufgebaut ist teams.add(team entfernen)
             teams.add(team);
-
             outputTextArea.append("Team '" + teamName + "' wurde hinzugefügt.\n");
             tempPlayers = new ArrayList<>();// Zurücksetzen der temporären Spielerliste
             playerField.setText("");
             teamNameField.setText("");
             addConfigButton.setEnabled(true);
 
-        }
-        else {
+        } else {
             outputTextArea.append("Mindestens ein Spieler und ein Teamname erforderlich!\n");
         }
         addTeamButton.setEnabled(false);
@@ -181,7 +184,8 @@ public class TeamApp extends JFrame {
         spielerTab.setLayout(new BoxLayout(spielerTab, BoxLayout.PAGE_AXIS));
 
         // Sammeln aller Spieler aller Teams in einer Liste
-        nameSpielerallerTeams = teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
+        nameSpielerallerTeams =
+                teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
 
         int playerIndex = 0;
         // Teamnamen hinzufügen
@@ -262,7 +266,7 @@ public class TeamApp extends JFrame {
     // Methode zum Aktualisieren von Spielernamen
     private void updatePlayerNames() {
         int playerIndex = 0;
-
+        List <Spieler> spielers= List.of(Objects.requireNonNull(getSpieler()));
         for (int i = 0; i < teams.size(); i++) {
             Team team = teams.get(i);
 
@@ -270,8 +274,15 @@ public class TeamApp extends JFrame {
                 JTextField playerNameField = playerNameFields.get(playerIndex);
                 String newPlayerName = playerNameField.getText();
 
+                if(!playerNameField.getText().equals(Objects.requireNonNull(spielers).get(playerIndex).getName())) {
+                    Client.spielerAnpassen(spielers.get(playerIndex).getID(), playerNameField.getText());
+                    System.out.println(spielers.get(playerIndex).getID());
+                }
+
+
                 team.setPlayerName(j, newPlayerName);
-                Client.sendTeamsToServer(team);
+
+                //Client.sendTeamsToServer(team);
 
                 playerIndex++;
             }
@@ -285,6 +296,7 @@ public class TeamApp extends JFrame {
             JTextField teamNameField = teamNameFields.get(i);
 
             String newTeamName = teamNameField.getText();
+            Client.teamNamenAendern(i,newTeamName);
             team.setName(newTeamName);
         }
     }
@@ -342,18 +354,23 @@ public class TeamApp extends JFrame {
                         spielerTab.repaint();
                         //spielerPanel.revalidate();
                         return;
-                    }
-                    else {
+                    } else {
                         System.out.println("Zu wenig Spieler im Team!!");
                     }
                 }
+
             }
+
         }
+
+
     }
 
     //TODO Löschen der teams
     private void deleteTeams(Team team) {
+
         Client.deleteTeam(team);
+
     }
 
     // Methode zum Initialisieren des ActionListeners zum Speichern von Teamnamen
@@ -372,5 +389,4 @@ public class TeamApp extends JFrame {
     private void scrollToBottom() {
 
     }
-
 }
