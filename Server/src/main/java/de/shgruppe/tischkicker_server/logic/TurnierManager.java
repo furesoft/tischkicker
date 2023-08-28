@@ -62,6 +62,7 @@ public class TurnierManager {
             teamfaktor = 1;
         }
 
+
         Spiel[] spiele = new Spiel[teams.size() / 2 + teamfaktor];
         Collections.shuffle(teams);
 
@@ -70,15 +71,27 @@ public class TurnierManager {
                 Spiel spiel = new Spiel();
                 spiel.setTeams(teams.get(i).getId(), teams.get(i + 1).getId());
                 spiel.setTeamNames(teams.get(i).getName(), teams.get(i + 1).getName());
+                spiel.setSpieleIDs(-1,-1);
                 spiele[i / 2] = spiel;
             }
             else if (teams.size() % 2 != 0 && i == teams.size() - 1) {
                 Spiel spielUngerade = new Spiel();
                 spielUngerade.setTeams(teams.get(i).getId(), -1);
                 spielUngerade.setTeamNames(teams.get(i).getName(), null);
+                spielUngerade.setSpieleIDs(-1,-1);
                 spiele[i / 2] = spielUngerade;
             }
         }
+        /*
+        for(int h = 1 ; h < teams.size()/2+1 ; h++)
+        {
+            Spiel spielLeer = new Spiel();
+            spielLeer.setTeams(-1,-1);
+            spielLeer.setTeamNames(null,null);
+            spielLeer.setSpieleIDs(h,h++);
+        }
+
+         */
 
         return Arrays.asList(spiele);
     }
