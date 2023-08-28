@@ -13,14 +13,15 @@ public class Spiel {
     private Date spieldatum;
     @Column(name = "teams")
     private String teams;
-    @Column(name = "Spiele")
-    private String spiele;
+
     @Column(name = "TORET1")
     private int toreteam1;
     @Column(name = "TORET2")
     private int toreteam2;
     @Column(name = "qualifikation")
     private int qualifikation;
+    @Column(name = "spiele")
+    private String spiele = "-1,-1";
     @Transient
     private String[] teamNames;
     @Transient
@@ -60,14 +61,13 @@ public class Spiel {
 
 
     public String[] getTeamNames() {
+        if (teamNames == null)
+        {
+            return new String[]{
+                    "",""
+            };
+        }
         return teamNames;
-    }
-
-    public void setTeams(int teamID1, int teamID2) {
-        List<String> strings = Arrays.stream(new int[]{teamID1, teamID2}).boxed().map(id -> Integer.toString(id))
-                                     .collect(Collectors.toList());
-        this.teams = String.join(",", strings);
-        this.teamIDs = new int[]{teamID1, teamID2};
     }
 
     public void setSpieleIDs(int spieleIDs1, int spieleID2){
@@ -84,6 +84,18 @@ public class Spiel {
 
         return spieleIDs;
     }
+
+
+    public void setTeams(int teamID1, int teamID2) {
+        List<String> strings = Arrays.stream(new int[]{teamID1, teamID2}).boxed().map(id -> Integer.toString(id))
+                                     .collect(Collectors.toList());
+        this.teams = String.join(",", strings);
+        this.teamIDs = new int[]{teamID1, teamID2};
+    }
+
+
+
+
 
     public int getQualifikation() {
         return qualifikation;
