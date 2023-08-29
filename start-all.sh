@@ -1,7 +1,3 @@
-command &>/dev/null &
-
-
-
 # starte torerkennung
 sh /home/pi/git-repos/torerkennung/run.sh &>/dev/null &
 # starte server
