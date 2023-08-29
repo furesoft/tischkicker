@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -26,8 +27,8 @@ public class TurnierManager {
         List<Spiel> spiele1 = spielRepository.findAll();
         if (spiele1.size() == 0)
         {
-            spiele1 = generiereSpiele();
-            spiele1 = spielRepository.saveAllAndFlush(spiele1);
+            spiele1.addAll(generiereUndSpeicherSpiele(generiereSpielePhase1()));
+            return spiele1;
         }
         else
         {
@@ -54,7 +55,7 @@ public class TurnierManager {
         return spiele1;
     }
 
-    private List<Spiel> generiereSpiele() {
+    private List<Spiel> generiereSpielePhase1() {
         int teamfaktor = 0;
         List<Team> teams = teamRepository.findAll();
 
@@ -70,16 +71,64 @@ public class TurnierManager {
                 Spiel spiel = new Spiel();
                 spiel.setTeams(teams.get(i).getId(), teams.get(i + 1).getId());
                 spiel.setTeamNames(teams.get(i).getName(), teams.get(i + 1).getName());
+                spiel.setQualifikation(1);
+                spiel.setSpieleIDs(-1,-1);
                 spiele[i / 2] = spiel;
+
             }
             else if (teams.size() % 2 != 0 && i == teams.size() - 1) {
                 Spiel spielUngerade = new Spiel();
-                spielUngerade.setTeams(teams.get(i).getId(), -1);
+                spielUngerade.setTeams(teams.get(i).getId(), -2);
                 spielUngerade.setTeamNames(teams.get(i).getName(), null);
+                spielUngerade.setQualifikation(1); // Qualifikation = Phase
+                spielUngerade.setSpieleIDs(-1,-1);
                 spiele[i / 2] = spielUngerade;
             }
         }
 
         return Arrays.asList(spiele);
     }
+    public List<Spiel> generiereUndSpeicherSpiele (List<Spiel> erstePhase)
+    {
+        List<Spiel> alleSpiele = new ArrayList<>();
+        List<Spiel> gespeicherteSpielePhase1 = spielRepository.saveAllAndFlush(erstePhase);
+        List<Spiel> aktuellePhase = gespeicherteSpielePhase1;
+        alleSpiele.addAll(gespeicherteSpielePhase1);
+        while (aktuellePhase.size()!=1)
+        {
+
+            aktuellePhase = generiereSpieleNaechstePhase(aktuellePhase);
+            aktuellePhase = spielRepository.saveAllAndFlush(aktuellePhase);
+            alleSpiele.addAll(aktuellePhase);
+
+        }
+
+        return alleSpiele;
+    }
+
+    private List<Spiel> generiereSpieleNaechstePhase(List<Spiel> aktuellePhase) {
+        List<Spiel> naechstePhase = new ArrayList<>();
+        for (int i= 0 ; i < aktuellePhase.size()-1 ; i+=2)
+        {
+            Spiel Vorgaenger1 = aktuellePhase.get(i);
+            Spiel Vorgaenger2 = aktuellePhase.get(i+1);
+            Spiel spielNeu = new Spiel();
+            spielNeu.setQualifikation(Vorgaenger1.getQualifikation()+1);
+            spielNeu.setSpieleIDs(Vorgaenger1.getSpielID(),Vorgaenger2.getSpielID());
+            spielNeu.setTeams(-1,-1);
+            naechstePhase.add(spielNeu);
+        }
+        boolean ungeradeSpielAnzahl = aktuellePhase.size()%2 != 0;
+        if (ungeradeSpielAnzahl) // falls ungerade Anzahl in Phase, ein weiteres Spiel generieren
+        {
+            Spiel Vorgaenger1 = aktuellePhase.get(aktuellePhase.size()-1);
+            Spiel spielUngerade = new Spiel();
+            spielUngerade.setSpieleIDs(Vorgaenger1.getSpielID(),-1); // -1 für kein Vorgänger Spiel
+            spielUngerade.setQualifikation(Vorgaenger1.getQualifikation()+1);
+            spielUngerade.setTeams(-1,-2); // -2 für unbekannten Verlierer und -1 noch nicht bekannt für Team
+            naechstePhase.add(spielUngerade);
+        }
+        return naechstePhase;
+    }
+
 }
