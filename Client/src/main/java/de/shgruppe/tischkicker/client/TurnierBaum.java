@@ -22,7 +22,7 @@ public class TurnierBaum {
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
     JButton starteSpiel = new JButton("Spiel starten");
     JPanel panel ;
-    int anzahlspile = Client.getTeams().length;
+    int anzahlSpiele = Client.getTeams().length;
 
 
 
@@ -46,7 +46,7 @@ public class TurnierBaum {
 
         frame.setSize(1920, 1080);
        //                   x=                  y=Fertig
-        setpenelsize(anzahlspile*100,anzahlspile*150/2);
+        setpenelsize(anzahlSpiele *100, anzahlSpiele *150/2);
 
        // panel.setBackground(Color.GREEN);
         panel.setLayout(null);
@@ -185,8 +185,19 @@ public class TurnierBaum {
     }
     public void spielfeldClicked(Spielfeld spielfeld) {
         aktuellesSpiel = spielfeld;
+        int [] teamids = spielfeld.spiel.getTeamIDs();
+        boolean spielVorbei = false;
+        if (spielfeld.spiel.getToreteam2() == 10 || spielfeld.spiel.getToreteam1() == 10)
+        {
+            spielVorbei = true;
+        }
+        if (teamids[0] > 0 && teamids[1] > 0) {
+            if (Client.getTeam(teamids[0]).isAufgegeben() || Client.getTeam(teamids[1]).isAufgegeben()) {
+                spielVorbei = true;
+            }
+        }
 
-        if (spielfeld.spiel == null || spielfeld.spiel.getTeamNames()[1] == null) {
+        if (teamids[0] < 0 || teamids[1] < 0 || spielVorbei) {
             return;
         }
 
