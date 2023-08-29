@@ -2,6 +2,7 @@ package de.shgruppe.tischkicker_server.controllers;
 
 import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.logic.SpielManager;
+import de.shgruppe.tischkicker_server.logic.TeamNameGetter;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class SpielController {
     SpielRepository spielRepository;
 
     @Autowired
-    TeamRepository teamRepository;
+    TeamNameGetter teamNameGetter;
 
     @GetMapping("/spiele")
     public List<Spiel> alleSpieleHolen() {
@@ -40,14 +41,10 @@ public class SpielController {
         Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel, id);
 
         int[] teamIDs = spiel1.getTeamIDs();
+        String teamname1 = teamNameGetter.getTeamName(teamIDs[0]);
+        String teamname2 = teamNameGetter.getTeamName(teamIDs[1]);
 
-        Optional<Team> team1 = teamRepository.findById(teamIDs[0]);
-        Optional<Team> team2 = teamRepository.findById(teamIDs[2]);
-
-        Team t1 = Hilfsmethoden.optionalCheck(team1, teamIDs[0]);
-        Team t2 = Hilfsmethoden.optionalCheck(team2, teamIDs[2]);
-
-        spiel1.setTeamNames(t1.getName(), t2.getName());
+        spiel1.setTeamNames(teamname1, teamname2);
 
         return spiel1;
     }

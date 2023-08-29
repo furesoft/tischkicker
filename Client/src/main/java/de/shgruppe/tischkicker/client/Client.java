@@ -159,8 +159,17 @@ public class Client {
     }
 
     public static Team[] getTeams() {
+        return getResource("/teams", Team[].class);
+    }
+
+    public static Spiel getSpiel( int spieleID) {
+        return getResource("/spiele/"+spieleID, Spiel.class);
+    }
+
+    public static <T> T getResource(String path, Class<T> clazz){
+
         try {
-            HttpRequest request = createRequest("/teams").GET().build();
+            HttpRequest request = createRequest(path).GET().build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
             HttpResponse<String> response = Client.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -169,7 +178,7 @@ public class Client {
                 // Die JSON-Antwort verarbeiten
                 String responseBody = response.body();
                 System.out.println("API-Antwort:");
-                return Client.gson.fromJson(responseBody, Team[].class);
+                return Client.gson.fromJson(responseBody, clazz);
             }
             else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
@@ -179,6 +188,7 @@ public class Client {
         }
         return null;
     }
+
 
     public static void spielStarten(Spiel spiel) {
         try {

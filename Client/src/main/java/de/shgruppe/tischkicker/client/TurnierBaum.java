@@ -56,6 +56,8 @@ public class TurnierBaum {
 
 
         starteSpiel.addActionListener(e -> {
+            //TODO Probieren, ob aktuelles Spiel startbar ist.
+
             Client.spielstandAnzeige.show();
             Client.spielstandAnzeige.aktualisiereDaten(aktuellesSpiel.spiel);
 
@@ -162,6 +164,7 @@ public class TurnierBaum {
             spielfeld.background.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+
                     spielfeldClicked(spielfeld);
                 }
             });
@@ -185,19 +188,12 @@ public class TurnierBaum {
     }
     public void spielfeldClicked(Spielfeld spielfeld) {
         aktuellesSpiel = spielfeld;
-        int [] teamids = spielfeld.spiel.getTeamIDs();
-        boolean spielVorbei = false;
-        if (spielfeld.spiel.getToreteam2() == 10 || spielfeld.spiel.getToreteam1() == 10)
-        {
-            spielVorbei = true;
-        }
-        if (teamids[0] > 0 && teamids[1] > 0) {
-            if (Client.getTeam(teamids[0]).isAufgegeben() || Client.getTeam(teamids[1]).isAufgegeben()) {
-                spielVorbei = true;
-            }
-        }
 
-        if (teamids[0] < 0 || teamids[1] < 0 || spielVorbei) {
+        spielfeld.spiel = Client.getSpiel(spielfeld.spiel.getSpielID());
+        int [] teamids = spielfeld.spiel.getTeamIDs();
+
+
+        if (teamids[0] < 0 || teamids[1] < 0 || spielfeld.spiel.getSpielvorbei()) {
             return;
         }
 
