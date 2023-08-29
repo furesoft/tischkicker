@@ -1,0 +1,1 @@
+java -jar /home/pi/git-repos/Tischkicker/Server/target/Server-1.0.0-SNAPSHOT.jar
