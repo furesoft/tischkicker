@@ -41,9 +41,7 @@ public class Websocket extends WebSocketClient {
         }
         else if (deserializedMessage.type == MessageType.SpielBeendet) {
             SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);
-
             Client.spielstandAnzeige.hide();
-
             Spielfeld f = Client.turnierbaum.getNaechstesSpielfeld();
             f.spiel = spielergebnis.getNeuesSpiel();
             Client.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());

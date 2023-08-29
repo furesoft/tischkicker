@@ -21,6 +21,8 @@ public class Verbindungslinie {
             verbindungslinie2(frame, spielfeld1, spielfeld2, linienStaerke);
         }
         else {
+            ankunftsSpielfeld = spielfeld2;
+            quellSpielFeld1 = spielfeld1;
             verbindungslinie1(frame, spielfeld1, spielfeld2, linienStaerke);
         }
     }
