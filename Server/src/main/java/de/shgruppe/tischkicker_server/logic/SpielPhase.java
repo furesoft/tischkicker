@@ -62,6 +62,7 @@ public class SpielPhase {
             team2 = gewinnerTeam.getId();
         }
 
+
         naechstesSpiel.setTeams(team1, team2);
 
         naechstesSpiel = spielRepository.saveAndFlush(naechstesSpiel);
