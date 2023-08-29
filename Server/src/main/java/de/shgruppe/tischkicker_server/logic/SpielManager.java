@@ -125,6 +125,7 @@ public class SpielManager {
             Spiel neuesSpiel = null;
             try {
                 neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+
             } catch (KeinSpielVerfuegbarWeilTurnierBeendetException e) {
                 //TODO was sende ich an den Client, wewnn das Spiel vorbei ist.
             }
