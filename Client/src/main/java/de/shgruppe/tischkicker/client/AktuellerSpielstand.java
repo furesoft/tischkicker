@@ -177,7 +177,7 @@ public class AktuellerSpielstand {
 
         toreTeam2Erhoehen.setData(team2ID);
         toreTeam2Verringern.setData(team2ID);
-        aufgebenTeam2Btn.setData(team1ID);
+        aufgebenTeam2Btn.setData(team2ID);
 
         farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam1));
         farbanzeigeTeam2.setBackground(getTeamFarbe(ergebnis.seiteTeam2));
