@@ -34,15 +34,20 @@ class SpielerController {
     @PutMapping("/spieler/{id}")
     public ResponseEntity<String> spielerNamenAendern(@PathVariable int id, @RequestBody String name) {
         Optional<Spieler> optionalSpieler = repository.findById(id);
+
         if (optionalSpieler.isPresent()) {
             Spieler spieler = optionalSpieler.get();
             spieler.setName(name);
 
-            repository.save(spieler);
+            repository.saveAndFlush(spieler);
             return ResponseEntity.ok("Spielername wurde erfolgreich aktualisiert.");
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    @DeleteMapping("/spieler/{id}")
+    public void spielerLoeschen(@PathVariable int id) {
+        repository.deleteById(id);
     }
 
 

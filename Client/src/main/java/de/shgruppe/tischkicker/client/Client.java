@@ -133,10 +133,35 @@ public class Client {
         }
     }
 
-    public static void deleteTeam(Team team) {
+    public static void deleteTeam(int id) {
         try {
             // HTTP-POST-Anfrage erstellen
-            HttpRequest request = createRequest("/teams/" + team.ID).DELETE().build();
+            HttpRequest request = createRequest("/teams/" + id).DELETE().build();
+
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                // Die JSON-Antwort verarbeiten
+                String responseBody = response.body();
+                System.out.println("API-Antwort:");
+                Team teams = gson.fromJson(responseBody, Team.class);
+                TeamApp.teams.add(teams);
+                System.out.println(responseBody);
+            }
+            else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void deleteSpieler(int spielerID) {
+        try {
+            // HTTP-POST-Anfrage erstellen
+            HttpRequest request = createRequest("/spieler/" + spielerID).DELETE().build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

@@ -82,16 +82,16 @@ public class TeamController {
 
             spielerRepository.saveAndFlush(s);
 
-            s.setID((int) spielerRepository.count());
+            s.setId((int) spielerRepository.count());
 
-            ids.add(Integer.toString(s.getID()));
+            ids.add(Integer.toString(s.getId()));
         }
 
         team.spieler = String.join(",", ids);
     }
 
     @DeleteMapping("/teams/{id}")
-    public void teamLoeschen(int id) {
+    public void teamLoeschen(@PathVariable int id) {
         teamRepository.deleteById(id);
     }
 
