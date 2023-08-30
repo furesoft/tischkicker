@@ -38,7 +38,7 @@ public class TurnierBaum {
 
         panel.add(starteSpiel);
         hinweis.setBounds(300, 20, 250, 50);
-        hinweis.setText("* = Bester Verlierer dieser Spiel-Phase");
+        hinweis.setText("* = Zufälliger Verlierer dieser Spiel-Phase");
 
         panel.add(hinweis);
 
@@ -274,13 +274,13 @@ public class TurnierBaum {
     }
 
     public void feldInitialisieren(Spiel spiel, Team team1) {
-        for (Spielfeld feld : alleSpielfelder) {
-            if (feld.spiel.getSpielID() == spiel.getSpielID()) {
-                if (spiel.getTeamIDs()[1] == -1) {
-                    feld.team1.setText(String.valueOf(team1.getName()));
+        for (int i = 0 ; i < alleSpielfelder.size() ; i++) {
+            if (alleSpielfelder.get(i).spiel.getSpielID() == spiel.getSpielID()) {
+                if (spiel.getTeamIDs()[1] == -1 || spiel.getTeamIDs()[1] == -2) {
+                    alleSpielfelder.get(i).team1.setText(String.valueOf(team1.getName()));
                 }
                 else {
-                    feld.team2.setText(String.valueOf(team1.getName()));
+                    alleSpielfelder.get(i).team2.setText(String.valueOf(team1.getName()));
                 }
 
                 break;

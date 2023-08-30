@@ -43,9 +43,10 @@ public class Websocket extends WebSocketClient {
             SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);
             Client.spielstandAnzeige.hide();
             Spielfeld f = Client.turnierbaum.getNaechstesSpielfeld();
-            f.spiel = spielergebnis.getNeuesSpiel();
-            Client.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());
-
+            if (f != null) {
+                f.spiel = spielergebnis.getNeuesSpiel();
+                Client.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());
+            }
             Client.gewinner.show(spielergebnis.getGewinner().getName());
             Client.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
             Client.turnierbaum.lock();
