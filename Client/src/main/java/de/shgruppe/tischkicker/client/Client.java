@@ -2,6 +2,7 @@ package de.shgruppe.tischkicker.client;
 
 import com.google.gson.Gson;
 import tischkicker.models.Spiel;
+import tischkicker.models.Spieler;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -22,6 +23,51 @@ public class Client {
     public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(500, 500);
     public static TurnierBaum turnierbaum = new TurnierBaum();
     public static Gewinner gewinner = new Gewinner();
+
+    public static void spielerAnpassen(int spielerId, String neuerName) {
+        try {
+            String jsonData = gson.toJson(neuerName);
+
+            // HTTP-PUT-Anfrage erstellen
+            HttpRequest request = createRequest("/spieler/" + spielerId)
+                    .PUT(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+                    .build();
+
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                System.out.println("Spielername erfolgreich aktualisiert.");
+            } else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void teamNamenAendern(int teamID, String neuerName) {
+        try {
+            String jsonData = gson.toJson(neuerName);
+
+            // HTTP-PUT-Anfrage erstellen
+            HttpRequest request = createRequest("/teams/" + teamID)
+                    .PUT(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+                    .build();
+
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                System.out.println("Spielername erfolgreich aktualisiert.");
+            } else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static Team sendTeamsToServer(Team team) {
         try {
@@ -88,10 +134,35 @@ public class Client {
         }
     }
 
-    public static void deleteTeam(Team team) {
+    public static void deleteTeam(int id) {
         try {
             // HTTP-POST-Anfrage erstellen
-            HttpRequest request = createRequest("/teams/" + team.ID).DELETE().build();
+            HttpRequest request = createRequest("/teams/" + id).DELETE().build();
+
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                // Die JSON-Antwort verarbeiten
+                String responseBody = response.body();
+                System.out.println("API-Antwort:");
+                Team teams = gson.fromJson(responseBody, Team.class);
+                TeamApp.teams.add(teams);
+                System.out.println(responseBody);
+            }
+            else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void deleteSpieler(int spielerID) {
+        try {
+            // HTTP-POST-Anfrage erstellen
+            HttpRequest request = createRequest("/spieler/" + spielerID).DELETE().build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -128,6 +199,28 @@ public class Client {
                 System.out.println("API-Antwort:" + responseBody);
 
                 return Client.gson.fromJson(responseBody, Spiel[].class);
+            }
+            else {
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Spieler[] getSpieler(){
+        try {
+            HttpRequest request = createRequest("/spieler").GET().build();
+
+            // Die Anfrage an die API senden und die Antwort erhalten
+            HttpResponse<String> response = Client.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            if (statusCode == 200) {
+                // Die JSON-Antwort verarbeiten
+                String responseBody = response.body();
+                System.out.println("API-Antwort:");
+                return Client.gson.fromJson(responseBody, Spieler[].class);
             }
             else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);

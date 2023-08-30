@@ -92,7 +92,6 @@ public class Spielfeld {
     }
 
     public void setTeamnames(Spiel spiel) {
-        //this.spiel = spiel;
         setTeams(spiel);
     }
     /**

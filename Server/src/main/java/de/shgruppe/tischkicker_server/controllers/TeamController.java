@@ -4,6 +4,7 @@ import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.repositories.SpielerRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tischkicker.models.Spieler;
 import tischkicker.models.Team;
@@ -29,6 +30,7 @@ public class TeamController {
         }
         return teams;
     }
+
 
     @GetMapping("/teams/{id}")
     public Team bestimtesTeamsHolen(@PathVariable int id) {
@@ -58,6 +60,20 @@ public class TeamController {
         return team;
     }
 
+    @PutMapping("/teams/{id}")
+    public ResponseEntity<String> teamNamenAendern(@PathVariable int id, @RequestBody String name) {
+        Optional<Team> optionalSpieler = teamRepository.findById(id);
+        if (optionalSpieler.isPresent()) {
+            Team teams = optionalSpieler.get();
+            teams.setName(name);
+
+            teamRepository.save(teams);
+            return ResponseEntity.ok("Teamname wurde erfolgreich aktualisiert.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     private void addSpielerToDb(Team team) {
         List<String> ids = new ArrayList();
         for (String name : team.getPlayers()) {
@@ -66,16 +82,16 @@ public class TeamController {
 
             spielerRepository.saveAndFlush(s);
 
-            s.setID((int) spielerRepository.count());
+            s.setId((int) spielerRepository.count());
 
-            ids.add(Integer.toString(s.getID()));
+            ids.add(Integer.toString(s.getId()));
         }
 
         team.spieler = String.join(",", ids);
     }
 
     @DeleteMapping("/teams/{id}")
-    public void teamLoeschen(int id) {
+    public void teamLoeschen(@PathVariable int id) {
         teamRepository.deleteById(id);
     }
 
