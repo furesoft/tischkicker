@@ -73,7 +73,7 @@ public class TurnierBaum {
 
         int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
         int teamAnzahl = (int) anzahlTeams;
-        double spielfelderAnzahlDouble;
+        double spielfelderAnzahlDouble; // Zwischenspeicher für die Berechnungen und den Abbruch der Do-While Schleife
 
         int y = 100; // Y-Koordinate für ein Spielfeld
         int x = 100; // X-Koordinate für ein Spielfeld
@@ -154,6 +154,14 @@ public class TurnierBaum {
         panel.setPreferredSize(new Dimension(x,y));
         panel.repaint();
    }
+
+    /**
+     * Füllt die Liste spielfeldList mit Spielfeldern
+     *
+     * @param x X-Koordinate für die Spielfelder einer Reihe
+     * @param y Y-Koordinate für das erste Spielfeld einer Reihe
+     * @param anzahlReihen Anzahl der Reihen
+     */
     public void spielfeldListeFuellen(int x, int y, int anzahlReihen, int beginIndexSpiele, List<Spiel> spiele) {
 
         for (int i = 0; i < anzahlReihen; i++) {
@@ -187,6 +195,14 @@ public class TurnierBaum {
         starteSpiel.setVisible(false);
     }
 
+
+    /**
+     * Ermöglicht es auf ein Spielfeld im Turnierbaum zuzugreifen, um es zu befüllen. Siehe OneNote Doku
+     *
+     * @param spiel Spiel, das in dem Spielfeld erscheinen soll
+     * @param reihe Reihe im Turnierbaum
+     * @param spielfeld Spielfeld im Turnierbaum
+     */
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld) {
         reihen.get(reihe).get(spielfeld).setTeamnames(spiel);
 
