@@ -178,8 +178,8 @@ public class TeamApp extends JFrame {
 
     // Methode zur Konfiguration von Spieler- und Teamnamen
     public void config() {
-
-
+        addTeamButton.setEnabled(false);
+        addPlayerButton.setEnabled(false);
         bearbeitenFenster = new JFrame();
         bearbeitenFenster.setTitle("Bearbeiten");
         bearbeitenFenster.setSize(400, 300);
@@ -248,7 +248,7 @@ public class TeamApp extends JFrame {
             Team team1 = teams.get(i);
 
             DataButton deleteTeamButton = new DataButton("Löschen");
-            deleteTeamButton.setData(playerIndex);
+            deleteTeamButton.setData(team1.getName());
 
             //Zu jedem Button wird eine eindeutiger int mitgeschickt der dann für die Löschung der Teams zuständig ist
             deleteTeamButton.addActionListener(new ActionListener() {
@@ -272,6 +272,17 @@ public class TeamApp extends JFrame {
 
         }
 
+        bearbeitenFenster.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Hier können Sie Ihre eigene Operation ausführen
+
+                addTeamButton.setEnabled(true);
+                addPlayerButton.setEnabled(true);
+
+            }
+        });
+
         JScrollPane teamTabScrollPane = new JScrollPane(teamPanel);
         tabbedPane.addTab("Teamname ändern", teamTabScrollPane);
         teamPanel.add(saveButtonTeams);
@@ -279,7 +290,11 @@ public class TeamApp extends JFrame {
         bearbeitenFenster.add(tabbedPane);
         bearbeitenFenster.setVisible(true);
 
+
+
+
     }
+
 
     // Methode zum Aktualisieren von Spielernamen
     private void updatePlayerNames() {
@@ -287,6 +302,10 @@ public class TeamApp extends JFrame {
         List <Spieler> spielers= List.of(Objects.requireNonNull(getSpieler()));
         for (int i = 0; i < teams.size(); i++) {
             Team team = teams.get(i);
+
+            if(team == null) {
+                continue;
+            }
 
             for (int j = 0; j < team.getNumberOfPlayersPerTeam(); j++) {
                 String newPlayerName = playerNameFields.get(playerIndex).getText();
@@ -314,7 +333,7 @@ public class TeamApp extends JFrame {
                 playerIndex++;
             }
         }
-        reload();
+
     }
 
     // Methode zum Aktualisieren von Teamnamen
@@ -335,7 +354,7 @@ public class TeamApp extends JFrame {
             }
 
         }
-        reload();
+
     }
 
 
@@ -363,10 +382,10 @@ public class TeamApp extends JFrame {
                         // Entferne das Panel des Spielers aus dem spielerPanel
                         spielerTab.repaint();
                         //spielerPanel.revalidate();
-                        reload();
+
                         return;
                     } else {
-                        reload();
+
                         System.out.println("Zu wenig Spieler im Team!!");
                     }
                 }
@@ -396,7 +415,7 @@ public class TeamApp extends JFrame {
             teamPanel.remove(btn.getParent());
 
         }
-        reload();
+
     }
 
     // Methode zum Initialisieren des ActionListeners zum Speichern von Teamnamen
