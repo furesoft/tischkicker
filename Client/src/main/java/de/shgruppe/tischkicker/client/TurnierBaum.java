@@ -47,7 +47,7 @@ public class TurnierBaum {
 
         frame.setSize(1920, 1080);
        //                   x=                  y=Fertig
-        setpenelsize(anzahlSpiele *100, anzahlSpiele *150/2);
+        setpenelsize(anzahlSpiele *150/2, anzahlSpiele *100);
 
        // panel.setBackground(Color.GREEN);
         panel.setLayout(null);
