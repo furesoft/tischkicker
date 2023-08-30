@@ -58,38 +58,44 @@ public class SpielPhase {
             if (spieleVorbei.size() == spieleDerPhase.size()-1) {
                 spieleDerPhase.removeAll(spieleVorbei);
                 Spiel uebriegesSpiel = spieleDerPhase.get(0);
-                    int tore1 = ergebnis.spiel.getToreteam1();
-                    int tore2 = ergebnis.spiel.getToreteam2();
+                for (int i = 0 ; i < spieleVorbei.size() ; i++)
+                {
+                    int tore1 = spieleVorbei.get(i).getToreteam1();
+                    int tore2 = spieleVorbei.get(i).getToreteam2();
                     int teamID1 = uebriegesSpiel.getTeamIDs()[0];
                     int teamID2 = uebriegesSpiel.getTeamIDs()[1];
                     if (teamID1 == -2 || teamID2 == -2) {
                         int verliererTeamID;
                         if (tore1 > tore2) {
-                            verliererTeamID = ergebnis.spiel.getTeamIDs()[1];
+                            verliererTeamID = spieleVorbei.get(i).getTeamIDs()[1];
                         } else {
-                            verliererTeamID = ergebnis.spiel.getTeamIDs()[0];
+                            verliererTeamID = spieleVorbei.get(i).getTeamIDs()[0];
                         }
                         boolean teamAufgegeben = ermittleTeamAufgegeben(verliererTeamID);
                         if (!teamAufgegeben) {
-                            if (teamID1 == -2) {
+                            if (teamID1 == -1) {
                                 teamID1 = verliererTeamID;
-                                uebriegesSpiel.setTeams(teamID1,uebriegesSpiel.getTeamIDs()[1]);
-                            }
-                            else
-                            {
+                                uebriegesSpiel.setTeams(teamID1, uebriegesSpiel.getTeamIDs()[1]);
+                            } else {
                                 if (teamID2 == -2) {
                                     teamID2 = verliererTeamID;
-                                    uebriegesSpiel.setTeams(uebriegesSpiel.getTeamIDs()[0],teamID2);
+                                    uebriegesSpiel.setTeams(uebriegesSpiel.getTeamIDs()[0], teamID2);
                                 }
                             }
-
                             uebriegesSpiel = spielRepository.saveAndFlush(uebriegesSpiel);
                             String t1Name = teamNameGetter.getTeamName(teamID1);
                             String t2Name = teamNameGetter.getTeamName(teamID2);
-                            uebriegesSpiel.setTeamNames(t1Name,t2Name);
-                            //return uebriegesSpiel;
+                            uebriegesSpiel.setTeamNames(t1Name, t2Name);
+                            break;
+                        }/*
+                        if (i == spieleVorbei.size()-1)
+                        {
+                            uebriegesSpiel.setTeams(uebriegesSpiel.getTeamIDs()[0],uebriegesSpiel.getTeamIDs()[0]);
+
                         }
+                        */
                     }
+                }
                 }
                 //wenn Nachfolger, dann Nachfolgespiel aktualisieren.
                 Spiel naechstesSpiel = maybeNaechstesSpiel.get();

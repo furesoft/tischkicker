@@ -87,6 +87,13 @@ public class Spielfeld {
         //toreTeam2.setText(String.valueOf(spiel.getTeam2().getTore()));
     }
 
+    void aktualisiereTeamnamenInGui(String[] teamNames){
+        var teamname1 = teamNames[0];
+        var teamname2 = teamNames[1];
+        team1.setText(teamname1);
+        team2.setText(teamname2);
+    }
+
     public void setY(int y) {
         background.setBounds(background.getX(), y, background.getWidth(), background.getHeight());
         team1.setBounds(team1.getX(), y + 5, team1.getWidth(), team1.getHeight());

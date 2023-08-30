@@ -31,7 +31,13 @@ public class SpielController {
 
     @GetMapping("/spiele")
     public List<Spiel> alleSpieleHolen() {
-        return spielRepository.findAll();
+        List<Spiel> alleSpiele = spielRepository.findAll();
+
+        alleSpiele.stream().forEach(spiel -> {
+            ergaenzeTeamnamen(spiel);
+        });
+
+        return alleSpiele;
     }
 
     @GetMapping("/spiele/{id}")
@@ -40,13 +46,17 @@ public class SpielController {
 
         Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel, id);
 
-        int[] teamIDs = spiel1.getTeamIDs();
+        ergaenzeTeamnamen(spiel1);
+
+        return spiel1;
+    }
+
+    private void ergaenzeTeamnamen(Spiel spiel) {
+        int[] teamIDs = spiel.getTeamIDs();
         String teamname1 = teamNameGetter.getTeamName(teamIDs[0]);
         String teamname2 = teamNameGetter.getTeamName(teamIDs[1]);
 
-        spiel1.setTeamNames(teamname1, teamname2);
-
-        return spiel1;
+        spiel.setTeamNames(teamname1, teamname2);
     }
 
     @PostMapping("/spiel/start/{id}")

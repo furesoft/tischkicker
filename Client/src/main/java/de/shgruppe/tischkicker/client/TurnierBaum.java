@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TurnierBaum {
 
@@ -276,11 +277,14 @@ public class TurnierBaum {
     public void feldInitialisieren(Spiel spiel, Team team1) {
         for (int i = 0 ; i < alleSpielfelder.size() ; i++) {
             if (alleSpielfelder.get(i).spiel.getSpielID() == spiel.getSpielID()) {
-                if (spiel.getTeamIDs()[1] == -1 || spiel.getTeamIDs()[1] == -2) {
-                    alleSpielfelder.get(i).team1.setText(String.valueOf(team1.getName()));
+
+                int teamID2 = spiel.getTeamIDs()[1];
+                String team1Name = String.valueOf(team1.getName());
+                if (teamID2 == -1 || teamID2 == -2) {
+                    alleSpielfelder.get(i).team1.setText(team1Name);
                 }
                 else {
-                    alleSpielfelder.get(i).team2.setText(String.valueOf(team1.getName()));
+                    alleSpielfelder.get(i).team2.setText(team1Name);
                 }
 
                 break;
@@ -302,6 +306,17 @@ public class TurnierBaum {
         }
 
         return null;
+    }
+
+    public void updateTeamnames(List<Spiel> alleSpieleMitTeamnamen) {
+        for(Spiel spiel: alleSpieleMitTeamnamen){
+            for(Spielfeld spielfeld: alleSpielfelder){
+                if(spielfeld.spiel.getSpielID() == spiel.getSpielID()){
+                    spielfeld.aktualisiereTeamnamenInGui(spiel.getTeamNames());
+                }
+            }
+        }
+
     }
 }
 
