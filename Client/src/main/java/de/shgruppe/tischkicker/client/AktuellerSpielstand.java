@@ -69,7 +69,7 @@ public class AktuellerSpielstand {
         toreTeam1Erhoehen.addActionListener(AktuellerSpielstand::buttonClick);
 
         toreTeam1Verringern = new DataButton("-");
-        toreTeam1Erhoehen.setToolTipText("Spielstand verringern");
+        toreTeam1Verringern.setToolTipText("Spielstand verringern");
         toreTeam1Verringern.setBounds(0, toreTeam1Erhoehen.getY() + toreTeam1Erhoehen.getHeight(), (int) (width * 0.1), (int) (height * 0.25) - 50);
         toreTeam1Verringern.setOpaque(true);
         toreTeam1Verringern.addActionListener(AktuellerSpielstand::buttonClick);
@@ -85,7 +85,7 @@ public class AktuellerSpielstand {
         toreTeam2Erhoehen.addActionListener(AktuellerSpielstand::buttonClick);
 
         toreTeam2Verringern = new DataButton("-");
-        toreTeam2Erhoehen.setToolTipText("Spielstand verringern");
+        toreTeam2Verringern.setToolTipText("Spielstand verringern");
         toreTeam2Verringern.setBounds(width - toreTeam1Verringern.getWidth() - 10, toreTeam1Verringern.getY(), toreTeam1Verringern.getWidth(), toreTeam1Verringern.getHeight());
         toreTeam2Verringern.setOpaque(true);
         toreTeam2Verringern.addActionListener(AktuellerSpielstand::buttonClick);

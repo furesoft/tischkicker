@@ -71,8 +71,9 @@ public class SpielPhase {
                         } else {
                             verliererTeamID = spieleVorbei.get(i).getTeamIDs()[0];
                         }
-                        boolean teamAufgegeben = ermittleTeamAufgegeben(verliererTeamID);
-                        if (!teamAufgegeben) {
+                        boolean teamAufgegeben1 = ermittleTeamAufgegeben(spieleVorbei.get(i).getTeamIDs()[1]);
+                        boolean teamAufgegeben2 = ermittleTeamAufgegeben(spieleVorbei.get(i).getTeamIDs()[0]);
+                        if (!teamAufgegeben1 && !teamAufgegeben2) {
                             if (teamID1 == -1) {
                                 teamID1 = verliererTeamID;
                                 uebriegesSpiel.setTeams(teamID1, uebriegesSpiel.getTeamIDs()[1]);

@@ -133,6 +133,14 @@ public class Spielfeld {
         }
 
     }
+    public void aktualisiereTeamnamenInGui(String[] teamnames)
+    {
+        var teamname1 = teamnames [0];
+        var teamname2 = teamnames [1];
+        team1.setText(teamname1);
+        team2.setText(teamname2);
+
+    }
 
     /**
      * Verschiebt verschiedene GUI-Komponenten vertikal basierend auf dem angegebenen y-Wert.

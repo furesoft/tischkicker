@@ -60,7 +60,7 @@ public class SpielController {
     }
 
     @PostMapping("/spiel/start/{id}")
-    public void spielStarten(@PathVariable int id) {
+    public void spielStarten(@PathVariable int id) throws IOException {
         Optional<Spiel> spiel = spielRepository.findById(id);
 
         Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel, id);

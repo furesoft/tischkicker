@@ -51,7 +51,7 @@ public class SpielManager {
         spielVorbei = false;
     }
 
-    public void spielStarten(Spiel spiel) {
+    public void spielStarten(Spiel spiel) throws IOException {
         reset();
 
         ergebnis.spiel = spiel;
@@ -62,6 +62,8 @@ public class SpielManager {
 
         ergebnis.seiteTeam2 = Tor.Seite.ROT;
         ergebnis.seiteTeam1 = Tor.Seite.WEISS;
+
+        SocketHandler.broadcast(ergebnis);
     }
 
     private Team[] getTeamsForSpiel(Spiel spiel) {
