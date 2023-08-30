@@ -37,8 +37,10 @@ public class TeamApp extends JFrame {
     public List<JTextField> playerNameFields = new ArrayList<>();// Liste der Textfelder für Spielernamen
     private JTextArea outputTextArea = new JTextArea(6, 21);// Textfeld für Ausgaben
     private JPanel hauptPanel = new JPanel();// Hauptpanel für die GUI
+    List <DataButton> buttonNamen= new ArrayList<>();
     private JPanel spielerTab;
     private List<String> nameSpielerallerTeams;
+
 
 
     private void initRows() {
@@ -118,7 +120,9 @@ public class TeamApp extends JFrame {
             // Aufruf der Methode zur Konfiguration von Spielern und Teams
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 config();
+               // addConfigButton.setEnabled(false);
             }
         });
 
@@ -179,16 +183,7 @@ public class TeamApp extends JFrame {
         bearbeitenFenster = new JFrame();
         bearbeitenFenster.setTitle("Bearbeiten");
         bearbeitenFenster.setSize(400, 300);
-        bearbeitenFenster.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                bearbeitenFenster.setVisible(false);
-                System.out.println("freshhhh");
-                bearbeitenFenster.invalidate();
-               // bearbeitenFenster.repaint();
-
-            }
-        });
+        //bearbeitenFenster.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -218,12 +213,15 @@ public class TeamApp extends JFrame {
                 deletePlayerButton = new DataButton("Löschen");
                 deletePlayerButton.setData(spielerName);
 
+                buttonNamen.add(deletePlayerButton);
+
                 deletePlayerButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         DataButton sender = (DataButton) e.getSource();
 
                         deletePlayerByString(sender);
+                        System.out.println(deletePlayerButton.getName());
                     }
                 });
 
@@ -293,8 +291,16 @@ public class TeamApp extends JFrame {
             for (int j = 0; j < team.getNumberOfPlayersPerTeam(); j++) {
                 String newPlayerName = playerNameFields.get(playerIndex).getText();
 
+
+                //buttonNamen
                 if(!newPlayerName.equals(Objects.requireNonNull(spielers).get(playerIndex).getName())) {
                     Client.spielerAnpassen(spielers.get(playerIndex).getId(), newPlayerName);
+                    for (int h = 0 ; h < buttonNamen.size() ; h++) {
+                        if (!buttonNamen.get(playerIndex).getData().equals(newPlayerName)) {
+                            buttonNamen.get(playerIndex).setData(newPlayerName);
+
+                        }
+                    }
                     System.out.println(spielers.get(playerIndex).getId());
                     team.setPlayerName(j, newPlayerName);
 
@@ -350,7 +356,7 @@ public class TeamApp extends JFrame {
                         // Spielerpanel löschen
                         spielerTab.remove(btn.getParent());
                         spielerTab.invalidate();
-
+                        buttonNamen.remove(playerIndex);
                         team.players.remove(playerName);
                         deleteSpieler(spielers.get(playerIndex).getId());
                         playerNameFields.remove(playerIndex);
