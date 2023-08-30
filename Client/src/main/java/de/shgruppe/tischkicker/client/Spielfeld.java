@@ -132,6 +132,14 @@ public class Spielfeld {
     }
 
     public void toolTip(JLabel label, String text){
+        if (label == null)
+        {
+            return;
+        }
+        if (text == null)
+        {
+            return;
+        }
         if(text.length() > 15){
             label.addMouseListener(new MouseAdapter() {
                 @Override
