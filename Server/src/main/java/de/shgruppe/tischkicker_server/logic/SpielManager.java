@@ -51,7 +51,7 @@ public class SpielManager {
         spielVorbei = false;
     }
 
-    public void spielStarten(Spiel spiel) {
+    public void spielStarten(Spiel spiel) throws IOException {
         reset();
 
         ergebnis.spiel = spiel;
@@ -62,6 +62,8 @@ public class SpielManager {
 
         ergebnis.seiteTeam2 = Tor.Seite.ROT;
         ergebnis.seiteTeam1 = Tor.Seite.WEISS;
+
+        SocketHandler.broadcast(ergebnis);
     }
 
     private Team[] getTeamsForSpiel(Spiel spiel) {
@@ -104,11 +106,6 @@ public class SpielManager {
         return team2;
     }
 
-    //TODO: Automatischer Seitenwechsel????
-    /***
-     * Wenn Seitenwechsel aktiviert ist, wird bei der hälfte des maximums der Spiele um zu gewinnen ein Seitenwechsel durchgeführt.
-     * Wenn diese erreicht ist, ist das Spiel vorbei und wird in die Datenbank gespeichert.
-     */
     private void triggerSpielMode() throws IOException {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
 
