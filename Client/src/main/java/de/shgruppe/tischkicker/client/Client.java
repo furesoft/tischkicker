@@ -11,6 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 public class Client {
@@ -295,8 +296,9 @@ public class Client {
         if (teams != null) {
             double anzahlTeams = teams.length;
             int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
-            Client.turnierbaum.tunierbaumErstellen(teams.length);
-            for (int i = 0; i < spielfelderAnzahl; i++) {
+            Client.turnierbaum.tunierbaumErstellen(teams.length, Arrays.asList(spiele));
+
+        for (int i = 0; i < spielfelderAnzahl; i++) {
                     // Problem falls Turnier gestartet wird, obwohl schon Spiele vorhanden sind
                     if (spiele[i].getQualifikation() == 1) {
                         Client.turnierbaum.spielfeldFuellen(spiele[i], 0, i);

@@ -62,7 +62,9 @@ public class Spielfeld {
         frame.repaint();
     }
 
-    public void setTeams(Spiel spiel) {
+    public void setTeamnames(Spiel spiel) {
+        //this.spiel = spiel;
+
         String teamName;
         if(spiel.getTeamNames() == null)
         {
@@ -74,7 +76,7 @@ public class Spielfeld {
                 teamName = "";
             }
         }
-        this.spiel = spiel;
+
         team1.setText(spiel.getTeamNames()[0]);
         if (besterVerlierer) {
             team2.setText(" * " + teamName);

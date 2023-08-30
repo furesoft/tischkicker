@@ -68,7 +68,7 @@ public class TurnierBaum {
 
     }
 
-    public int tunierbaumErstellen(double anzahlTeams) {
+    public int tunierbaumErstellen(double anzahlTeams, List<Spiel> spiele) {
 
 
         int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
@@ -82,9 +82,11 @@ public class TurnierBaum {
         reihen.clear();
         spielfeldList.clear();
 
+        int beginIndexSpiele = 0;
         do {
             starteSpiel.setVisible(false);
-            spielfeldListeFuellen(x, y, spielfelderAnzahl);
+            spielfeldListeFuellen(x, y, spielfelderAnzahl, beginIndexSpiele, spiele);
+            beginIndexSpiele += spielfelderAnzahl;
             reihen.add(new ArrayList<>(spielfeldList));
 
             if (teamAnzahl % 2 != 0 && teamAnzahl > 2) {
@@ -152,9 +154,11 @@ public class TurnierBaum {
         panel.setPreferredSize(new Dimension(x,y));
         panel.repaint();
    }
-    public void spielfeldListeFuellen(int x, int y, int anzahlReihen) {
+    public void spielfeldListeFuellen(int x, int y, int anzahlReihen, int beginIndexSpiele, List<Spiel> spiele) {
+
         for (int i = 0; i < anzahlReihen; i++) {
             Spielfeld spielfeld = new Spielfeld(panel, x, y, 150, 100);
+            spielfeld.spiel = spiele.get(beginIndexSpiele + i);
             spielfeldList.add(spielfeld);
             alleSpielfelder.add(spielfeld);
 
@@ -184,7 +188,7 @@ public class TurnierBaum {
     }
 
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld) {
-        reihen.get(reihe).get(spielfeld).setTeams(spiel);
+        reihen.get(reihe).get(spielfeld).setTeamnames(spiel);
 
     }
     public void spielfeldClicked(Spielfeld spielfeld) {
@@ -255,7 +259,7 @@ public class TurnierBaum {
                 }
                 if (spiels[i].getSpielID() == alleSpielfelder.get(h).spiel.getSpielID())
                 {
-                    alleSpielfelder.get(h).setTeams(spiels[i]);
+                    alleSpielfelder.get(h).setTeamnames(spiels[i]);
                     if (spiels[i].getToreteam1() > 0 || spiels[i].getToreteam2() > 0)
                     {
                         alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
