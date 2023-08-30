@@ -160,9 +160,10 @@ public class TeamApp extends JFrame {
         String teamName = teamNameField.getText();
         if (!teamName.isEmpty() && !tempPlayers.isEmpty()) {
             Team team = new Team(tempPlayers, teamName);// Erstellen eines neuen Teams
-            team = Client.sendTeamsToServer(team);// Senden des Teams an den Server (Annahme)
-            //TODO sobald Client Server verbindung aufgebaut ist teams.add(team entfernen)
             teams.add(team);
+            Client.sendTeamsToServer(team);// Senden des Teams an den Server (Annahme)
+            //TODO sobald Client Server verbindung aufgebaut ist teams.add(team entfernen)
+
             outputTextArea.append("Team '" + teamName + "' wurde hinzugefügt.\n");
             tempPlayers = new ArrayList<>();// Zurücksetzen der temporären Spielerliste
             playerField.setText("");
@@ -178,6 +179,8 @@ public class TeamApp extends JFrame {
 
     // Methode zur Konfiguration von Spieler- und Teamnamen
     public void config() {
+        playerNameFields.clear();
+        buttonNamen.clear();
         addTeamButton.setEnabled(false);
         addPlayerButton.setEnabled(false);
         bearbeitenFenster = new JFrame();
@@ -192,8 +195,7 @@ public class TeamApp extends JFrame {
         spielerTab.setLayout(new BoxLayout(spielerTab, BoxLayout.PAGE_AXIS));
 
         // Sammeln aller Spieler aller Teams in einer Liste
-        nameSpielerallerTeams =
-                teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
+        List <Spieler> spielers= List.of(Objects.requireNonNull(getSpieler()));
 
         int playerIndex = 0;
         // Teamnamen hinzufügen
@@ -205,7 +207,7 @@ public class TeamApp extends JFrame {
             // Spielernamen hinzufügen
             // Hinzufügen der Textfelder für die Spielernamen und Lösch-Buttons
             for (int i = 0; i < team.getNumberOfPlayersPerTeam(); i++) {
-                String spielerName = nameSpielerallerTeams.get(playerIndex);
+                String spielerName = spielers.get(playerIndex).getName();
                 JTextField spielerNameField = new JTextField(spielerName);
 
                 spielerNameField.setColumns(20);
@@ -298,6 +300,7 @@ public class TeamApp extends JFrame {
 
     // Methode zum Aktualisieren von Spielernamen
     private void updatePlayerNames() {
+
         int playerIndex = 0;
         List <Spieler> spielers= List.of(Objects.requireNonNull(getSpieler()));
         for (int i = 0; i < teams.size(); i++) {
@@ -429,9 +432,6 @@ public class TeamApp extends JFrame {
             }
         });
     }
-    public void reload(){
-        nameSpielerallerTeams =
-                teams.stream().flatMap(team -> team.players.stream()).collect(Collectors.toList());
-    }
+
 
 }
