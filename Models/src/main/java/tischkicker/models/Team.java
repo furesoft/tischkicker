@@ -31,7 +31,7 @@ public class Team {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.replace("\"", "");
     }
 
     public String[] getPlayers() {
