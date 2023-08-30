@@ -91,12 +91,9 @@ public class Spielfeld {
         frame.repaint();
     }
 
-    /**
-     * Aktualisiert die Anzeige der Teamnamen in der GUI basierend auf den Informationen aus dem Spiel-Objekt.
-     *
-     * @param spiel Ein Spiel-Objekt, das die benötigten Informationen über die Teams enthält.
-     */
-    public void setTeams(Spiel spiel) {
+    public void setTeamnames(Spiel spiel) {
+        //this.spiel = spiel;
+
         String teamName;
         if(spiel.getTeamNames() == null)
         {
@@ -108,7 +105,7 @@ public class Spielfeld {
                 teamName = "";
             }
         }
-        this.spiel = spiel;
+
         team1.setText(spiel.getTeamNames()[0]);
         toolTip(team1, team1.getText());
 

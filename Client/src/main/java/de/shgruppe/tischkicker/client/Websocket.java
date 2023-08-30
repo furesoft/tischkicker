@@ -7,8 +7,12 @@ import tischkicker.messages.Message;
 import tischkicker.messages.MessageType;
 import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.messages.SpielErgebnis;
+import tischkicker.models.Spiel;
+import tischkicker.models.Team;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class Websocket extends WebSocketClient {
@@ -41,12 +45,14 @@ public class Websocket extends WebSocketClient {
         }
         else if (deserializedMessage.type == MessageType.SpielBeendet) {
             SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);
-
             Client.spielstandAnzeige.hide();
-
             Spielfeld f = Client.turnierbaum.getNaechstesSpielfeld();
-            f.spiel = spielergebnis.getNeuesSpiel();
-            Client.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());
+            if (f != null) {
+                f.spiel = spielergebnis.getNeuesSpiel();
+                Client.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());
+            }
+
+            holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI();
 
             Client.gewinner.show(spielergebnis.getGewinner().getName());
             Client.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
@@ -54,6 +60,14 @@ public class Websocket extends WebSocketClient {
 
         }
 
+    }
+
+    private void holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI() {
+        // Alle Spiele vom Server holen
+        List<Spiel> alleSpieleMitTeamnamen = Arrays.asList(Client.getSpieleFromServer());
+
+        // Alle Teamnamen aktualisieren.
+        Client.turnierbaum.updateTeamnames(alleSpieleMitTeamnamen);
     }
 
     @Override

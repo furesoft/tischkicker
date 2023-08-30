@@ -20,7 +20,7 @@ public class TeamNameGetter
             return "";
         }
         else if(teamId == -2){
-            return "Verlierer aus...";
+            return "* ";
         }
 
         //unbekannter Status....

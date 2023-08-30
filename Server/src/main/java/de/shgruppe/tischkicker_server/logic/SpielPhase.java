@@ -10,14 +10,18 @@ import tischkicker.models.Team;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class SpielPhase {
 
 
-
+    int naechstSpielePhase;
     @Autowired
     SpielRepository spielRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
 
     @Autowired
     TeamNameGetter teamNameGetter;
@@ -46,21 +50,69 @@ public class SpielPhase {
             throw new KeinSpielVerfuegbarWeilTurnierBeendetException();
         }
 
-        //wenn Nachfolger, dann Nachfolgespiel aktualisieren.
-        Spiel naechstesSpiel = maybeNaechstesSpiel.get();
 
-        int team1 = naechstesSpiel.getTeamIDs()[0];
-        int team2 = naechstesSpiel.getTeamIDs()[1];
+        naechstSpielePhase = ergebnis.spiel.getQualifikation();
+        List<Spiel> alleSpiele = spielRepository.findAll();
+        List<Spiel> spieleDerPhase = alleSpiele.stream().filter(s -> s.getQualifikation() == naechstSpielePhase).collect(Collectors.toList());
+            List<Spiel> spieleVorbei = spieleDerPhase.stream().filter(Spiel::getSpielvorbei).collect(Collectors.toList());
+            if (spieleVorbei.size() == spieleDerPhase.size()-1) {
+                spieleDerPhase.removeAll(spieleVorbei);
+                Spiel uebriegesSpiel = spieleDerPhase.get(0);
+                for (int i = 0 ; i < spieleVorbei.size() ; i++)
+                {
+                    int tore1 = spieleVorbei.get(i).getToreteam1();
+                    int tore2 = spieleVorbei.get(i).getToreteam2();
+                    int teamID1 = uebriegesSpiel.getTeamIDs()[0];
+                    int teamID2 = uebriegesSpiel.getTeamIDs()[1];
+                    if (teamID1 == -2 || teamID2 == -2) {
+                        int verliererTeamID;
+                        if (tore1 > tore2) {
+                            verliererTeamID = spieleVorbei.get(i).getTeamIDs()[1];
+                        } else {
+                            verliererTeamID = spieleVorbei.get(i).getTeamIDs()[0];
+                        }
+                        boolean teamAufgegeben = ermittleTeamAufgegeben(verliererTeamID);
+                        if (!teamAufgegeben) {
+                            if (teamID1 == -1) {
+                                teamID1 = verliererTeamID;
+                                uebriegesSpiel.setTeams(teamID1, uebriegesSpiel.getTeamIDs()[1]);
+                            } else {
+                                if (teamID2 == -2) {
+                                    teamID2 = verliererTeamID;
+                                    uebriegesSpiel.setTeams(uebriegesSpiel.getTeamIDs()[0], teamID2);
+                                }
+                            }
+                            uebriegesSpiel = spielRepository.saveAndFlush(uebriegesSpiel);
+                            String t1Name = teamNameGetter.getTeamName(teamID1);
+                            String t2Name = teamNameGetter.getTeamName(teamID2);
+                            uebriegesSpiel.setTeamNames(t1Name, t2Name);
+                            break;
+                        }/*
+                        if (i == spieleVorbei.size()-1)
+                        {
+                            uebriegesSpiel.setTeams(uebriegesSpiel.getTeamIDs()[0],uebriegesSpiel.getTeamIDs()[0]);
 
-        // -1 == noch nicht gespielt, -2 == bester-verlierer
-        if(team1 < 0){
-            //setze Gewinner als team1
-            team1 = gewinnerTeam.getId();
-        }
-        else {
-            //setze Gewiiner Team2
-            team2 = gewinnerTeam.getId();
-        }
+                        }
+                        */
+                    }
+                }
+                }
+                //wenn Nachfolger, dann Nachfolgespiel aktualisieren.
+                Spiel naechstesSpiel = maybeNaechstesSpiel.get();
+
+                int team1 = naechstesSpiel.getTeamIDs()[0];
+                int team2 = naechstesSpiel.getTeamIDs()[1];
+
+                // -1 == noch nicht gespielt, -2 == bester-verlierer
+                if(team1 < 0){
+                    //setze Gewinner als team1
+                    team1 = gewinnerTeam.getId();
+                }
+                else {
+                    //setze Gewiiner Team2
+                    team2 = gewinnerTeam.getId();
+                }
+
 
 
         naechstesSpiel.setTeams(team1, team2);
@@ -68,7 +120,7 @@ public class SpielPhase {
         naechstesSpiel = spielRepository.saveAndFlush(naechstesSpiel);
 
         String team1Name = teamNameGetter.getTeamName(team1);
-        String team2Name = teamNameGetter.getTeamName(team1);
+        String team2Name = teamNameGetter.getTeamName(team2);
 
         naechstesSpiel.setTeamNames(team1Name, team2Name);
 
@@ -109,4 +161,15 @@ public class SpielPhase {
 
         return ergebnis.teams[1];
     }
+
+
+    private boolean ermittleTeamAufgegeben(int teamID){
+        Optional<Team> a = teamRepository.findById(teamID);
+        boolean b = a.get().isAufgegeben();
+        return b ;
+
+
+
+    }
+
 }

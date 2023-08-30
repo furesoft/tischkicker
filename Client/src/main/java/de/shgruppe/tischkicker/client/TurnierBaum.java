@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TurnierBaum {
 
@@ -22,7 +23,7 @@ public class TurnierBaum {
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
     JButton starteSpiel = new JButton("Spiel starten");
     JPanel panel ;
-    int anzahlspile = Client.getTeams().length;
+    int anzahlSpiele = Client.getTeams().length;
 
 
 
@@ -38,7 +39,7 @@ public class TurnierBaum {
 
         panel.add(starteSpiel);
         hinweis.setBounds(300, 20, 250, 50);
-        hinweis.setText("* = Bester Verlierer dieser Spiel-Phase");
+        hinweis.setText("* = Zufälliger Verlierer dieser Spiel-Phase");
 
         panel.add(hinweis);
 
@@ -46,7 +47,7 @@ public class TurnierBaum {
 
         frame.setSize(1920, 1080);
        //                   x=                  y=Fertig
-        setpenelsize(anzahlspile*100,anzahlspile*150/2);
+        setpenelsize(anzahlSpiele *100, anzahlSpiele *150/2);
 
        // panel.setBackground(Color.GREEN);
         panel.setLayout(null);
@@ -56,6 +57,8 @@ public class TurnierBaum {
 
 
         starteSpiel.addActionListener(e -> {
+            //TODO Probieren, ob aktuelles Spiel startbar ist.
+
             Client.spielstandAnzeige.show();
             Client.spielstandAnzeige.aktualisiereDaten(aktuellesSpiel.spiel);
 
@@ -65,15 +68,8 @@ public class TurnierBaum {
 
     }
 
-    /**
-     * Diese Methode erstellt den Turnierbaum
-     *
-     * @param anzahlTeams gibt die Anzahl der Teams mit
-     */
-    public int tunierbaumErstellen(double anzahlTeams) {
-        // Da im Turnierbaum die Spiele angezeigt werden teilt man die AnzahlTeams durch 2 und erhält somit die Anzahl der Spielfelder.
-        // Das Ergebnis wird gerundet, da man bei einer ungeraden Anzahl an Teams ein extra Spielfeld ergänzt.
-        // In diesem extra Spielfeld tritt der beste Verlierer gegen das übrig gebliebene Team an
+    public int tunierbaumErstellen(double anzahlTeams, List<Spiel> spiele) {
+
 
         int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
         int teamAnzahl = (int) anzahlTeams;
@@ -86,9 +82,11 @@ public class TurnierBaum {
         reihen.clear();
         spielfeldList.clear();
 
+        int beginIndexSpiele = 0;
         do {
             starteSpiel.setVisible(false);
-            spielfeldListeFuellen(x, y, spielfelderAnzahl);
+            spielfeldListeFuellen(x, y, spielfelderAnzahl, beginIndexSpiele, spiele);
+            beginIndexSpiele += spielfelderAnzahl;
             reihen.add(new ArrayList<>(spielfeldList));
 
             if (teamAnzahl % 2 != 0 && teamAnzahl > 2) {
@@ -156,17 +154,11 @@ public class TurnierBaum {
         panel.setPreferredSize(new Dimension(x,y));
         panel.repaint();
    }
+    public void spielfeldListeFuellen(int x, int y, int anzahlReihen, int beginIndexSpiele, List<Spiel> spiele) {
 
-    /**
-     * Füllt die Liste spielfeldList mit Spielfeldern
-     *
-     * @param x X-Koordinate für die Spielfelder einer Reihe
-     * @param y Y-Koordinate für das erste Spielfeld einer Reihe
-     * @param anzahlReihen Anzahl der Reihen
-     */
-    public void spielfeldListeFuellen(int x, int y, int anzahlReihen) {
         for (int i = 0; i < anzahlReihen; i++) {
             Spielfeld spielfeld = new Spielfeld(panel, x, y, 150, 100);
+            spielfeld.spiel = spiele.get(beginIndexSpiele + i);
             spielfeldList.add(spielfeld);
             alleSpielfelder.add(spielfeld);
 
@@ -177,6 +169,7 @@ public class TurnierBaum {
             spielfeld.background.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+
                     spielfeldClicked(spielfeld);
                 }
             });
@@ -203,13 +196,17 @@ public class TurnierBaum {
      * @param spielfeld Spielfeld im Turnierbaum
      */
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld) {
-        reihen.get(reihe).get(spielfeld).setTeams(spiel);
+        reihen.get(reihe).get(spielfeld).setTeamnames(spiel);
 
     }
     public void spielfeldClicked(Spielfeld spielfeld) {
         aktuellesSpiel = spielfeld;
 
-        if (spielfeld.spiel == null || spielfeld.spiel.getTeamNames()[1] == null) {
+        spielfeld.spiel = Client.getSpiel(spielfeld.spiel.getSpielID());
+        int [] teamids = spielfeld.spiel.getTeamIDs();
+
+
+        if (teamids[0] < 0 || teamids[1] < 0 || spielfeld.spiel.getSpielvorbei()) {
             return;
         }
 
@@ -270,7 +267,7 @@ public class TurnierBaum {
                 }
                 if (spiels[i].getSpielID() == alleSpielfelder.get(h).spiel.getSpielID())
                 {
-                    alleSpielfelder.get(h).setTeams(spiels[i]);
+                    alleSpielfelder.get(h).setTeamnames(spiels[i]);
                     if (spiels[i].getToreteam1() > 0 || spiels[i].getToreteam2() > 0)
                     {
                         alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
@@ -290,13 +287,16 @@ public class TurnierBaum {
     }
 
     public void feldInitialisieren(Spiel spiel, Team team1) {
-        for (Spielfeld feld : alleSpielfelder) {
-            if (feld.spiel.getSpielID() == spiel.getSpielID()) {
-                if (spiel.getTeamIDs()[1] == -1) {
-                    feld.team1.setText(String.valueOf(team1.getName()));
+        for (int i = 0 ; i < alleSpielfelder.size() ; i++) {
+            if (alleSpielfelder.get(i).spiel.getSpielID() == spiel.getSpielID()) {
+
+                int teamID2 = spiel.getTeamIDs()[1];
+                String team1Name = String.valueOf(team1.getName());
+                if (teamID2 == -1 || teamID2 == -2) {
+                    alleSpielfelder.get(i).team1.setText(team1Name);
                 }
                 else {
-                    feld.team2.setText(String.valueOf(team1.getName()));
+                    alleSpielfelder.get(i).team2.setText(team1Name);
                 }
 
                 break;
@@ -318,6 +318,17 @@ public class TurnierBaum {
         }
 
         return null;
+    }
+
+    public void updateTeamnames(List<Spiel> alleSpieleMitTeamnamen) {
+        for(Spiel spiel: alleSpieleMitTeamnamen){
+            for(Spielfeld spielfeld: alleSpielfelder){
+                if(spielfeld.spiel.getSpielID() == spiel.getSpielID()){
+                    spielfeld.aktualisiereTeamnamenInGui(spiel.getTeamNames());
+                }
+            }
+        }
+
     }
 }
 
