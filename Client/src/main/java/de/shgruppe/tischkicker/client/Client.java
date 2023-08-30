@@ -287,7 +287,7 @@ public class Client {
             int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
             Client.turnierbaum.tunierbaumErstellen(teams.length);
             for (int i = 0; i < spielfelderAnzahl; i++) {
-                    // Problem falls Turnier gestartet wird, obwohl schon Spiele vorhanden sind
+                    // Problem, falls Turnier gestartet wird, obwohl schon Spiele vorhanden sind
                     if (spiele[i].getQualifikation() == 1) {
                         Client.turnierbaum.spielfeldFuellen(spiele[i], 0, i);
                     }
