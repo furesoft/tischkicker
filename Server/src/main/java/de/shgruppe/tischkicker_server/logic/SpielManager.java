@@ -116,9 +116,19 @@ public class SpielManager {
         if (maxTore == anzahltoreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben()) {
             ergebnis.spiel.setToreteam1(team1.tore);
             ergebnis.spiel.setToreteam2(team2.tore);
+
+            ergebnis.spiel.setSpielvorbei(true);
+
             spielRepository.saveAndFlush(ergebnis.spiel);
 
-            Spiel neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+
+            Spiel neuesSpiel = null;
+            try {
+                neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+
+            } catch (KeinSpielVerfuegbarWeilTurnierBeendetException e) {
+                //TODO was sende ich an den Client, wewnn das Spiel vorbei ist.
+            }
             SpielBeendetMessage msg = new SpielBeendetMessage();
             msg.setGewinner(getGewinner(ergebnis.spiel));
             msg.setSpiel(ergebnis.spiel);
@@ -137,13 +147,26 @@ public class SpielManager {
     private Team getGewinner(Spiel spiel) {
         Team team = ergebnis.teams[1];
 
-        if (ergebnis.toreTeam1 > ergebnis.toreTeam2) {
+        if (ergebnis.teams[0].isAufgegeben()) {
+            team = ergebnis.teams[1];
+            team.setId(spiel.getTeamIDs()[1]);
+        }
+
+        if (ergebnis.teams[1].isAufgegeben()) {
+            team = ergebnis.teams[0];
+            team.setId(spiel.getTeamIDs()[0]);
+        }
+
+        if (ergebnis.toreTeam1 > ergebnis.toreTeam2 && !ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()) {
             team = ergebnis.teams[0];
             team.setId(spiel.getTeamIDs()[0]);
             return team;
         }
 
-        team.setId(spiel.getTeamIDs()[1]);
+        if (ergebnis.toreTeam1 < ergebnis.toreTeam2 && !ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()){
+            team = ergebnis.teams[1];
+            team.setId(spiel.getTeamIDs()[1]);
+        }
 
         return team;
     }

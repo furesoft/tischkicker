@@ -62,12 +62,21 @@ public class Spielfeld {
         frame.repaint();
     }
 
-    public void setTeams(Spiel spiel) {
-        String teamName = spiel.getTeamNames()[1];
-        if (teamName == null) {
+    public void setTeamnames(Spiel spiel) {
+        //this.spiel = spiel;
+
+        String teamName;
+        if(spiel.getTeamNames() == null)
+        {
             teamName = "";
         }
-        this.spiel = spiel;
+        else {
+            teamName = spiel.getTeamNames()[1];
+            if (teamName == null) {
+                teamName = "";
+            }
+        }
+
         team1.setText(spiel.getTeamNames()[0]);
         if (besterVerlierer) {
             team2.setText(" * " + teamName);
@@ -78,6 +87,13 @@ public class Spielfeld {
         }
         // toreTeam1.setText(String.valueOf(spiel.getTeam1().getTore()));
         //toreTeam2.setText(String.valueOf(spiel.getTeam2().getTore()));
+    }
+
+    void aktualisiereTeamnamenInGui(String[] teamNames){
+        var teamname1 = teamNames[0];
+        var teamname2 = teamNames[1];
+        team1.setText(teamname1);
+        team2.setText(teamname2);
     }
 
     public void setY(int y) {
