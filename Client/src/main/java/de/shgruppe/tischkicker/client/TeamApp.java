@@ -179,6 +179,7 @@ public class TeamApp extends JFrame {
 
     // Methode zur Konfiguration von Spieler- und Teamnamen
     public void config() {
+
         playerNameFields.clear();
         buttonNamen.clear();
         addTeamButton.setEnabled(false);
@@ -186,7 +187,6 @@ public class TeamApp extends JFrame {
         bearbeitenFenster = new JFrame();
         bearbeitenFenster.setTitle("Bearbeiten");
         bearbeitenFenster.setSize(400, 300);
-        //bearbeitenFenster.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -249,23 +249,23 @@ public class TeamApp extends JFrame {
             JTextField teamNameField = new JTextField(15);
             Team team1 = teams.get(i);
 
-            DataButton deleteTeamButton = new DataButton("Löschen");
-            deleteTeamButton.setData(team1.getName());
+            //DataButton deleteTeamButton = new DataButton("Löschen");
+            //deleteTeamButton.setData(team1.getName());
 
             //Zu jedem Button wird eine eindeutiger int mitgeschickt der dann für die Löschung der Teams zuständig ist
-            deleteTeamButton.addActionListener(new ActionListener() {
+            /*deleteTeamButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     DataButton sender = (DataButton) e.getSource();
 
                     deleteTeamByString(sender);
                 }
-            });
+            });*/
             teamNameField.setText(team1.getName());
             teamNameFields.add(teamNameField);
             JPanel deleteButtonundTeamnamen = new JPanel();
             deleteButtonundTeamnamen.add(teamNameField);
-            deleteButtonundTeamnamen.add(deleteTeamButton);
+            //deleteButtonundTeamnamen.add(deleteTeamButton);
 
             teamPanel.add(deleteButtonundTeamnamen);
 
