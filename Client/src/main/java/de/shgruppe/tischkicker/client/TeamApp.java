@@ -265,7 +265,7 @@ public class TeamApp extends JFrame {
             teamNameFields.add(teamNameField);
             JPanel deleteButtonundTeamnamen = new JPanel();
             deleteButtonundTeamnamen.add(teamNameField);
-            //deleteButtonundTeamnamen.add(deleteTeamButton);
+            //sadeleteButtonundTeamnamen.add(deleteTeamButton);
 
             teamPanel.add(deleteButtonundTeamnamen);
 
