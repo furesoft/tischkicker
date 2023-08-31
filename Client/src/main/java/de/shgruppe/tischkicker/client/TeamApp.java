@@ -345,12 +345,13 @@ public class TeamApp extends JFrame {
         List <Team> teamsVonAPIAnfrage= List.of(Objects.requireNonNull(getTeams()));
         for (int i = 0; i < teams.size(); i++) {
             Team team = teams.get(i);
-            JTextField teamNameField = teamNameFields.get(i);
+            String teamNameField = teamNameFields.get(i).getText();
 
-            String newTeamName = teamNameField.getText();
-            if(!teamNameField.getText().equals(Objects.requireNonNull(teamsVonAPIAnfrage).get(i).getName())){
-                Client.teamNamenAendern(teamsVonAPIAnfrage.get(i).getID(),newTeamName);
-                team.setName(newTeamName);
+
+
+            if(!teamNameField.equals(Objects.requireNonNull(teamsVonAPIAnfrage).get(i).getName())){
+                Client.teamNamenAendern(teamsVonAPIAnfrage.get(i).getID(),teamNameField);
+                team.setName(teamNameField);
                 spielerTab.invalidate();
                 spielerTab.repaint();
 
@@ -427,7 +428,7 @@ public class TeamApp extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateTeamNames();
-                teamNameFields.clear();
+
                 outputTextArea.append("Teamnamen gespeichert!\n");
             }
         });
