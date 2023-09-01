@@ -88,13 +88,7 @@ public class SpielPhase {
                             String t2Name = teamNameGetter.getTeamName(teamID2);
                             uebriegesSpiel.setTeamNames(t1Name, t2Name);
                             break;
-                        }/*
-                        if (i == spieleVorbei.size()-1)
-                        {
-                            uebriegesSpiel.setTeams(uebriegesSpiel.getTeamIDs()[0],uebriegesSpiel.getTeamIDs()[0]);
-
                         }
-                        */
                     }
                 }
                 }

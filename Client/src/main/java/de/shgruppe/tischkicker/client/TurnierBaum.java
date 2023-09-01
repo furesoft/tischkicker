@@ -280,11 +280,17 @@ public class TurnierBaum {
                     {
                         alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
                         alleSpielfelder.get(h).toreTeam2.setText(String.valueOf(spiels[i].getToreteam2()));
-                        if (spiels[i].getToreteam1() == 10 || Client.getTeam(spiels[i].getTeamIDs()[1]).isAufgegeben())
+                        if (spiels[i].getToreteam1() == 10)
                         {
                             alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[0]);
                         }
-                        if (spiels[i].getToreteam2() == 10 || Client.getTeam(spiels[i].getTeamIDs()[0]).isAufgegeben())
+                        else if (spiels[i].getToreteam2() == 10)
+                        {
+                            alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[1]);
+                        } else if (Client.getTeam(spiels[i].getTeamIDs()[1]).isAufgegeben())
+                        {
+                            alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[0]);
+                        } else if (Client.getTeam(spiels[i].getTeamIDs()[0]).isAufgegeben())
                         {
                             alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[1]);
                         }
