@@ -3,17 +3,21 @@ package de.shgruppe.tischkicker_server.logic;
 import de.shgruppe.tischkicker_server.SocketHandler;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
+import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.messages.SpielErgebnis;
+import tischkicker.messages.TurnierBeendetMessage;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Tor;
+import tischkicker.models.Turnier;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 
 class SpielHolder {
     public int teamID;
@@ -33,6 +37,9 @@ public class SpielManager {
     TeamRepository teamRepository;
     @Autowired
     TurnierManager turnierManager;
+
+    @Autowired
+    TurnierRepository turnierRepository;
     private SpielErgebnis ergebnis = new SpielErgebnis();
     private boolean tauscheTeams = false;
     private SpielHolder team1 = new SpielHolder();
@@ -125,6 +132,12 @@ public class SpielManager {
 
             } catch (KeinSpielVerfuegbarWeilTurnierBeendetException e) {
                 //TODO was sende ich an den Client, wewnn das Spiel vorbei ist.
+                Optional<Turnier> turnier = turnierRepository.findById(ergebnis.spiel.getTurnierID());
+                turnier.get().setGespielt(true);
+                turnierRepository.saveAndFlush(turnier.get());
+                TurnierBeendetMessage tmsg = new TurnierBeendetMessage();
+                tmsg.setTurnier(turnier.get());
+                SocketHandler.broadcast(tmsg);
             }
             SpielBeendetMessage msg = new SpielBeendetMessage();
             msg.setGewinner(getGewinner(ergebnis.spiel));
@@ -132,6 +145,7 @@ public class SpielManager {
             msg.setNeuesSpiel(neuesSpiel);
 
             SocketHandler.broadcast(msg);
+
 
             if(!ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()){
                 reset();

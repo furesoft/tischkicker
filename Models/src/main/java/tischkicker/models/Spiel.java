@@ -32,6 +32,9 @@ public class Spiel {
     @Transient
     private int[] spieleIDs;
 
+    @Column(name="TurnierID")
+    private int turnierID;
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +53,13 @@ public class Spiel {
 
     public Spiel() {
 
+    }
+    public int getTurnierID() {
+        return turnierID;
+    }
+
+    public void setTurnierID(int turnierID) {
+        this.turnierID = turnierID;
     }
 
     public int getSpielID() {

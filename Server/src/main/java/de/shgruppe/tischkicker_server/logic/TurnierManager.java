@@ -2,15 +2,18 @@ package de.shgruppe.tischkicker_server.logic;
 
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
+import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
+import tischkicker.models.Turnier;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TurnierManager {
@@ -23,11 +26,23 @@ public class TurnierManager {
     @Autowired
     SpielRepository spielRepository;
 
+    @Autowired
+    TurnierRepository turnierRepository;
+
     public List<Spiel> turnierStarten() {
         List<Spiel> spiele1 = spielRepository.findAll();
         if (spiele1.size() == 0)
         {
+            Turnier turnier = new Turnier();
             spiele1.addAll(generiereUndSpeicherSpiele(generiereSpielePhase1()));
+            turnier.setSpieleIDs(spiele1.stream().mapToInt(Spiel::getSpielID).toArray());
+            turnier = turnierRepository.saveAndFlush(turnier);
+
+            for (int i = 0 ; i < spiele1.size() ; i++)
+            {
+                spiele1.get(i).setTurnierID(turnier.getID());
+            }
+
             return spiele1;
         }
         else
