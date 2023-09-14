@@ -1,6 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
 import com.google.gson.Gson;
+import de.shgruppe.tischkicker.client.websockets.WebsocketConnection;
 import tischkicker.models.Spiel;
 import tischkicker.models.Spieler;
 import tischkicker.models.Turnier;
@@ -8,7 +9,6 @@ import tischkicker.models.Turnier;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -30,9 +30,8 @@ public class Client {
             String jsonData = gson.toJson(neuerName);
 
             // HTTP-PUT-Anfrage erstellen
-            HttpRequest request = createRequest("/spieler/" + spielerId)
-                    .PUT(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
-                    .build();
+            HttpRequest request = createRequest("/spieler/" + spielerId).PUT(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+                                                                        .build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -40,21 +39,22 @@ public class Client {
             int statusCode = response.statusCode();
             if (statusCode == 200) {
                 System.out.println("Spielername erfolgreich aktualisiert.");
-            } else {
+            }
+            else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
+
     public static void teamNamenAendern(int teamID, String neuerName) {
         try {
             String jsonData = gson.toJson(neuerName);
 
             // HTTP-PUT-Anfrage erstellen
-            HttpRequest request = createRequest("/teams/" + teamID)
-                    .PUT(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
-                    .build();
+            HttpRequest request = createRequest("/teams/" + teamID).PUT(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+                                                                   .build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -62,7 +62,8 @@ public class Client {
             int statusCode = response.statusCode();
             if (statusCode == 200) {
                 System.out.println("Spielername erfolgreich aktualisiert.");
-            } else {
+            }
+            else {
                 System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
             }
         } catch (IOException | InterruptedException e) {
@@ -160,6 +161,7 @@ public class Client {
         }
 
     }
+
     public static void deleteSpieler(int spielerID) {
         try {
             // HTTP-POST-Anfrage erstellen
@@ -191,30 +193,31 @@ public class Client {
         return getResource("/turnier", Spiel[].class);
     }
 
-    public static Spieler[] getSpieler(){
+    public static Spieler[] getSpieler() {
         return getResource("/spieler", Spieler[].class);
     }
+
     public static tischkicker.models.Team getTeam(int id) {
-        return getResource("/teams/"+id, tischkicker.models.Team.class);
+        return getResource("/teams/" + id, tischkicker.models.Team.class);
     }
 
     public static Team[] getTeams() {
         return getResource("/teams", Team[].class);
     }
 
-    public static Spiel getSpiel( int spieleID) {
-        return getResource("/spiele/"+spieleID, Spiel.class);
+    public static Spiel getSpiel(int spieleID) {
+        return getResource("/spiele/" + spieleID, Spiel.class);
     }
-    public static Turnier getTurnier(int turnierID)
-    {
-        return getResource("/turniere"+turnierID, Turnier.class);
+
+    public static Turnier getTurnier(int turnierID) {
+        return getResource("/turniere" + turnierID, Turnier.class);
     }
-    public static Turnier[] getTurniere()
-    {
+
+    public static Turnier[] getTurniere() {
         return getResource("/turniere", Turnier[].class);
     }
 
-    public static <T> T getResource(String path, Class<T> clazz){
+    public static <T> T getResource(String path, Class<T> clazz) {
 
         try {
             HttpRequest request = createRequest(path).GET().build();
@@ -267,7 +270,7 @@ public class Client {
             String jsonData = gson.toJson(spiel);
 
             // HTTP-POST-Anfrage erstellen
-            HttpRequest request = createRequest( "/spiel/aufgeben/" + spiel.getSpielID()).POST(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+            HttpRequest request = createRequest("/spiel/aufgeben/" + spiel.getSpielID()).POST(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
                                                                                         .build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
@@ -319,12 +322,12 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            URI serverURI = new URI("ws://localhost:8080/live");
-            Websocket client = new Websocket(serverURI);
+            WebsocketConnection client = new WebsocketConnection();
             client.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -345,11 +348,11 @@ public class Client {
             int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
             Client.turnierbaum.tunierbaumErstellen(teams.length, Arrays.asList(spiele));
 
-        for (int i = 0; i < spielfelderAnzahl; i++) {
-                    // Problem falls Turnier gestartet wird, obwohl schon Spiele vorhanden sind
-                    if (spiele[i].getQualifikation() == 1) {
-                        Client.turnierbaum.spielfeldFuellen(spiele[i], 0, i);
-                    }
+            for (int i = 0; i < spielfelderAnzahl; i++) {
+                // Problem falls Turnier gestartet wird, obwohl schon Spiele vorhanden sind
+                if (spiele[i].getQualifikation() == 1) {
+                    Client.turnierbaum.spielfeldFuellen(spiele[i], 0, i);
+                }
             }
 
             Client.turnierbaum.frame.setVisible(true);

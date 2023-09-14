@@ -1,6 +1,8 @@
-package de.shgruppe.tischkicker.client;
+package de.shgruppe.tischkicker.client.websockets;
 
 import com.google.gson.Gson;
+import de.shgruppe.tischkicker.client.Client;
+import de.shgruppe.tischkicker.client.Spielfeld;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import tischkicker.messages.Message;
@@ -8,14 +10,13 @@ import tischkicker.messages.MessageType;
 import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
-import tischkicker.models.Team;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
 
-public class Websocket extends WebSocketClient {
+class Websocket extends WebSocketClient {
     public Websocket(URI serverURI) {
         super(serverURI);
     }
@@ -46,6 +47,7 @@ public class Websocket extends WebSocketClient {
         else if (deserializedMessage.type == MessageType.SpielBeendet) {
             SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);
             Client.spielstandAnzeige.hide();
+
             Spielfeld f = Client.turnierbaum.getNaechstesSpielfeld();
             if (f != null) {
                 f.spiel = spielergebnis.getNeuesSpiel();

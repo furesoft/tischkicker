@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 
 public class Spielfeld {
     public JLabel background;
+    public Spiel spiel;
     JLabel team1;
     JLabel team2;
     JLabel toreTeam1;
@@ -16,16 +17,15 @@ public class Spielfeld {
     Color selected = new Color(36, 157, 255);
     Color normal = new Color(149, 157, 158);
     boolean besterVerlierer = false;
-    Spiel spiel;
     JPanel frame;
 
     /**
      * Erstellt ein neues Spielfeld.
      *
-     * @param frame gibt das JPanel an, in dem das Spielfeld erscheinen soll.
-     * @param x gibt die X-Koordinate eines Spielfeldes an.
-     * @param y gibt die Y-Koordinate eines Spielfeldes an.
-     * @param width gibt die Breite eines Spielfelds an.
+     * @param frame  gibt das JPanel an, in dem das Spielfeld erscheinen soll.
+     * @param x      gibt die X-Koordinate eines Spielfeldes an.
+     * @param y      gibt die Y-Koordinate eines Spielfeldes an.
+     * @param width  gibt die Breite eines Spielfelds an.
      * @param height gibt die Höhe eines Spielfelds an.
      */
     public Spielfeld(JPanel frame, int x, int y, int width, int height) {
@@ -94,6 +94,7 @@ public class Spielfeld {
     public void setTeamnames(Spiel spiel) {
         setTeams(spiel);
     }
+
     /**
      * Aktualisiert die Anzeige der Teamnamen in der GUI basierend auf den Informationen aus dem Spiel-Objekt.
      *
@@ -101,8 +102,7 @@ public class Spielfeld {
      */
     public void setTeams(Spiel spiel) {
         String teamName;
-        if(spiel.getTeamNames() == null)
-        {
+        if (spiel.getTeamNames() == null) {
             teamName = "";
         }
         else {
@@ -124,28 +124,27 @@ public class Spielfeld {
         }
     }
 
-    void aktualisiereTeamnamenInGui(String[] teamNames){
+    void aktualisiereTeamnamenInGui(String[] teamNames) {
         var teamname1 = teamNames[0];
         var teamname2 = teamNames[1];
         team1.setText(teamname1);
         team2.setText(teamname2);
     }
 
-    public void toolTip(JLabel label, String text){
-        if (label == null)
-        {
+    public void toolTip(JLabel label, String text) {
+        if (label == null) {
             return;
         }
-        if (text == null)
-        {
+        if (text == null) {
             return;
         }
-        if(text.length() > 15){
+        if (text.length() > 15) {
             label.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     label.setToolTipText(text);
                 }
+
                 @Override
                 public void mouseExited(MouseEvent e) {
                     label.setToolTipText(null); // Remove the tooltip
