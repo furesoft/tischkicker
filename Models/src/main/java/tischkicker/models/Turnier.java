@@ -9,18 +9,19 @@ import java.util.stream.Collectors;
 
 @Entity
 public class Turnier {
-    private Date startdatum;
-    private Date enddatum;
+    private String startdatum;
+    private String enddatum;
     @Column(name = "spiele")
     private String spiele;
 
     @Column(name= "gespielt")
     private boolean gespielt;
+    @Transient
     private int [] spieleIDs;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
+    private int id;
 
     public boolean isGespielt() {
         return gespielt;
@@ -30,23 +31,23 @@ public class Turnier {
         this.gespielt = gespielt;
     }
 
-    public Date getStartdatum() {
+    public String getStartdatum() {
         return startdatum;
     }
 
-    public void setStartdatum(Date startdatum) {
+    public void setStartdatum(String startdatum) {
         this.startdatum = startdatum;
     }
 
     public int getID() {
-        return ID;
+        return id;
     }
 
-    public Date getEnddatum() {
+    public String getEnddatum() {
         return enddatum;
     }
 
-    public void setEnddatum(Date enddatum) {
+    public void setEnddatum(String enddatum) {
         this.enddatum = enddatum;
     }
 
@@ -63,5 +64,7 @@ public class Turnier {
         }
         return spieleIDs;
     }
+
+
 
 }

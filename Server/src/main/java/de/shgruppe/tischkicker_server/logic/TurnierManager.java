@@ -1,5 +1,6 @@
 package de.shgruppe.tischkicker_server.logic;
 
+import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
@@ -14,6 +15,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import  java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 @Component
 public class TurnierManager {
@@ -30,29 +36,36 @@ public class TurnierManager {
     TurnierRepository turnierRepository;
 
 
+
+
+
     public List<Spiel> turnierStarten() {
-        List<Spiel> spiele1 = spielRepository.findAll();
-        if (spiele1.size() == 0)
+        List<Spiel> spiele = spielRepository.findAll();
+        if (spiele.size() == 0)
         {
             Turnier turnier = new Turnier();
-            spiele1.addAll(generiereUndSpeicherSpiele(generiereSpielePhase1()));
-            turnier.setSpieleIDs(spiele1.stream().mapToInt(Spiel::getSpielID).toArray());
+             turnier.setStartdatum(Hilfsmethoden.ermittleDatum());
+
+            spiele.addAll(generiereUndSpeicherSpiele(generiereSpielePhase1()));
+            turnier.setSpieleIDs(spiele.stream().mapToInt(Spiel::getSpielID).toArray());
             turnier = turnierRepository.saveAndFlush(turnier);
 
-            for (int i = 0 ; i < spiele1.size() ; i++)
+            for (int i = 0 ; i < spiele.size() ; i++)
             {
-                spiele1.get(i).setTurnierID(turnier.getID());
+                spiele.get(i).setTurnierID(turnier.getID());
             }
 
-            return spiele1;
+            spielRepository.saveAllAndFlush(spiele);
+
+            return spiele;
         }
         else
         {
             List<Team> teams = teamRepository.findAll();
-            for (int i = 0 ; i < spiele1.size() ; i++)
+            for (int i = 0 ; i < spiele.size() ; i++)
             {
                 String [] namen = new String[2];
-                int [] teamids = spiele1.get(i).getTeamIDs();
+                int [] teamids = spiele.get(i).getTeamIDs();
                 for (int h = 0 ; h < 2 ; h++)
                 {
                    if (teamids[h] < 0)
@@ -64,11 +77,11 @@ public class TurnierManager {
                        namen[h] = teams.get(teamids[h]-1).getName();
                    }
                 }
-                spiele1.get(i).setTeamNames(namen[0],namen[1]);
+                spiele.get(i).setTeamNames(namen[0],namen[1]);
             }
         }
 
-        return spiele1;
+        return spiele;
     }
 
     private List<Spiel> generiereSpielePhase1() {
@@ -146,5 +159,8 @@ public class TurnierManager {
         }
         return naechstePhase;
     }
+
+
+
 
 }

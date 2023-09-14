@@ -23,8 +23,6 @@ public class TurnierBaum {
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
     JButton starteSpiel = new JButton("Spiel starten");
     JPanel panel ;
-    int anzahlSpiele = Client.getTeams().length;
-
 
 
     public TurnierBaum() {
@@ -44,10 +42,10 @@ public class TurnierBaum {
         panel.add(hinweis);
 
 
-
         frame.setSize(1920, 1080);
+        int anzahlTeams = Client.getTeams().length;
        //                   x=                  y=Fertig
-        setpenelsize(anzahlSpiele *150/2, anzahlSpiele *100);
+        setpenelsize(anzahlTeams *150/2, anzahlTeams *100);
 
        // panel.setBackground(Color.GREEN);
         panel.setLayout(null);
