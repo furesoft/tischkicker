@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tischkicker.models.Spiel;
+import tischkicker.models.Spieler;
 import tischkicker.models.Turnier;
 
 import java.util.Date;
@@ -35,6 +36,10 @@ public class TurnierController {
         // return repository.findByDate(datum);
         //ToDo: Nicht implementiert
         return null;
+    }
+    @GetMapping("/turniere")
+    public List<Turnier> alleTurniereHolen() {
+        return repository.findAll();
     }
 
     @GetMapping("/turnier")

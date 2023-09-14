@@ -17,6 +17,7 @@ public class SpielPhase {
 
 
     int naechstSpielePhase;
+    int turnierID;
     @Autowired
     SpielRepository spielRepository;
 
@@ -43,17 +44,19 @@ public class SpielPhase {
 
         // finde spiele mit spiele, das diese id beinhaltet.
         int spielIdBeendetesSpiel = ergebnis.spiel.getSpielID();
-        Optional<Spiel> maybeNaechstesSpiel = findeSpieleMitNachfolgerVonSpiel(spielIdBeendetesSpiel);
+        Optional<Spiel> maybeNaechstesSpiel = findeSpieleMitNachfolgerVonSpiel(spielIdBeendetesSpiel,ergebnis.spiel.getTurnierID());
 
         if(!maybeNaechstesSpiel.isPresent()){
             System.out.println("Spiel hat kein Nachfolger. Turnier ist beendet");
             throw new KeinSpielVerfuegbarWeilTurnierBeendetException();
         }
 
-
+        turnierID = ergebnis.spiel.getTurnierID();
         naechstSpielePhase = ergebnis.spiel.getQualifikation();
         List<Spiel> alleSpiele = spielRepository.findAll();
-        List<Spiel> spieleDerPhase = alleSpiele.stream().filter(s -> s.getQualifikation() == naechstSpielePhase).collect(Collectors.toList());
+        List<Spiel> spieleDerPhase = alleSpiele.stream()
+                .filter(s -> s.getQualifikation() == naechstSpielePhase)
+                .filter(t -> t.getTurnierID() == turnierID).collect(Collectors.toList());
             List<Spiel> spieleVorbei = spieleDerPhase.stream().filter(Spiel::getSpielvorbei).collect(Collectors.toList());
             if (spieleVorbei.size() == spieleDerPhase.size()-1) {
                 spieleDerPhase.removeAll(spieleVorbei);
@@ -122,12 +125,13 @@ public class SpielPhase {
         return naechstesSpiel;
     }
 
-    private Optional<Spiel> findeSpieleMitNachfolgerVonSpiel(int spielIdBeendetesSpiel) {
+    private Optional<Spiel> findeSpieleMitNachfolgerVonSpiel(int spielIdBeendetesSpiel, int turnierID) {
 
         List<Spiel> alleSpiele = spielRepository.findAll();
 
         //finde das Spiel, das die ID als Vorgänger beinhaltet.
         return alleSpiele.stream()
+                .filter( k -> k.getTurnierID() == turnierID)
                 .filter(spiel -> {
                     int[] ids = spiel.getSpieleIDs();
                     for(int i=0; i< ids.length; i++){

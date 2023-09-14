@@ -29,6 +29,7 @@ public class TurnierManager {
     @Autowired
     TurnierRepository turnierRepository;
 
+
     public List<Spiel> turnierStarten() {
         List<Spiel> spiele1 = spielRepository.findAll();
         if (spiele1.size() == 0)
