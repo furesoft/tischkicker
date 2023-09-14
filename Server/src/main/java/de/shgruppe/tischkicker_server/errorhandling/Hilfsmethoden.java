@@ -1,5 +1,8 @@
 package de.shgruppe.tischkicker_server.errorhandling;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class Hilfsmethoden {
@@ -12,4 +15,14 @@ public class Hilfsmethoden {
             return null;
         }
     }
+
+
+    public  static String ermittleDatum(){
+
+         String timestamp = ZonedDateTime.now(ZoneId.of("Europe/Berlin"))
+                .format(DateTimeFormatter.ofPattern("MM.dd.yyy"));
+        return  timestamp;
+    }
+
+
 }

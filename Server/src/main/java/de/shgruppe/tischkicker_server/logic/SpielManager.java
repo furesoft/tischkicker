@@ -1,6 +1,7 @@
 package de.shgruppe.tischkicker_server.logic;
 
 import de.shgruppe.tischkicker_server.SocketHandler;
+import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
@@ -131,8 +132,10 @@ public class SpielManager {
                 neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
 
             } catch (KeinSpielVerfuegbarWeilTurnierBeendetException e) {
+
                 //TODO was sende ich an den Client, wewnn das Spiel vorbei ist.
                 Optional<Turnier> turnier = turnierRepository.findById(ergebnis.spiel.getTurnierID());
+                turnier.get().setEnddatum(Hilfsmethoden.ermittleDatum());
                 turnier.get().setGespielt(true);
                 turnierRepository.saveAndFlush(turnier.get());
                 TurnierBeendetMessage tmsg = new TurnierBeendetMessage();
@@ -143,7 +146,6 @@ public class SpielManager {
             msg.setGewinner(getGewinner(ergebnis.spiel));
             msg.setSpiel(ergebnis.spiel);
             msg.setNeuesSpiel(neuesSpiel);
-
             SocketHandler.broadcast(msg);
 
 
