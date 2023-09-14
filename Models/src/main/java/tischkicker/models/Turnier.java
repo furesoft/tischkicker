@@ -9,7 +9,10 @@ import java.util.stream.Collectors;
 
 @Entity
 public class Turnier {
+    @Column(name = "startdatum")
     private String startdatum;
+
+    @Column(name = "enddatum")
     private String enddatum;
     @Column(name = "spiele")
     private String spiele;
@@ -18,11 +21,18 @@ public class Turnier {
     private boolean gespielt;
     @Transient
     private int [] spieleIDs;
+
+    @Column(name = "teams")
+    private String teams;
+
+    @Transient
+    private int [] teamsIDs;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "gespielt" )
     public boolean isGespielt() {
         return gespielt;
     }
@@ -63,6 +73,19 @@ public class Turnier {
             return Arrays.stream(spiele.split(",")).mapToInt(Integer::parseInt).toArray();
         }
         return spieleIDs;
+    }
+    public void setTeamsIDs(int [] spiele){
+        List<String> strings = Arrays.stream(spiele).boxed().map(id -> Integer.toString(id))
+                .collect(Collectors.toList());
+        this.teams = String.join(",", strings);
+        this.teamsIDs = spiele;
+    }
+
+    public int[] getTeamsIDs(){
+        if (teamsIDs == null) {
+            return Arrays.stream(teams.split(",")).mapToInt(Integer::parseInt).toArray();
+        }
+        return teamsIDs;
     }
 
 

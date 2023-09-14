@@ -131,7 +131,7 @@ public class SpielPhase {
 
         //finde das Spiel, das die ID als Vorgänger beinhaltet.
         return alleSpiele.stream()
-                .filter( k -> k.getTurnierID() == turnierID)
+                .filter( s -> s.getTurnierID() == turnierID)
                 .filter(spiel -> {
                     int[] ids = spiel.getSpieleIDs();
                     for(int i=0; i< ids.length; i++){

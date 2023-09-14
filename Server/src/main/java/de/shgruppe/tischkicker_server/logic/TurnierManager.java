@@ -16,11 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import  java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
-
 @Component
 public class TurnierManager {
     @Autowired
@@ -32,40 +27,36 @@ public class TurnierManager {
     @Autowired
     SpielRepository spielRepository;
 
+    Turnier aktuellesTurnier;
     @Autowired
     TurnierRepository turnierRepository;
 
-
-
-
-
     public List<Spiel> turnierStarten() {
-        List<Spiel> spiele = spielRepository.findAll();
-        if (spiele.size() == 0)
+        List<Spiel> spiele1 = spielRepository.findAll();
+        if (spiele1.size() == 0)
         {
             Turnier turnier = new Turnier();
-             turnier.setStartdatum(Hilfsmethoden.ermittleDatum());
-
-            spiele.addAll(generiereUndSpeicherSpiele(generiereSpielePhase1()));
-            turnier.setSpieleIDs(spiele.stream().mapToInt(Spiel::getSpielID).toArray());
+            aktuellesTurnier = turnier;
+            spiele1.addAll(generiereUndSpeicherSpiele(generiereSpielePhase1()));
+            turnier.setSpieleIDs(spiele1.stream().mapToInt(Spiel::getSpielID).toArray());
+            int[] teamIDs = spiele1.stream().flatMapToInt(k -> Arrays.stream(k.getTeamIDs())).toArray();
+            turnier.setTeamsIDs(teamIDs);
             turnier = turnierRepository.saveAndFlush(turnier);
-
-            for (int i = 0 ; i < spiele.size() ; i++)
+            aktuellesTurnier = turnier;
+            for (int i = 0 ; i < spiele1.size() ; i++)
             {
-                spiele.get(i).setTurnierID(turnier.getID());
+                spiele1.get(i).setTurnierID(turnier.getID());
             }
 
-            spielRepository.saveAllAndFlush(spiele);
-
-            return spiele;
+            return spiele1;
         }
         else
         {
-            List<Team> teams = teamRepository.findAll();
-            for (int i = 0 ; i < spiele.size() ; i++)
+            List<Team> teams = holeTeamsvonTurnier(aktuellesTurnier);
+            for (int i = 0 ; i < spiele1.size() ; i++)
             {
                 String [] namen = new String[2];
-                int [] teamids = spiele.get(i).getTeamIDs();
+                int [] teamids = spiele1.get(i).getTeamIDs();
                 for (int h = 0 ; h < 2 ; h++)
                 {
                    if (teamids[h] < 0)
@@ -77,16 +68,24 @@ public class TurnierManager {
                        namen[h] = teams.get(teamids[h]-1).getName();
                    }
                 }
-                spiele.get(i).setTeamNames(namen[0],namen[1]);
+                spiele1.get(i).setTeamNames(namen[0],namen[1]);
             }
         }
 
-        return spiele;
+        return spiele1;
+    }
+
+    public List<Team> holeTeamsvonTurnier (Turnier turnier)
+    {
+        List<Team> alleTeams = teamRepository.findAll();
+        List teamIds= List.of(turnier.getTeamsIDs());
+
+        return alleTeams.stream().filter(t -> teamIds.contains(t.getId())).collect(Collectors.toList());
     }
 
     private List<Spiel> generiereSpielePhase1() {
         int teamfaktor = 0;
-        List<Team> teams = teamRepository.findAll();
+        List<Team> teams = holeTeamsvonTurnier(aktuellesTurnier);
 
         if (teams.size() % 2 != 0) {
             teamfaktor = 1;
@@ -159,8 +158,5 @@ public class TurnierManager {
         }
         return naechstePhase;
     }
-
-
-
 
 }
