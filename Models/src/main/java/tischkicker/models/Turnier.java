@@ -1,9 +1,7 @@
 package tischkicker.models;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,16 +15,16 @@ public class Turnier {
     @Column(name = "spiele")
     private String spiele;
 
-    @Column(name= "gespielt")
+    @Column(name = "gespielt")
     private boolean gespielt;
     @Transient
-    private int [] spieleIDs;
+    private int[] spieleIDs;
 
     @Column(name = "teams")
     private String teams;
 
     @Transient
-    private int [] teamsIDs;
+    private int[] teamsIDs;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,28 +67,28 @@ public class Turnier {
 
     public void setSpieleIDs(int[] spiele) {
         List<String> strings = Arrays.stream(spiele).boxed().map(id -> Integer.toString(id))
-                .collect(Collectors.toList());
+                                     .collect(Collectors.toList());
         this.spiele = String.join(",", strings);
         this.spieleIDs = spiele;
     }
 
-
-    public void setTeamsIDs(int [] teams){
-        List<String> strings = Arrays.stream(teams).boxed().map(id -> Integer.toString(id))
-                .collect(Collectors.toList());
-        this.teams = String.join(",", strings);
-        this.teamsIDs = teams;
-    }
-
-    public int[] getTeamsIDs(){
+    public int[] getTeamsIDs() {
         if (teamsIDs == null) {
             return Arrays.stream(teams.split(",")).mapToInt(Integer::parseInt).toArray();
         }
         return teamsIDs;
     }
+
+    public void setTeamsIDs(int[] teams) {
+        List<String> strings = Arrays.stream(teams).boxed().map(id -> Integer.toString(id))
+                                     .collect(Collectors.toList());
+        this.teams = String.join(",", strings);
+        this.teamsIDs = teams;
+    }
+
     @Override
     public String toString() {
-        if (startdatum == enddatum) {
+        if (startdatum.equals(enddatum)) {
             return startdatum + " : " + id;
         }
 
