@@ -1,6 +1,6 @@
 package de.shgruppe.tischkicker_server.controllers;
 
-import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
+import de.shgruppe.tischkicker_server.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.repositories.SpielerRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +40,18 @@ public class TeamController {
     public Team teamUmwandeln(int id) {
         Optional<Team> team = teamRepository.findById(id);
         Team team1 = Hilfsmethoden.optionalCheck(team, id);
+
         int[] ids = team1.getspielerIDs();
         String[] names = new String[ids.length];
+
         for (int i = 0; i < ids.length; i++) {
             Optional<Spieler> spieler = spielerRepository.findById(ids[i]);
             Spieler spieler1 = Hilfsmethoden.optionalCheck(spieler, ids[i]);
             names[i] = spieler1.getName();
         }
+
         team1.setPlayers(names);
+
         return team1;
     }
 
@@ -63,19 +67,22 @@ public class TeamController {
     @PutMapping("/teams/{id}")
     public ResponseEntity<String> teamNamenAendern(@PathVariable int id, @RequestBody String name) {
         Optional<Team> optionalSpieler = teamRepository.findById(id);
+
         if (optionalSpieler.isPresent()) {
             Team teams = optionalSpieler.get();
             teams.setName(name);
 
             teamRepository.save(teams);
+
             return ResponseEntity.ok("Teamname wurde erfolgreich aktualisiert.");
-        } else {
-            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.notFound().build();
     }
 
     private void addSpielerToDb(Team team) {
         List<String> ids = new ArrayList();
+
         for (String name : team.getPlayers()) {
             Spieler s = new Spieler();
             s.setName(name);

@@ -1,4 +1,4 @@
-package de.shgruppe.tischkicker.client;
+package de.shgruppe.tischkicker.client.ui;
 
 import tischkicker.models.Spiel;
 
@@ -10,12 +10,12 @@ import java.awt.event.MouseEvent;
 public class Spielfeld {
     public JLabel background;
     public Spiel spiel;
-    JLabel team1;
-    JLabel team2;
-    JLabel toreTeam1;
-    JLabel toreTeam2;
-    Color selected = new Color(36, 157, 255);
-    Color normal = new Color(149, 157, 158);
+    public JLabel team1;
+    public JLabel team2;
+    public JLabel toreTeam1;
+    public JLabel toreTeam2;
+    public Color selected = new Color(36, 157, 255);
+    public Color normal = new Color(149, 157, 158);
     boolean besterVerlierer = false;
     JPanel frame;
 
@@ -124,9 +124,10 @@ public class Spielfeld {
         }
     }
 
-    void aktualisiereTeamnamenInGui(String[] teamNames) {
+    public void aktualisiereTeamNamen(String[] teamNames) {
         var teamname1 = teamNames[0];
         var teamname2 = teamNames[1];
+
         team1.setText(teamname1);
         team2.setText(teamname2);
     }

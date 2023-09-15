@@ -1,8 +1,9 @@
 package de.shgruppe.tischkicker.client.websockets;
 
 import com.google.gson.Gson;
-import de.shgruppe.tischkicker.client.Client;
-import de.shgruppe.tischkicker.client.Spielfeld;
+import de.shgruppe.tischkicker.client.API;
+import de.shgruppe.tischkicker.client.App;
+import de.shgruppe.tischkicker.client.ui.Spielfeld;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import tischkicker.messages.Message;
@@ -36,29 +37,29 @@ class Websocket extends WebSocketClient {
             SpielErgebnis spielergebnis = gson.fromJson(message, SpielErgebnis.class);
             System.out.println("Received message: " + message);
 
-            Client.spielstandAnzeige.aktualisiereDaten(spielergebnis);
+            App.spielstandAnzeige.aktualisiereDaten(spielergebnis);
 
             System.out.printf(String.valueOf(Thread.currentThread().getId()));
-            Client.turnierbaum.ergebnisUebertragen(spielergebnis);
+            App.turnierbaum.ergebnisUebertragen(spielergebnis);
         }
         else if (deserializedMessage.type == MessageType.Phasenaenderung) {
             //ToDo: implementiere spiel in nächster phase anzeigen
         }
         else if (deserializedMessage.type == MessageType.SpielBeendet) {
             SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);
-            Client.spielstandAnzeige.hide();
+            App.spielstandAnzeige.hide();
 
-            Spielfeld f = Client.turnierbaum.getNaechstesSpielfeld();
+            Spielfeld f = App.turnierbaum.getNaechstesSpielfeld();
             if (f != null) {
                 f.spiel = spielergebnis.getNeuesSpiel();
-                Client.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());
+                App.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());
             }
 
             holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI();
 
-            Client.gewinner.show(spielergebnis.getGewinner().getName());
-            Client.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
-            Client.turnierbaum.lock();
+            App.gewinner.show(spielergebnis.getGewinner().getName());
+            App.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
+            App.turnierbaum.lock();
 
         }
 
@@ -66,10 +67,10 @@ class Websocket extends WebSocketClient {
 
     private void holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI() {
         // Alle Spiele vom Server holen
-        List<Spiel> alleSpieleMitTeamnamen = Arrays.asList(Client.getSpieleFromServer());
+        List<Spiel> alleSpieleMitTeamnamen = Arrays.asList(API.getSpieleFromServer());
 
         // Alle Teamnamen aktualisieren.
-        Client.turnierbaum.updateTeamnames(alleSpieleMitTeamnamen);
+        App.turnierbaum.updateTeamnames(alleSpieleMitTeamnamen);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package de.shgruppe.tischkicker.client;
+package de.shgruppe.tischkicker.client.fenster;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,11 +16,12 @@ public class Gewinner {
     }
 
     public void show(String teamName) {
-        if(teamName.length()>20){
+        if (teamName.length() > 20) {
             gewinner.setText("<html>" + teamName + " hat gewonnen!!!<br></html>");
             //frame.setSize(SwingUtilities.computeStringWidth(frame.getGraphics().getFontMetrics(gewinner.getFont()), gewinner.getText()),
             //        500);
-        }else{
+        }
+        else {
             gewinner.setText(teamName + " hat gewonnen!!!");
             //frame.setSize(SwingUtilities.computeStringWidth(frame.getGraphics().getFontMetrics(gewinner.getFont()), gewinner.getText()),
             //        500);
