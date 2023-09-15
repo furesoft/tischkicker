@@ -1,6 +1,6 @@
 package de.shgruppe.tischkicker_server.controllers;
 
-import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
+import de.shgruppe.tischkicker_server.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.repositories.SpielerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,16 +40,16 @@ class SpielerController {
             spieler.setName(name);
 
             repository.saveAndFlush(spieler);
+
             return ResponseEntity.ok("Spielername wurde erfolgreich aktualisiert.");
-        } else {
-            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.notFound().build();
     }
+
     @DeleteMapping("/spieler/{id}")
     public void spielerLoeschen(@PathVariable int id) {
         repository.deleteById(id);
     }
-
-
 }
 

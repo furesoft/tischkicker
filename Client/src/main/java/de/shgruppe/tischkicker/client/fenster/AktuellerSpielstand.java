@@ -1,5 +1,6 @@
-package de.shgruppe.tischkicker.client;
+package de.shgruppe.tischkicker.client.fenster;
 
+import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.ui.DataButton;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
@@ -42,7 +43,7 @@ public class AktuellerSpielstand {
         seitenwechsel.setOpaque(true);
         seitenwechsel.addActionListener(e -> {
             try {
-                Client.seitenwechsel();
+                API.seitenwechsel();
             } catch (IOException | InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
@@ -127,10 +128,10 @@ public class AktuellerSpielstand {
     private static void buttonClick(ActionEvent e) {
         DataButton btn = (DataButton) e.getSource();
 
-        Client.Modus modus = btn.getText() == "+" ? Client.Modus.increment : Client.Modus.decrement;
+        API.Modus modus = btn.getText() == "+" ? API.Modus.increment : API.Modus.decrement;
 
         try {
-            Client.spielstandAnpassen((int) btn.getData(), modus);
+            API.spielstandAnpassen((int) btn.getData(), modus);
         } catch (IOException ex) {
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);
@@ -189,7 +190,7 @@ public class AktuellerSpielstand {
         DataButton btn = (DataButton) e.getSource();
 
         try {
-            Client.aufgeben((int) btn.getData());
+            API.aufgeben((int) btn.getData());
         } catch (IOException ex) {
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);

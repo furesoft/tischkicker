@@ -1,7 +1,7 @@
 package de.shgruppe.tischkicker_server.logic;
 
+import de.shgruppe.tischkicker_server.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.SocketHandler;
-import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
@@ -15,7 +15,6 @@ import tischkicker.models.Team;
 import tischkicker.models.Tor;
 import tischkicker.models.Turnier;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
@@ -24,14 +23,14 @@ class SpielHolder {
     public int teamID;
 
     public int tore;
-
 }
 
 @Component
 public class SpielManager {
 
     public boolean spielVorbei = false;
-    public int anzahltoreBisGewonnen = 10;
+    public int anzahlToreBisGewonnen = 10;
+
     @Autowired
     SpielRepository spielRepository;
     @Autowired
@@ -97,10 +96,10 @@ public class SpielManager {
     }
 
     private int getIdVonSeite(Tor.Seite seite) {
-        if(this.ergebnis.seiteTeam1 == seite) {
+        if (this.ergebnis.seiteTeam1 == seite) {
             return team1.teamID;
         }
-        else{
+        else {
             return team2.teamID;
         }
 
@@ -117,8 +116,8 @@ public class SpielManager {
     private void triggerSpielMode() throws IOException {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
 
-            // Abfrage, ob die Gewinnbedingungen erfüllt wurden
-        if (maxTore == anzahltoreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben()) {
+        // Abfrage, ob die Gewinnbedingungen erfüllt wurden
+        if (maxTore == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben()) {
             ergebnis.spiel.setToreteam1(team1.tore);
             ergebnis.spiel.setToreteam2(team2.tore);
 
@@ -130,18 +129,20 @@ public class SpielManager {
             Spiel neuesSpiel = null;
             try {
                 neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
-
-            } catch (KeinSpielVerfuegbarWeilTurnierBeendetException e) {
-
-                //TODO was sende ich an den Client, wewnn das Spiel vorbei ist.
+            } catch (TurnierBeendetException e) {
                 Optional<Turnier> turnier = turnierRepository.findById(ergebnis.spiel.getTurnierID());
+
                 turnier.get().setEnddatum(Hilfsmethoden.ermittleDatum());
                 turnier.get().setGespielt(true);
+
                 turnierRepository.saveAndFlush(turnier.get());
+
                 TurnierBeendetMessage tmsg = new TurnierBeendetMessage();
                 tmsg.setTurnier(turnier.get());
+
                 SocketHandler.broadcast(tmsg);
             }
+
             SpielBeendetMessage msg = new SpielBeendetMessage();
             msg.setGewinner(getGewinner(ergebnis.spiel));
             msg.setSpiel(ergebnis.spiel);
@@ -149,7 +150,7 @@ public class SpielManager {
             SocketHandler.broadcast(msg);
 
 
-            if(!ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()){
+            if (!ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()) {
                 reset();
             }
 
@@ -176,7 +177,7 @@ public class SpielManager {
             return team;
         }
 
-        if (ergebnis.toreTeam1 < ergebnis.toreTeam2 && !ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()){
+        if (ergebnis.toreTeam1 < ergebnis.toreTeam2 && !ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()) {
             team = ergebnis.teams[1];
             team.setId(spiel.getTeamIDs()[1]);
         }
@@ -189,8 +190,6 @@ public class SpielManager {
         Tor.Seite tmpSeite = ergebnis.seiteTeam1;
         ergebnis.seiteTeam1 = ergebnis.seiteTeam2;
         ergebnis.seiteTeam2 = tmpSeite;
-
-
 
 
         SocketHandler.broadcast(ergebnis);

@@ -1,13 +1,11 @@
 package de.shgruppe.tischkicker.client;
 
 import com.google.gson.Gson;
-import de.shgruppe.tischkicker.client.ui.TurnierAuswallfenster;
-import de.shgruppe.tischkicker.client.websockets.WebsocketConnection;
+import de.shgruppe.tischkicker.client.fenster.TeamsInitialisierenFenster;
 import tischkicker.models.Spiel;
 import tischkicker.models.Spieler;
 import tischkicker.models.Turnier;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -15,16 +13,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.List;
 
-public class Client {
+public class API {
     private static final String URL = "http://localhost:8080";
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     private static final Gson gson = new Gson();
-    public static List<Spiel> spiele;
-    public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(500, 500);
-    public static TurnierBaum turnierbaum = new TurnierBaum();
-    public static Gewinner gewinner = new Gewinner();
 
     public static void spielerAnpassen(int spielerId, String neuerName) {
         try {
@@ -42,7 +35,7 @@ public class Client {
                 System.out.println("Spielername erfolgreich aktualisiert.");
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode + " " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -65,7 +58,7 @@ public class Client {
                 System.out.println("Spielername erfolgreich aktualisiert.");
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode + " " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -91,7 +84,7 @@ public class Client {
                 return gson.fromJson(responseBody, Team.class);
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode + " " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -151,11 +144,11 @@ public class Client {
                 String responseBody = response.body();
                 System.out.println("API-Antwort:");
                 Team teams = gson.fromJson(responseBody, Team.class);
-                TeamApp.teams.add(teams);
+                TeamsInitialisierenFenster.teams.add(teams);
                 System.out.println(responseBody);
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode + " " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -177,11 +170,11 @@ public class Client {
                 String responseBody = response.body();
                 System.out.println("API-Antwort:");
                 Team teams = gson.fromJson(responseBody, Team.class);
-                TeamApp.teams.add(teams);
+                TeamsInitialisierenFenster.teams.add(teams);
                 System.out.println(responseBody);
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode + " " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -228,23 +221,22 @@ public class Client {
             HttpRequest request = createRequest(path).GET().build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
-            HttpResponse<String> response = Client.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = API.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             int statusCode = response.statusCode();
             if (statusCode == 200) {
                 // Die JSON-Antwort verarbeiten
                 String responseBody = response.body();
                 System.out.println("API-Antwort:");
-                return Client.gson.fromJson(responseBody, clazz);
+                return API.gson.fromJson(responseBody, clazz);
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode + " " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
     }
-
 
     public static void spielStarten(Spiel spiel) {
         try {
@@ -263,7 +255,7 @@ public class Client {
                 String responseBody = response.body();
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode + " " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -287,7 +279,7 @@ public class Client {
                 String responseBody = response.body();
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode + " " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -316,7 +308,7 @@ public class Client {
 
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode + " " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -325,42 +317,21 @@ public class Client {
         return null;
     }
 
-    public static void main(String[] args) {
-        try {
-            WebsocketConnection client = new WebsocketConnection();
-            client.connect();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                turnierbaum.frame.setVisible(false);
-                new TurnierAuswallfenster().setVisible(true);
-            }
-        });
-
-
-        //in Bearbeitung
-        //Siegertreppchen sieger = new Siegertreppchen(f, 1400, 900, 150, 100, 28);
-    }
-
     public static void turnierbaumGenerieren(Spiel[] spiele) {
         Team[] teams = getTeams();
         if (teams != null) {
             double anzahlTeams = teams.length;
             int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
-            Client.turnierbaum.tunierbaumErstellen(teams.length, Arrays.asList(spiele));
+            App.turnierbaum.tunierbaumErstellen(teams.length, Arrays.asList(spiele));
 
             for (int i = 0; i < spielfelderAnzahl; i++) {
-                // Problem falls Turnier gestartet wird, obwohl schon Spiele vorhanden sind
+                // Problem, falls Turnier gestartet wird, obwohl schon Spiele vorhanden sind
                 if (spiele[i].getQualifikation() == 1) {
-                    Client.turnierbaum.spielfeldFuellen(spiele[i], 0, i);
+                    App.turnierbaum.spielfeldFuellen(spiele[i], 0, i);
                 }
             }
 
-            Client.turnierbaum.frame.setVisible(true);
+            App.turnierbaum.frame.setVisible(true);
         }
         else {
             // TODO Fehlermeldung ausgeben, falls keine Teams vorhanden sind (null), zum Beispiel mit Exception werfen

@@ -1,5 +1,9 @@
-package de.shgruppe.tischkicker.client;
+package de.shgruppe.tischkicker.client.fenster;
 
+import de.shgruppe.tischkicker.client.API;
+import de.shgruppe.tischkicker.client.App;
+import de.shgruppe.tischkicker.client.Verbindungslinie;
+import de.shgruppe.tischkicker.client.ui.Spielfeld;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
@@ -14,7 +18,7 @@ import java.util.List;
 public class TurnierBaum {
 
     static ArrayList<ArrayList<Spielfeld>> reihen = new ArrayList<>();
-    JFrame frame = new JFrame();
+    public JFrame frame = new JFrame();
     Spielfeld selectedSpielfeld;
     Spielfeld aktuellesSpiel;
     JLabel hinweis = new JLabel();
@@ -22,14 +26,13 @@ public class TurnierBaum {
     ArrayList<Spielfeld> alleSpielfelder = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
     JButton starteSpiel = new JButton("Spiel starten");
-    JPanel panel ;
+    JPanel panel;
 
 
     public TurnierBaum() {
 
         panel = new JPanel();
-        JScrollPane scrollPane = new JScrollPane(panel,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        JScrollPane scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 
         starteSpiel.setBounds(50, 20, 150, 50);
@@ -43,11 +46,11 @@ public class TurnierBaum {
 
 
         frame.setSize(1920, 1080);
-        int anzahlTeams = Client.getTeams().length;
-       //                   x=                  y=Fertig
-        setpenelsize(anzahlTeams *150/2, anzahlTeams *100);
+        int anzahlTeams = API.getTeams().length;
+        //                   x=                  y=Fertig
+        setpenelsize(anzahlTeams * 150 / 2, anzahlTeams * 100);
 
-       // panel.setBackground(Color.GREEN);
+        // panel.setBackground(Color.GREEN);
         panel.setLayout(null);
 
 
@@ -57,10 +60,10 @@ public class TurnierBaum {
         starteSpiel.addActionListener(e -> {
             //TODO Probieren, ob aktuelles Spiel startbar ist.
 
-            Client.spielstandAnzeige.show();
-            Client.spielstandAnzeige.aktualisiereDaten(aktuellesSpiel.spiel);
+            App.spielstandAnzeige.show();
+            App.spielstandAnzeige.aktualisiereDaten(aktuellesSpiel.spiel);
 
-            Client.spielStarten(aktuellesSpiel.spiel);
+            API.spielStarten(aktuellesSpiel.spiel);
 
         });
 
@@ -131,7 +134,7 @@ public class TurnierBaum {
                 }
             }
         }
-         return teamAnzahl;
+        return teamAnzahl;
     }
 
     public Spielfeld getNaechstesSpielfeld() {
@@ -144,20 +147,20 @@ public class TurnierBaum {
         return null;
     }
 
-   public void  setpenelsize(int x ,int y ){
+    public void setpenelsize(int x, int y) {
         // panel größe wird Festgelegt
 
-        panel.setMinimumSize(new Dimension(x,y));
-        panel.setMaximumSize(new Dimension(x,y));
-        panel.setPreferredSize(new Dimension(x,y));
+        panel.setMinimumSize(new Dimension(x, y));
+        panel.setMaximumSize(new Dimension(x, y));
+        panel.setPreferredSize(new Dimension(x, y));
         panel.repaint();
-   }
+    }
 
     /**
      * Füllt die Liste spielfeldList mit Spielfeldern
      *
-     * @param x X-Koordinate für die Spielfelder einer Reihe
-     * @param y Y-Koordinate für das erste Spielfeld einer Reihe
+     * @param x            X-Koordinate für die Spielfelder einer Reihe
+     * @param y            Y-Koordinate für das erste Spielfeld einer Reihe
      * @param anzahlReihen Anzahl der Reihen
      */
     public void spielfeldListeFuellen(int x, int y, int anzahlReihen, int beginIndexSpiele, List<Spiel> spiele) {
@@ -197,19 +200,20 @@ public class TurnierBaum {
     /**
      * Ermöglicht es auf ein Spielfeld im Turnierbaum zuzugreifen, um es zu befüllen. Siehe OneNote Doku
      *
-     * @param spiel Spiel, das in dem Spielfeld erscheinen soll
-     * @param reihe Reihe im Turnierbaum
+     * @param spiel     Spiel, das in dem Spielfeld erscheinen soll
+     * @param reihe     Reihe im Turnierbaum
      * @param spielfeld Spielfeld im Turnierbaum
      */
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld) {
         reihen.get(reihe).get(spielfeld).setTeamnames(spiel);
 
     }
+
     public void spielfeldClicked(Spielfeld spielfeld) {
         aktuellesSpiel = spielfeld;
 
-        spielfeld.spiel = Client.getSpiel(spielfeld.spiel.getSpielID());
-        int [] teamids = spielfeld.spiel.getTeamIDs();
+        spielfeld.spiel = API.getSpiel(spielfeld.spiel.getSpielID());
+        int[] teamids = spielfeld.spiel.getTeamIDs();
 
 
         if (teamids[0] < 0 || teamids[1] < 0 || spielfeld.spiel.getSpielvorbei()) {
@@ -254,42 +258,34 @@ public class TurnierBaum {
             }
         }
     }
+
     // wird aufgerufen um bei einem bereits laufenden Turnier den Turnierbaum richtig zu laden
-    public void ergebnisAmAnfang (Spiel[] spiels)
-    {
+    public void ergebnisAmAnfang(Spiel[] spiels) {
         // alle Spiele des Turniers
-        for (int i = 0 ; i < spiels.length ; i++)
-        {
+        for (int i = 0; i < spiels.length; i++) {
             // alle Spielfelder des Turnierbaums
-            for (int h = 0 ; h < alleSpielfelder.size();h++)
-            {
-                if (alleSpielfelder.get(h).spiel == null && i == h)
-                {
+            for (int h = 0; h < alleSpielfelder.size(); h++) {
+                if (alleSpielfelder.get(h).spiel == null && i == h) {
                     alleSpielfelder.get(h).spiel = spiels[i];
                 }
-                if (alleSpielfelder.get(h).spiel == null)
-                {
+                if (alleSpielfelder.get(h).spiel == null) {
                     continue;
                 }
-                if (spiels[i].getSpielID() == alleSpielfelder.get(h).spiel.getSpielID())
-                {
+                if (spiels[i].getSpielID() == alleSpielfelder.get(h).spiel.getSpielID()) {
                     alleSpielfelder.get(h).setTeamnames(spiels[i]);
-                    if (spiels[i].getToreteam1() > 0 || spiels[i].getToreteam2() > 0)
-                    {
+                    if (spiels[i].getToreteam1() > 0 || spiels[i].getToreteam2() > 0) {
                         alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
                         alleSpielfelder.get(h).toreTeam2.setText(String.valueOf(spiels[i].getToreteam2()));
-                        if (spiels[i].getToreteam1() == 10)
-                        {
+                        if (spiels[i].getToreteam1() == 10) {
                             alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[0]);
                         }
-                        else if (spiels[i].getToreteam2() == 10)
-                        {
+                        else if (spiels[i].getToreteam2() == 10) {
                             alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[1]);
-                        } else if (Client.getTeam(spiels[i].getTeamIDs()[1]).isAufgegeben())
-                        {
+                        }
+                        else if (API.getTeam(spiels[i].getTeamIDs()[1]).isAufgegeben()) {
                             alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[0]);
-                        } else if (Client.getTeam(spiels[i].getTeamIDs()[0]).isAufgegeben())
-                        {
+                        }
+                        else if (API.getTeam(spiels[i].getTeamIDs()[0]).isAufgegeben()) {
                             alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[1]);
                         }
                     }
@@ -299,7 +295,7 @@ public class TurnierBaum {
     }
 
     public void feldInitialisieren(Spiel spiel, Team team1) {
-        for (int i = 0 ; i < alleSpielfelder.size() ; i++) {
+        for (int i = 0; i < alleSpielfelder.size(); i++) {
             if (alleSpielfelder.get(i).spiel.getSpielID() == spiel.getSpielID()) {
 
                 int teamID2 = spiel.getTeamIDs()[1];
@@ -333,10 +329,10 @@ public class TurnierBaum {
     }
 
     public void updateTeamnames(List<Spiel> alleSpieleMitTeamnamen) {
-        for(Spiel spiel: alleSpieleMitTeamnamen){
-            for(Spielfeld spielfeld: alleSpielfelder){
-                if(spielfeld.spiel.getSpielID() == spiel.getSpielID()){
-                    spielfeld.aktualisiereTeamnamenInGui(spiel.getTeamNames());
+        for (Spiel spiel : alleSpieleMitTeamnamen) {
+            for (Spielfeld spielfeld : alleSpielfelder) {
+                if (spielfeld.spiel.getSpielID() == spiel.getSpielID()) {
+                    spielfeld.aktualisiereTeamNamen(spiel.getTeamNames());
                 }
             }
         }

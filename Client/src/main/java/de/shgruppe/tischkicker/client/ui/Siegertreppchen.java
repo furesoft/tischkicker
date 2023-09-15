@@ -1,4 +1,4 @@
-package de.shgruppe.tischkicker.client;
+package de.shgruppe.tischkicker.client.ui;
 
 import javax.swing.*;
 import java.awt.*;

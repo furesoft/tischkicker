@@ -1,5 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
+import de.shgruppe.tischkicker.client.ui.Spielfeld;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,10 +12,10 @@ public class Verbindungslinie {
     /**
      * Erstellt eine Verbindungslinie zwischen 3 Spielfeldern
      *
-     * @param frame gibt den JFrame an, indem die Linie erscheinen soll
-     * @param spielfeld1 spielfeld 1 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
-     * @param spielfeld2 spielfeld 2 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
-     * @param spielfeld3 spielfeld 3 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
+     * @param frame         gibt den JFrame an, indem die Linie erscheinen soll
+     * @param spielfeld1    spielfeld 1 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
+     * @param spielfeld2    spielfeld 2 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
+     * @param spielfeld3    spielfeld 3 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
      * @param linienStaerke gibt die Linienstärke an
      */
     public Verbindungslinie(JPanel frame, Spielfeld spielfeld1, Spielfeld spielfeld2, Spielfeld spielfeld3, int linienStaerke) {
@@ -28,13 +30,13 @@ public class Verbindungslinie {
     /**
      * Erstellt eine Verbindungslinie zwischen 2 Spielfeldern
      *
-     * @param frame gibt den JFrame an, indem die Linie erscheinen soll
-     * @param spielfeld1 spielfeld 1 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
-     * @param spielfeld2 spielfeld 2 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
+     * @param frame         gibt den JFrame an, indem die Linie erscheinen soll
+     * @param spielfeld1    spielfeld 1 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
+     * @param spielfeld2    spielfeld 2 wird zu berechnung der Koordinaten, Breite, Höhe benötigt
      * @param linienStaerke gibt die Linienstärke an
      */
     public Verbindungslinie(JPanel frame, Spielfeld spielfeld1, Spielfeld spielfeld2, int linienStaerke) {
-        spielfeld2.setY(spielfeld2.background.getY()+20);
+        spielfeld2.setY(spielfeld2.background.getY() + 20);
         if (spielfeld1.background.getY() < spielfeld2.background.getY()) {
             verbindungslinie2(frame, spielfeld1, spielfeld2, linienStaerke);
         }

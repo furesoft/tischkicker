@@ -1,18 +1,15 @@
 package de.shgruppe.tischkicker_server.controllers;
 
-import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
+import de.shgruppe.tischkicker_server.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.logic.SpielManager;
 import de.shgruppe.tischkicker_server.logic.TeamNameGetter;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
-import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
-import tischkicker.models.Team;
 
 import java.io.IOException;
 import java.util.List;
@@ -61,10 +58,10 @@ public class SpielController {
 
     @PostMapping("/spiel/start/{id}")
     public void spielStarten(@PathVariable int id) throws IOException {
-        Optional<Spiel> spiel = spielRepository.findById(id);
+        Optional<Spiel> spielAusDb = spielRepository.findById(id);
 
-        Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel, id);
-        spielManager.spielStarten(spiel1);
+        Spiel spiel = Hilfsmethoden.optionalCheck(spielAusDb, id);
+        spielManager.spielStarten(spiel);
     }
 
     @PostMapping("/spiel/aufgeben/{id}")
