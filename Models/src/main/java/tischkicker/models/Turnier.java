@@ -32,7 +32,6 @@ public class Turnier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "gespielt" )
     public boolean isGespielt() {
         return gespielt;
     }
@@ -61,24 +60,26 @@ public class Turnier {
         this.enddatum = enddatum;
     }
 
-    public void setSpieleIDs(int [] spiele){
+    public int[] getSpieleIDs() {
+        if (spieleIDs == null) {
+            return Arrays.stream(spiele.split(",")).mapToInt(Integer::parseInt).toArray();
+        }
+        return spieleIDs;
+    }
+
+    public void setSpieleIDs(int[] spiele) {
         List<String> strings = Arrays.stream(spiele).boxed().map(id -> Integer.toString(id))
                 .collect(Collectors.toList());
         this.spiele = String.join(",", strings);
         this.spieleIDs = spiele;
     }
 
-    public int[] getSpieleIDs(){
-        if (spieleIDs == null) {
-            return Arrays.stream(spiele.split(",")).mapToInt(Integer::parseInt).toArray();
-        }
-        return spieleIDs;
-    }
-    public void setTeamsIDs(int [] spiele){
-        List<String> strings = Arrays.stream(spiele).boxed().map(id -> Integer.toString(id))
+
+    public void setTeamsIDs(int [] teams){
+        List<String> strings = Arrays.stream(teams).boxed().map(id -> Integer.toString(id))
                 .collect(Collectors.toList());
         this.teams = String.join(",", strings);
-        this.teamsIDs = spiele;
+        this.teamsIDs = teams;
     }
 
     public int[] getTeamsIDs(){
@@ -87,7 +88,14 @@ public class Turnier {
         }
         return teamsIDs;
     }
+    @Override
+    public String toString() {
+        if (startdatum == enddatum) {
+            return startdatum + " : " + id;
+        }
 
+        return startdatum + " - " + enddatum + " : " + id;
+    }
 
 
 }

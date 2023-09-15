@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
 @Component
 public class TurnierManager {
     @Autowired
@@ -27,9 +29,23 @@ public class TurnierManager {
     @Autowired
     SpielRepository spielRepository;
 
-    Turnier aktuellesTurnier;
     @Autowired
     TurnierRepository turnierRepository;
+
+    Turnier aktuellesTurnier ;
+
+
+
+    public Turnier Turniererstellen(){
+
+      Turnier turnier1 = new Turnier();
+
+        aktuellesTurnier = turnierRepository.saveAndFlush(turnier1);
+
+
+
+      return  aktuellesTurnier;
+    }
 
     public List<Spiel> turnierStarten() {
         List<Spiel> spiele1 = spielRepository.findAll();
@@ -75,14 +91,12 @@ public class TurnierManager {
         return spiele1;
     }
 
-    public List<Team> holeTeamsvonTurnier (Turnier turnier)
-    {
+    public List<Team> holeTeamsvonTurnier (Turnier turnier) {
         List<Team> alleTeams = teamRepository.findAll();
-        List teamIds= List.of(turnier.getTeamsIDs());
+        List teamIds = List.of(turnier.getTeamsIDs());
 
         return alleTeams.stream().filter(t -> teamIds.contains(t.getId())).collect(Collectors.toList());
     }
-
     private List<Spiel> generiereSpielePhase1() {
         int teamfaktor = 0;
         List<Team> teams = holeTeamsvonTurnier(aktuellesTurnier);
@@ -158,5 +172,8 @@ public class TurnierManager {
         }
         return naechstePhase;
     }
+
+
+
 
 }

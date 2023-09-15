@@ -63,4 +63,8 @@ public class TurnierController {
         return alleTeams.stream().filter(t -> teamIds.contains(t.getId())).collect(Collectors.toList());
     }
 
+    @GetMapping("/turniererstellen")
+    public Turnier einzelnesTurnierErstellen() {
+     return    turnierManager.Turniererstellen();
+    }
 }

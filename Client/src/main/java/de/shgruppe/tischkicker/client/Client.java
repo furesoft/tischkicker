@@ -1,6 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
 import com.google.gson.Gson;
+import de.shgruppe.tischkicker.client.ui.TurnierAuswallfenster;
 import de.shgruppe.tischkicker.client.websockets.WebsocketConnection;
 import tischkicker.models.Spiel;
 import tischkicker.models.Spieler;
@@ -41,7 +42,7 @@ public class Client {
                 System.out.println("Spielername erfolgreich aktualisiert.");
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -64,7 +65,7 @@ public class Client {
                 System.out.println("Spielername erfolgreich aktualisiert.");
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -90,7 +91,7 @@ public class Client {
                 return gson.fromJson(responseBody, Team.class);
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -154,7 +155,7 @@ public class Client {
                 System.out.println(responseBody);
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -180,7 +181,7 @@ public class Client {
                 System.out.println(responseBody);
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -188,6 +189,10 @@ public class Client {
 
     }
 
+
+    public static Turnier erstelleTurnier() {
+        return getResource("/turniererstellen", Turnier.class);
+    }
 
     public static Spiel[] startTurnier() {
         return getResource("/turnier", Spiel[].class);
@@ -232,7 +237,7 @@ public class Client {
                 return Client.gson.fromJson(responseBody, clazz);
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -258,7 +263,7 @@ public class Client {
                 String responseBody = response.body();
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -282,7 +287,7 @@ public class Client {
                 String responseBody = response.body();
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -311,7 +316,7 @@ public class Client {
 
             }
             else {
-                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode);
+                System.out.println("Fehler bei der API-Anfrage. Response Code: " + statusCode+" "+response.body());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -332,7 +337,7 @@ public class Client {
             @Override
             public void run() {
                 turnierbaum.frame.setVisible(false);
-                new TeamApp().setVisible(true);
+                new TurnierAuswallfenster().setVisible(true);
             }
         });
 
