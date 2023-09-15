@@ -47,4 +47,8 @@ public class TurnierController {
         return turnierManager.turnierStarten();
     }
 
+    @GetMapping("/turniererstellen")
+    public Turnier einzelnesTurnierErstellen() {
+     return    turnierManager.Turniererstellen();
+    }
 }

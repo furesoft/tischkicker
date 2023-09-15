@@ -35,9 +35,20 @@ public class TurnierManager {
     @Autowired
     TurnierRepository turnierRepository;
 
+    Turnier aktuellestunier ;
 
 
 
+    public Turnier Turniererstellen(){
+
+      Turnier turnier1 = new Turnier();
+
+      aktuellestunier = turnierRepository.saveAndFlush(turnier1);
+
+
+
+      return  aktuellestunier;
+    }
 
     public List<Spiel> turnierStarten() {
         List<Spiel> spiele = spielRepository.findAll();

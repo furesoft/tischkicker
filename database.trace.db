@@ -1,4 +1,4 @@
-2023-08-30 15:03:07 jdbc[3]: exception
+2023-09-14 09:28:16 jdbc[3]: exception
 java.sql.SQLClientInfoException: Client info name 'ApplicationName' not supported.
 	at org.h2.jdbc.JdbcConnection.setClientInfo(JdbcConnection.java:1573)
 	at org.jkiss.dbeaver.ext.generic.model.GenericDataSource.populateClientAppName(GenericDataSource.java:183)
@@ -14,17 +14,9 @@ java.sql.SQLClientInfoException: Client info name 'ApplicationName' not supporte
 	at org.jkiss.dbeaver.ext.generic.GenericDataSourceProvider.openDataSource(GenericDataSourceProvider.java:106)
 	at org.jkiss.dbeaver.registry.DataSourceDescriptor.openDataSource(DataSourceDescriptor.java:1210)
 	at org.jkiss.dbeaver.registry.DataSourceDescriptor.connect(DataSourceDescriptor.java:1076)
-	at org.jkiss.dbeaver.runtime.jobs.ConnectJob.run(ConnectJob.java:77)
-	at org.jkiss.dbeaver.runtime.jobs.ConnectJob.runSync(ConnectJob.java:104)
-	at org.jkiss.dbeaver.ui.actions.datasource.DataSourceHandler.connectToDataSource(DataSourceHandler.java:115)
-	at org.jkiss.dbeaver.ui.actions.datasource.UIServiceConnectionsImpl.initConnection(UIServiceConnectionsImpl.java:87)
-	at org.jkiss.dbeaver.model.DBUtils.initDataSource(DBUtils.java:2530)
-	at org.jkiss.dbeaver.model.navigator.DBNDataSource.initializeNode(DBNDataSource.java:152)
-	at org.jkiss.dbeaver.model.navigator.DBNDatabaseNode.getChildren(DBNDatabaseNode.java:225)
-	at org.jkiss.dbeaver.model.navigator.DBNDatabaseNode.getChildren(DBNDatabaseNode.java:1)
-	at org.jkiss.dbeaver.model.navigator.DBNUtils.getNodeChildrenFiltered(DBNUtils.java:92)
-	at org.jkiss.dbeaver.ui.navigator.database.load.TreeLoadService.evaluate(TreeLoadService.java:49)
-	at org.jkiss.dbeaver.ui.navigator.database.load.TreeLoadService.evaluate(TreeLoadService.java:1)
+	at org.jkiss.dbeaver.ui.editors.DatabaseLazyEditorInput.initializeRealInput(DatabaseLazyEditorInput.java:260)
+	at org.jkiss.dbeaver.ui.editors.ProgressEditorPart$InitNodeService.evaluate(ProgressEditorPart.java:172)
+	at org.jkiss.dbeaver.ui.editors.ProgressEditorPart$InitNodeService.evaluate(ProgressEditorPart.java:1)
 	at org.jkiss.dbeaver.ui.LoadingJob.run(LoadingJob.java:88)
 	at org.jkiss.dbeaver.ui.LoadingJob.run(LoadingJob.java:72)
 	at org.jkiss.dbeaver.model.runtime.AbstractJob.run(AbstractJob.java:105)

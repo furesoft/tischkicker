@@ -1,6 +1,7 @@
 package de.shgruppe.tischkicker.client;
 
 import com.google.gson.Gson;
+import de.shgruppe.tischkicker.client.ui.TurnierAuswallfenster;
 import de.shgruppe.tischkicker.client.websockets.WebsocketConnection;
 import tischkicker.models.Spiel;
 import tischkicker.models.Spieler;
@@ -189,6 +190,10 @@ public class Client {
     }
 
 
+    public static Turnier erstelleTurnier() {
+        return getResource("/turniererstellen", Turnier.class);
+    }
+
     public static Spiel[] startTurnier() {
         return getResource("/turnier", Spiel[].class);
     }
@@ -332,7 +337,7 @@ public class Client {
             @Override
             public void run() {
                 turnierbaum.frame.setVisible(false);
-                new TeamApp().setVisible(true);
+                 new TurnierAuswallfenster().setVisible(true);
             }
         });
 
