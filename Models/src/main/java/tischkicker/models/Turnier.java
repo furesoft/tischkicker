@@ -1,9 +1,7 @@
 package tischkicker.models;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,10 +12,10 @@ public class Turnier {
     @Column(name = "spiele")
     private String spiele;
 
-    @Column(name= "gespielt")
+    @Column(name = "gespielt")
     private boolean gespielt;
     @Transient
-    private int [] spieleIDs;
+    private int[] spieleIDs;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,20 +49,27 @@ public class Turnier {
         this.enddatum = enddatum;
     }
 
-    public void setSpieleIDs(int [] spiele){
-        List<String> strings = Arrays.stream(spiele).boxed().map(id -> Integer.toString(id))
-                .collect(Collectors.toList());
-        this.spiele = String.join(",", strings);
-        this.spieleIDs = spiele;
-    }
-
-    public int[] getSpieleIDs(){
+    public int[] getSpieleIDs() {
         if (spieleIDs == null) {
             return Arrays.stream(spiele.split(",")).mapToInt(Integer::parseInt).toArray();
         }
         return spieleIDs;
     }
 
+    public void setSpieleIDs(int[] spiele) {
+        List<String> strings = Arrays.stream(spiele).boxed().map(id -> Integer.toString(id))
+                                     .collect(Collectors.toList());
+        this.spiele = String.join(",", strings);
+        this.spieleIDs = spiele;
+    }
 
+    @Override
+    public String toString() {
+        if (startdatum == enddatum) {
+            return startdatum + " : " + id;
+        }
+
+        return startdatum + " - " + enddatum + " : " + id;
+    }
 
 }
