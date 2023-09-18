@@ -1,13 +1,16 @@
 package de.shgruppe.tischkicker_server.controllers;
 
 import de.shgruppe.tischkicker_server.Hilfsmethoden;
+import de.shgruppe.tischkicker_server.logic.TurnierManager;
 import de.shgruppe.tischkicker_server.repositories.SpielerRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tischkicker.models.Spiel;
 import tischkicker.models.Spieler;
 import tischkicker.models.Team;
+import tischkicker.models.Turnier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ public class TeamController {
 
     @Autowired
     SpielerRepository spielerRepository;
+
 
     @GetMapping("/teams")
     public List<Team> alleTeamsHolen() {
@@ -60,9 +64,11 @@ public class TeamController {
         addSpielerToDb(team);
 
         team = teamRepository.saveAndFlush(team);
+        TurnierManager.teamHinzufuegen(team);
 
         return team;
     }
+
 
     @PutMapping("/teams/{id}")
     public ResponseEntity<String> teamNamenAendern(@PathVariable int id, @RequestBody String name) {

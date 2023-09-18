@@ -1,5 +1,7 @@
 package tischkicker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
@@ -58,6 +60,7 @@ public class Turnier {
         this.enddatum = enddatum;
     }
 
+    @JsonIgnore
     public int[] getSpieleIDs() {
         if (spieleIDs == null) {
             return Arrays.stream(spiele.split(",")).mapToInt(Integer::parseInt).toArray();
@@ -72,6 +75,7 @@ public class Turnier {
         this.spieleIDs = spiele;
     }
 
+    @JsonIgnore
     public int[] getTeamsIDs() {
         if (teamsIDs == null) {
             return Arrays.stream(teams.split(",")).mapToInt(Integer::parseInt).toArray();
@@ -88,6 +92,10 @@ public class Turnier {
 
     @Override
     public String toString() {
+        if(startdatum == null || enddatum == null) {
+            return "Turnier: " + id;
+        }
+
         if (startdatum.equals(enddatum)) {
             return startdatum + " : " + id;
         }
