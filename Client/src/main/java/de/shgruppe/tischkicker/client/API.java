@@ -188,7 +188,7 @@ public class API {
     }
 
     public static Spiel[] startTurnier(int id) {
-        return getResource("/turnier"+id, Spiel[].class);
+        return getResource("/turnier/"+id, Spiel[].class);
     }
 
     public static Spieler[] getSpieler() {
