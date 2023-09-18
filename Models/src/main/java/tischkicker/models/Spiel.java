@@ -1,5 +1,7 @@
 package tischkicker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Date;
@@ -32,7 +34,7 @@ public class Spiel {
     @Transient
     private int[] spieleIDs;
 
-    @Column(name="TurnierID")
+    //@Column(name="TurnierID")
     private int turnierID;
 
     @Id
@@ -61,6 +63,8 @@ public class Spiel {
     public void setTurnierID(int turnierID) {
         this.turnierID = turnierID;
     }
+
+
 
     public int getSpielID() {
         return spielID;
@@ -92,6 +96,7 @@ public class Spiel {
         this.spieleIDs = new int[]{spieleIDs1, spieleID2};
     }
 
+    @JsonIgnore
     public int[] getSpieleIDs(){
         if (spieleIDs == null) {
             return Arrays.stream(spiele.split(",")).mapToInt(Integer::parseInt).toArray();
@@ -146,6 +151,7 @@ public class Spiel {
         teamNames = new String[]{team1, team2};
     }
 
+    @JsonIgnore
     public int[] getTeamIDs() {
         if (teamIDs == null) {
             return Arrays.stream(teams.split(",")).mapToInt(Integer::parseInt).toArray();

@@ -47,9 +47,9 @@ public class TurnierController {
         return repository.findAll();
     }
 
-    @GetMapping("/turnier")
-    public List<Spiel> turnierStarten() {
-        return turnierManager.turnierStarten();
+    @GetMapping("/turnier/{id}")
+    public List<Spiel> turnierStarten(@PathVariable int id) {
+        return turnierManager.turnierStarten(id);
     }
 
 
@@ -62,8 +62,10 @@ public class TurnierController {
         return alleTeams.stream().filter(t -> teamIds.contains(t.getId())).collect(Collectors.toList());
     }
 
+
     @GetMapping("/turniererstellen")
     public Turnier einzelnesTurnierErstellen() {
-        return turnierManager.Turniererstellen();
+        Turnier turnier = turnierManager.Turniererstellen();
+        return turnier;
     }
 }

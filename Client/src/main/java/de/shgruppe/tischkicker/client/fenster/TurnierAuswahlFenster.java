@@ -1,14 +1,24 @@
 package de.shgruppe.tischkicker.client.fenster;
 
 import de.shgruppe.tischkicker.client.API;
+import de.shgruppe.tischkicker.client.App;
+import tischkicker.models.Spiel;
 import tischkicker.models.Turnier;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import static de.shgruppe.tischkicker.client.API.getSpieleFromServer;
+import static de.shgruppe.tischkicker.client.API.turnierbaumGenerieren;
 
 public class TurnierAuswahlFenster extends JFrame {
 
 
+    static Turnier aktuellesTurnier;
     public TurnierAuswahlFenster() {
 
         Turnier[] alleTurniere = API.getTurniere();
@@ -21,10 +31,16 @@ public class TurnierAuswahlFenster extends JFrame {
         this.add(panel);
         panel.setVisible(true);
 
+        JComboBox turniereComboBox = new JComboBox(alleTurniere);
+        panel.add(turniereComboBox);
+        turniereComboBox.setBackground(Color.WHITE);
+        turniereComboBox.setBounds(100, 100, 150, 50);
+        turniereComboBox.setVisible(true);
+
         JButton turnierErstellenButton = new JButton("+");
         turnierErstellenButton.setSize(50, 50);
         turnierErstellenButton.addActionListener(e -> {
-            API.erstelleTurnier();
+            aktuellesTurnier = API.erstelleTurnier();
             new TeamsInitialisierenFenster().setVisible(true);
         });
 
@@ -41,13 +57,24 @@ public class TurnierAuswahlFenster extends JFrame {
         panel.add(turnierButton);
         turnierButton.setVisible(true);
 
+        turnierButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int id = ((Turnier)turniereComboBox.getSelectedItem())
+                        .getID();
+                var SpieleZuTurnier = Arrays.stream(getSpieleFromServer())
+                        .filter(s -> s.getTurnierID() == id).collect(Collectors.toList());
 
-        JComboBox turniereComboBox = new JComboBox(alleTurniere);
+                Spiel[] spiele = API.startTurnier(id);
+                turnierbaumGenerieren(spiele);
 
-        panel.add(turniereComboBox);
-        turniereComboBox.setBackground(Color.WHITE);
-        turniereComboBox.setBounds(100, 100, 150, 50);
-        turniereComboBox.setVisible(true);
+                if (SpieleZuTurnier.size() != 0) {
+                    App.turnierbaum.ergebnisAmAnfang(spiele);
+                }
+            }
+        });
+
+
     }
 
 }

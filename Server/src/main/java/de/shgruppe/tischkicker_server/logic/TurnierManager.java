@@ -1,5 +1,6 @@
 package de.shgruppe.tischkicker_server.logic;
 
+import de.shgruppe.tischkicker_server.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
@@ -9,10 +10,7 @@ import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Turnier;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -29,7 +27,20 @@ public class TurnierManager {
     @Autowired
     TurnierRepository turnierRepository;
 
-    Turnier aktuellesTurnier;
+    static Turnier aktuellesTurnier;
+    public static Map<Integer, List<Team>> alleTeams = new HashMap<>();
+
+    public static void teamHinzufuegen (Team team) {
+        if(alleTeams.containsKey(aktuellesTurnier.getID())) {
+            alleTeams.get(aktuellesTurnier.getID()).add(team);
+        }
+        else {
+            List<Team> teams = new ArrayList<>();
+            teams.add(team);
+
+            alleTeams.put(aktuellesTurnier.getID(), teams);
+        }
+    }
 
     public Turnier Turniererstellen() {
         aktuellesTurnier = turnierRepository.saveAndFlush(new Turnier());
@@ -37,24 +48,21 @@ public class TurnierManager {
         return aktuellesTurnier;
     }
 
-    public List<Spiel> turnierStarten() {
+    public List<Spiel> turnierStarten(int turnierID) {
         List<Spiel> spiele1 = spielRepository.findAll();
+        spiele1 = spiele1.stream().filter(s -> s.getTurnierID() == turnierID).collect(Collectors.toList());
+        aktuellesTurnier = turnierRepository.findById(turnierID).get();
 
         if (spiele1.size() == 0) {
-            Turnier turnier = new Turnier();
-            aktuellesTurnier = turnier;
-
+            aktuellesTurnier.setStartdatum(Hilfsmethoden.ermittleDatum());
+            aktuellesTurnier.setTeamsIDs(alleTeams.get(turnierID).stream().mapToInt(Team::getId).toArray());
             spiele1.addAll(generiereUndSpeicherSpiele(generiereSpielePhase1()));
-            turnier.setSpieleIDs(spiele1.stream().mapToInt(Spiel::getSpielID).toArray());
+            aktuellesTurnier.setSpieleIDs(spiele1.stream().mapToInt(Spiel::getSpielID).toArray());
 
-            int[] teamIDs = spiele1.stream().flatMapToInt(k -> Arrays.stream(k.getTeamIDs())).toArray();
-
-            turnier.setTeamsIDs(teamIDs);
-            turnier = turnierRepository.saveAndFlush(turnier);
-            aktuellesTurnier = turnier;
+            aktuellesTurnier = turnierRepository.saveAndFlush(aktuellesTurnier);
 
             for (int i = 0; i < spiele1.size(); i++) {
-                spiele1.get(i).setTurnierID(turnier.getID());
+                spiele1.get(i).setTurnierID(aktuellesTurnier.getID());
             }
 
             return spiele1;

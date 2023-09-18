@@ -1,51 +1,57 @@
 package tischkicker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.List;
 
 @Entity
 public class Team {
     public String spieler;
-    private String name;
+    public String name;
     @Transient
     private String[] players;
-
     private int gesamttore;
     private int gegentore;
     private boolean aufgegeben;
     @Id
-    @Column(name = "id")
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
-
-    public void setId(int id) {
+    public void setId (int id)
+    {
         this.id = id;
     }
-
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name.replace("\"", "");
+    public void setName(String name)
+    {
+        this.name = name.replace("\"","");
     }
-
-    public String[] getPlayers() {
+    public String[] getPlayers()
+    {
         return players;
     }
-
-    public void setPlayers(String[] names) {
+    public void setPlayers(String[] names)
+    {
         players = names;
     }
 
+    @JsonIgnore
     public int[] getspielerIDs() {
+
         String[] ids = spieler.split(",");
 
         return Arrays.stream(ids).mapToInt(Integer::parseInt).toArray();
+
     }
 
     public int getGesamttore() {
