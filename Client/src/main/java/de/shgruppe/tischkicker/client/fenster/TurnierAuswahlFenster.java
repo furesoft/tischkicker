@@ -35,6 +35,14 @@ public class TurnierAuswahlFenster extends JFrame {
 
 
 
+
+        JButton turnierButton = new JButton("Turnier anzeigen ");
+        turnierButton.setSize(50,50);
+        turnierButton.setBackground(new Color(165,171,179));
+        turnierButton.setBounds(50,200,200,50);
+        panel.add( turnierButton);
+        turnierButton.setVisible(true);
+
         turnierErstellenButton.setBounds(300, 100, 150, 50);
         panel.add(turnierErstellenButton);
         turnierErstellenButton.setVisible(true);
