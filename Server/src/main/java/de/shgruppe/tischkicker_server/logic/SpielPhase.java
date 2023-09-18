@@ -57,7 +57,7 @@ public class SpielPhase {
         List<Spiel> spieleDerPhase = alleSpiele.stream().filter(s -> s.getQualifikation() == naechstSpielePhase)
                                                .filter(t -> t.getTurnierID() == turnierID).collect(Collectors.toList());
 
-        List<Spiel> spieleVorbei = spieleDerPhase.stream().filter(Spiel::getSpielvorbei).collect(Collectors.toList());
+        List<Spiel> spieleVorbei = spieleDerPhase.stream().filter(s -> s.getGewinner() > 0).collect(Collectors.toList());
 
         if (spieleVorbei.size() == spieleDerPhase.size() - 1) {
             spieleDerPhase.removeAll(spieleVorbei);

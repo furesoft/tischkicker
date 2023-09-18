@@ -216,7 +216,7 @@ public class TurnierBaum {
         int[] teamids = spielfeld.spiel.getTeamIDs();
 
 
-        if (teamids[0] < 0 || teamids[1] < 0 || spielfeld.spiel.getSpielvorbei()) {
+        if (teamids[0] < 0 || teamids[1] < 0 || spielfeld.spiel.getGewinner() > 0) {
             return;
         }
 
@@ -273,6 +273,13 @@ public class TurnierBaum {
                 }
                 if (spiels[i].getSpielID() == alleSpielfelder.get(h).spiel.getSpielID()) {
                     alleSpielfelder.get(h).setTeamnames(spiels[i]);
+                    if (spiels[i].getGewinner() > 0)
+                    {
+                        alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
+                        alleSpielfelder.get(h).toreTeam2.setText(String.valueOf(spiels[i].getToreteam2()));
+                        alleSpielfelder.get(h).setGewinner(spiels[i].getGewinner());
+                    }
+                    /*
                     if (spiels[i].getToreteam1() > 0 || spiels[i].getToreteam2() > 0) {
                         alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
                         alleSpielfelder.get(h).toreTeam2.setText(String.valueOf(spiels[i].getToreteam2()));
@@ -289,6 +296,8 @@ public class TurnierBaum {
                             alleSpielfelder.get(h).setGewinner(alleSpielfelder.get(h).spiel.getTeamIDs()[1]);
                         }
                     }
+
+                     */
                 }
             }
         }

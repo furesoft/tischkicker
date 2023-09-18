@@ -25,8 +25,8 @@ public class Spiel {
     @Column(name = "spiele")
     private String spiele = "-1,-1";
 
-    @Column(name = "spielvorbei")
-    private boolean spielvorbei;
+    @Column(name = "GewinnerID")
+    private int gewinnerID;
     @Transient
     private String[] teamNames;
     @Transient
@@ -34,7 +34,7 @@ public class Spiel {
     @Transient
     private int[] spieleIDs;
 
-    //@Column(name="TurnierID")
+    @Column(name="TurnierID")
     private int turnierID;
 
     @Id
@@ -42,7 +42,7 @@ public class Spiel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int spielID;
 
-    public Spiel(Date spieldatum, String teams, int toreteam1, int toreteam2, int qualifikation, int ID, String spiele,boolean spielvorbei) {
+    public Spiel(Date spieldatum, String teams, int toreteam1, int toreteam2, int qualifikation, int ID, String spiele,int gewinnerID) {
         this.spieldatum = spieldatum;
         this.teams = teams;
         this.toreteam1 = toreteam1;
@@ -50,7 +50,7 @@ public class Spiel {
         this.qualifikation = qualifikation;
         this.spielID = ID;
         this.spiele = spiele;
-        this.spielvorbei =spielvorbei;
+        this.gewinnerID =gewinnerID;
     }
 
     public Spiel() {
@@ -114,12 +114,12 @@ public class Spiel {
     }
 
 
-    public boolean getSpielvorbei() {
-        return spielvorbei;
+    public int getGewinner() {
+        return gewinnerID;
     }
 
-    public void setSpielvorbei(boolean spielvorbei) {
-        this.spielvorbei = spielvorbei;
+    public void setGewinner(int gewinnerID) {
+        this.gewinnerID = gewinnerID;
     }
 
 

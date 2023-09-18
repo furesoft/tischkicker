@@ -120,11 +120,15 @@ public class SpielManager {
         if (maxTore == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben()) {
             ergebnis.spiel.setToreteam1(team1.tore);
             ergebnis.spiel.setToreteam2(team2.tore);
-
-            ergebnis.spiel.setSpielvorbei(true);
-
+            if (ergebnis.toreTeam1 == anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben())
+            {
+                ergebnis.spiel.setGewinner(ergebnis.teams[0].getId());
+            }
+            if (ergebnis.toreTeam2 == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben())
+            {
+                ergebnis.spiel.setGewinner(ergebnis.teams[1].getId());
+            }
             spielRepository.saveAndFlush(ergebnis.spiel);
-
 
             Spiel neuesSpiel = null;
             try {

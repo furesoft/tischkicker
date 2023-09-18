@@ -63,6 +63,7 @@ public class TurnierManager {
 
             for (int i = 0; i < spiele1.size(); i++) {
                 spiele1.get(i).setTurnierID(aktuellesTurnier.getID());
+                spiele1.get(i).setGewinner(-1);
             }
 
             return spiele1;
