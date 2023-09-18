@@ -92,7 +92,7 @@ public class TurnierManager {
 
     public List<Team> holeTeamsvonTurnier(Turnier turnier) {
         List<Team> alleTeams = teamRepository.findAll();
-        List teamIds = List.of(turnier.getTeamsIDs());
+        List<Integer> teamIds = Arrays.stream(turnier.getTeamsIDs()).boxed().collect(Collectors.toList());
 
         return alleTeams.stream().filter(t -> teamIds.contains(t.getId())).collect(Collectors.toList());
     }
