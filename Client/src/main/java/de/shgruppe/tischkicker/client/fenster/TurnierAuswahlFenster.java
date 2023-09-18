@@ -48,16 +48,6 @@ public class TurnierAuswahlFenster extends JFrame {
         turniereComboBox.setForeground(Color.WHITE);
         turniereComboBox.setBounds(50, 100, 200, 50);
         turniereComboBox.setVisible(true);
-
-        JButton turnierButton = new JButton("Turnier anzeigen ");
-
-        turnierButton.setBackground(new java.awt.Color(165, 171, 179));
-        turnierButton.setBounds(50, 200, 150, 50);
-        panel.add(turnierButton);
-        turnierButton.setVisible(true);
-
-
-
     }
 
 }
