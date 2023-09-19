@@ -131,11 +131,11 @@ public class Spiel {
     }
 
 
-    public int getGewinner() {
+    public int getGewinnerID() {
         return gewinnerID;
     }
 
-    public void setGewinner(int gewinnerID) {
+    public void setGewinnerID(int gewinnerID) {
         this.gewinnerID = gewinnerID;
     }
 

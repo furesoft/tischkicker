@@ -122,11 +122,11 @@ public class SpielManager {
             ergebnis.spiel.setToreteam2(team2.tore);
             if (ergebnis.toreTeam1 == anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben())
             {
-                ergebnis.spiel.setGewinner(ergebnis.teams[0].getId());
+                ergebnis.spiel.setGewinnerID(ergebnis.teams[0].getId());
             }
             if (ergebnis.toreTeam2 == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben())
             {
-                ergebnis.spiel.setGewinner(ergebnis.teams[1].getId());
+                ergebnis.spiel.setGewinnerID(ergebnis.teams[1].getId());
             }
             spielRepository.saveAndFlush(ergebnis.spiel);
 
