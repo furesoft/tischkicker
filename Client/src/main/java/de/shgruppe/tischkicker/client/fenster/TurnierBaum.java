@@ -3,6 +3,7 @@ package de.shgruppe.tischkicker.client.fenster;
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
 import de.shgruppe.tischkicker.client.Verbindungslinie;
+import de.shgruppe.tischkicker.client.ui.Colors;
 import de.shgruppe.tischkicker.client.ui.Spielfeld;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
@@ -48,7 +49,7 @@ public class TurnierBaum {
         frame.setSize(1920, 1080);
         int anzahlTeams = API.getTeams().length;
         //                   x=                  y=Fertig
-        setpenelsize(anzahlTeams * 150 / 2, anzahlTeams * 100);
+        setPanelSize(anzahlTeams * 150 / 2, anzahlTeams * 100);
 
         // panel.setBackground(Color.GREEN);
         panel.setLayout(null);
@@ -58,15 +59,14 @@ public class TurnierBaum {
 
 
         starteSpiel.addActionListener(e -> {
-            //TODO Probieren, ob aktuelles Spiel startbar ist.
-
             App.spielstandAnzeige.show();
             App.spielstandAnzeige.aktualisiereDaten(aktuellesSpiel.spiel);
 
             API.spielStarten(aktuellesSpiel.spiel);
-
         });
 
+        frame.setBackground(Colors.BACKGROUND);
+        panel.setBackground(Colors.BACKGROUND);
     }
 
     public int tunierbaumErstellen(double anzahlTeams, List<Spiel> spiele) {
@@ -147,7 +147,7 @@ public class TurnierBaum {
         return null;
     }
 
-    public void setpenelsize(int x, int y) {
+    public void setPanelSize(int x, int y) {
         // panel größe wird Festgelegt
 
         panel.setMinimumSize(new Dimension(x, y));
@@ -206,7 +206,6 @@ public class TurnierBaum {
      */
     public void spielfeldFuellen(Spiel spiel, int reihe, int spielfeld) {
         reihen.get(reihe).get(spielfeld).setTeamnames(spiel);
-
     }
 
     public void spielfeldClicked(Spielfeld spielfeld) {

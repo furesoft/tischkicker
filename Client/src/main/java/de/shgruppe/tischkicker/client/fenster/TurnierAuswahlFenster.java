@@ -2,6 +2,7 @@ package de.shgruppe.tischkicker.client.fenster;
 
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
+import de.shgruppe.tischkicker.client.ui.Colors;
 import tischkicker.models.Spiel;
 import tischkicker.models.Turnier;
 
@@ -28,7 +29,7 @@ public class TurnierAuswahlFenster extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(null);
         panel.setBounds(0, 0, 600, 400);
-        panel.setBackground(new java.awt.Color(40, 44, 52));
+        panel.setBackground(Colors.BACKGROUND);
         this.add(panel);
         panel.setVisible(true);
 
