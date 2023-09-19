@@ -85,7 +85,7 @@ public class TurnierAuswahlFenster extends JFrame {
             turnierbaumGenerieren(spiele);
 
             if (SpieleZuTurnier.size() != 0) {
-                App.turnierbaum.ergebnisAmAnfang(spiele);
+                App.turnierbaum.ladeSpieleAmAnfang(spiele);
             }
         });
 

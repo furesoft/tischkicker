@@ -7,7 +7,6 @@ import de.shgruppe.tischkicker.client.Team;
 import de.shgruppe.tischkicker.client.ui.DataButton;
 import tischkicker.models.Spiel;
 import tischkicker.models.Spieler;
-import tischkicker.models.Turnier;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,14 +71,14 @@ public class TeamsInitialisierenFenster extends JFrame {
         startButton = new JButton("Start");
         startButton.addActionListener(e -> {
             int id = TurnierAuswahlFenster.aktuellesTurnier.getID();
-            var SpieleZuTurnier = Arrays.stream(getSpieleFromServer())
-                    .filter(s -> s.getTurnierID() == id).collect(Collectors.toList());
+            var SpieleZuTurnier = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
+                                        .collect(Collectors.toList());
 
             Spiel[] spiele = API.startTurnier(id);
             turnierbaumGenerieren(spiele);
 
             if (SpieleZuTurnier.size() != 0) {
-                App.turnierbaum.ergebnisAmAnfang(spiele);
+                App.turnierbaum.ladeSpieleAmAnfang(spiele);
             }
 
         });
