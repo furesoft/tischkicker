@@ -2,7 +2,6 @@ package de.shgruppe.tischkicker.client.fenster;
 
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
-import de.shgruppe.tischkicker.client.Team;
 import tischkicker.models.Spiel;
 import tischkicker.models.Turnier;
 
@@ -40,13 +39,13 @@ public class TurnierAuswahlFenster extends JFrame {
         turnierErstellenButton.setBackground(new java.awt.Color(165, 171, 179));
 
         turnierErstellenButton.addActionListener(e -> {
-             aktuellesTurnier = API.erstelleTurnier();
+            aktuellesTurnier = API.erstelleTurnier();
             new TeamsInitialisierenFenster().setVisible(true);
 
         });
 
 
-        JButton turnierButton = new JButton("Turnier anzeigen ");
+        JButton turnierButton = new JButton("Turnier anzeigen");
         turnierButton.setSize(50, 50);
         turnierButton.setBackground(new Color(165, 171, 179));
         turnierButton.setBounds(50, 200, 200, 50);
@@ -61,20 +60,30 @@ public class TurnierAuswahlFenster extends JFrame {
         JComboBox turniereComboBox = new JComboBox(alleTurniere);
 
         panel.add(turniereComboBox);
+
         turniereComboBox.setBackground(Color.WHITE);
         turniereComboBox.setForeground(Color.WHITE);
         turniereComboBox.setBounds(50, 100, 200, 50);
         turniereComboBox.setVisible(true);
 
+        turniereComboBox.addActionListener(e -> {
+            Turnier selectedTurnier = (Turnier) turniereComboBox.getSelectedItem();
 
+            if (selectedTurnier.isGespielt()) {
+                turnierButton.setText("Turnier anzeigen");
+            }
+            else {
+                turnierButton.setText("Turnier starten/fortsetzen");
+            }
+        });
 
 
         turnierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int id = ((Turnier) turniereComboBox.getSelectedItem())
-                        .getID();
-                var SpieleZuTurnier = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id).collect(Collectors.toList());
+                int id = ((Turnier) turniereComboBox.getSelectedItem()).getID();
+                var SpieleZuTurnier = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
+                                            .collect(Collectors.toList());
 
                 Spiel[] spiele = API.startTurnier(id);
                 turnierbaumGenerieren(spiele);
