@@ -39,7 +39,6 @@ public class TurnierAuswahlFenster extends JFrame {
         turnierErstellenButton.addActionListener(e -> {
             aktuellesTurnier = API.erstelleTurnier();
             new TeamsInitialisierenFenster().setVisible(true);
-
         });
 
 
