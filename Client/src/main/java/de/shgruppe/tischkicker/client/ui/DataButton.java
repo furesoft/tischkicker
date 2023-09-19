@@ -9,6 +9,7 @@ public class DataButton extends JButton {
 
         setText(text);
         setForeground(Colors.BUTTON_SCHRIFT);
+        setBackground(Colors.BUTTON_BACKGROUND);
     }
 
     public Object getData() {

@@ -35,9 +35,7 @@ public class TurnierBaum {
         panel = new JPanel();
         JScrollPane scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-
         starteSpiel.setBounds(50, 20, 150, 50);
-
 
         panel.add(starteSpiel);
         hinweis.setBounds(300, 20, 250, 50);
@@ -57,7 +55,6 @@ public class TurnierBaum {
 
 
         frame.add(scrollPane);
-
 
         starteSpiel.addActionListener(e -> {
             App.spielstandAnzeige.show();
@@ -149,8 +146,6 @@ public class TurnierBaum {
     }
 
     public void setPanelSize(int x, int y) {
-        // panel größe wird Festgelegt
-
         panel.setMinimumSize(new Dimension(x, y));
         panel.setMaximumSize(new Dimension(x, y));
         panel.setPreferredSize(new Dimension(x, y));
@@ -189,7 +184,7 @@ public class TurnierBaum {
     /*
      * Blockiert das aktuell angeklickte Spielfeld
      */
-    public void lock() {
+    public void block() {
         selectedSpielfeld.background.setBackground(Colors.SPIELFELD_NORMAL);
 
         aktuellesSpiel = null;
@@ -344,7 +339,6 @@ public class TurnierBaum {
                 }
             }
         }
-
     }
 }
 

@@ -59,7 +59,7 @@ class Websocket extends WebSocketClient {
 
             App.gewinner.show(spielergebnis.getGewinner().getName());
             App.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
-            App.turnierbaum.lock();
+            App.turnierbaum.block();
 
         }
 

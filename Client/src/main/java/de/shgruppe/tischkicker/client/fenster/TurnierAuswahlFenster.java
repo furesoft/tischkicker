@@ -1,6 +1,5 @@
 package de.shgruppe.tischkicker.client.fenster;
 
-import com.sun.xml.bind.v2.TODO;
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
 import de.shgruppe.tischkicker.client.ui.Colors;
@@ -79,7 +78,7 @@ public class TurnierAuswahlFenster extends JFrame {
         turnierButton.addActionListener(e -> {
             int id = ((Turnier) turniereComboBox.getSelectedItem()).getId();
             //Todo liste nach nunier von id
-              aktuellesTurnier = alleTurniere[id-1];
+            aktuellesTurnier = alleTurniere[id - 1];
             var SpieleZuTurnier = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
                                         .collect(Collectors.toList());
 
