@@ -15,17 +15,12 @@ import java.io.IOException;
 
 public class AktuellerSpielstand {
 
-    JLabel team1Name;
-    JLabel toreLbl;
-    JLabel team2Name;
+    JLabel team1Name, toreLbl, team2Name;
 
-    DataButton toreTeam1Erhoehen;
-    DataButton toreTeam1Verringern;
-    DataButton toreTeam2Erhoehen;
-    DataButton toreTeam2Verringern;
+    DataButton toreTeam1Erhoehen, toreTeam1Verringern, toreTeam2Erhoehen, toreTeam2Verringern;
 
-    JPanel farbanzeigeTeam1 = new JPanel();
-    JPanel farbanzeigeTeam2 = new JPanel();
+
+    JPanel farbanzeigeTeam1 = new JPanel(), farbanzeigeTeam2 = new JPanel();
 
     JButton seitenwechsel;
 
@@ -34,8 +29,7 @@ public class AktuellerSpielstand {
 
     JFrame frame = new JFrame();
 
-    int team1ID;
-    int team2ID;
+    int team1ID, team2ID;
 
     public AktuellerSpielstand(int width, int height) {
         seitenwechsel = new DataButton("<-->");
@@ -125,9 +119,9 @@ public class AktuellerSpielstand {
         frame.setLayout(null);
         frame.setResizable(false);
 
-        aufgebenTeam1Btn.addActionListener(e -> aufgebenClick(e));
+        aufgebenTeam1Btn.addActionListener(this::aufgebenClick);
 
-        aufgebenTeam2Btn.addActionListener(e -> aufgebenClick(e));
+        aufgebenTeam2Btn.addActionListener(this::aufgebenClick);
 
         contentPanel.setBackground(Colors.BACKGROUND);
 
@@ -200,8 +194,7 @@ public class AktuellerSpielstand {
 
         try {
             API.aufgeben((int) btn.getData());
-        } catch (IOException ex) {
-        } catch (InterruptedException ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
