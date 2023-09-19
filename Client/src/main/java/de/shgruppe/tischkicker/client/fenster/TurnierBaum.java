@@ -56,6 +56,8 @@ public class TurnierBaum {
 
         frame.add(scrollPane);
 
+
+
         starteSpiel.addActionListener(e -> {
             App.spielstandAnzeige.show();
             App.spielstandAnzeige.aktualisiereDaten(aktuellesSpiel.spiel);
@@ -69,7 +71,7 @@ public class TurnierBaum {
 
     public int tunierbaumErstellen(double anzahlTeams, List<Spiel> spiele) {
 
-
+        frame.setTitle(TurnierAuswahlFenster.aktuellesTurnier.getTurnierName());
         int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
         int teamAnzahl = (int) anzahlTeams;
         double spielfelderAnzahlDouble; // Zwischenspeicher für die Berechnungen und den Abbruch der Do-While Schleife

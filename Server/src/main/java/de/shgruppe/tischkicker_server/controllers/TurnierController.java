@@ -5,9 +5,7 @@ import de.shgruppe.tischkicker_server.logic.TurnierManager;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Turnier;
@@ -70,4 +68,9 @@ public class TurnierController {
         Turnier turnier = turnierManager.Turniererstellen();
         return turnier;
     }
+
+   @PostMapping("/turnierupdaten")
+    public void updateturnier(@RequestBody Turnier turnier) {
+       repository.saveAndFlush(turnier);
+   }
 }
