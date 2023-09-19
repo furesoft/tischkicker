@@ -114,8 +114,9 @@ public class Turnier {
 
     @Override
     public String toString() {
-        if(startdatum == null || enddatum == null) {
-            return "Turnier: " + id;
+        if (!turnierName.isEmpty())
+        {
+            return turnierName;
         }
 
         if (startdatum.equals(enddatum)) {
