@@ -14,6 +14,7 @@
 
 database.lock.db
 database.mv.db
+database.trace.db
 
 target/
 
