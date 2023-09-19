@@ -1,9 +1,6 @@
 package de.shgruppe.tischkicker.client.ui;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.border.Border;
 
 public class DataButton extends JButton {
     private Object data;
@@ -11,6 +8,7 @@ public class DataButton extends JButton {
     public DataButton(String text) {
 
         setText(text);
+        setForeground(Colors.BUTTON_SCHRIFT);
     }
 
     public Object getData() {

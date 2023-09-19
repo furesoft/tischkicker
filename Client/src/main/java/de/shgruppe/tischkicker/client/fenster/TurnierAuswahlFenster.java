@@ -16,12 +16,9 @@ import static de.shgruppe.tischkicker.client.API.turnierbaumGenerieren;
 
 public class TurnierAuswahlFenster extends JFrame {
 
-
     public static Turnier aktuellesTurnier;
 
     public TurnierAuswahlFenster() {
-
-
         Turnier[] alleTurniere = API.getTurniere();
 
         this.setSize(600, 600);
@@ -34,8 +31,9 @@ public class TurnierAuswahlFenster extends JFrame {
         panel.setVisible(true);
 
         JButton turnierErstellenButton = new JButton("Neues Turnier");
+        turnierErstellenButton.setForeground(Colors.BUTTON_SCHRIFT);
 
-        turnierErstellenButton.setBackground(new java.awt.Color(165, 171, 179));
+        turnierErstellenButton.setBackground(Colors.BUTTON_BACKGROUND);
 
         turnierErstellenButton.addActionListener(e -> {
             aktuellesTurnier = API.erstelleTurnier();
@@ -46,7 +44,8 @@ public class TurnierAuswahlFenster extends JFrame {
 
         JButton turnierButton = new JButton("Turnier anzeigen");
         turnierButton.setSize(50, 50);
-        turnierButton.setBackground(new Color(165, 171, 179));
+        turnierButton.setBackground(Colors.BUTTON_BACKGROUND);
+        turnierButton.setForeground(Colors.BUTTON_SCHRIFT);
         turnierButton.setBounds(50, 200, 200, 50);
         panel.add(turnierButton);
         turnierButton.setVisible(true);
