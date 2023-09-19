@@ -4,8 +4,6 @@ import tischkicker.models.Spiel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class Spielfeld {
     public JLabel background;
@@ -50,7 +48,7 @@ public class Spielfeld {
         team1.setBackground(new Color(209, 210, 209));
         toreTeam1.setBounds(x + width - 30, y + 5, 25, ((height - 10) / 2));
         toreTeam1.setOpaque(true);
-        toreTeam1.setBackground(Color.WHITE);
+        toreTeam1.setBackground(Colors.SpielfeldName);
 
         // Setzt die Position, Größe und Hintergrundfarbe des zweiten Teams.
         team2.setBounds(x + 5, (int) (y + 5 + (height * 0.9) / 2), width - 10, ((height - 10) / 2));
@@ -58,7 +56,7 @@ public class Spielfeld {
         team2.setBackground(new Color(201, 197, 195));
         toreTeam2.setBounds(x + width - 30, (int) (y + 5 + (height * 0.9) / 2), 25, ((height - 10) / 2));
         toreTeam2.setOpaque(true);
-        toreTeam2.setBackground(Color.WHITE);
+        toreTeam2.setBackground(Colors.SpielfeldName);
 
         // Fügt die Anzeigen für die Tore der beiden Teams und die Teamnamen dem JPanel hinzu.
         frame.add(toreTeam1);
@@ -133,17 +131,7 @@ public class Spielfeld {
             return;
         }
         if (text.length() > 15) {
-            label.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    label.setToolTipText(text);
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    label.setToolTipText(null); // Remove the tooltip
-                }
-            });
+            label.setToolTipText(text);
         }
 
     }

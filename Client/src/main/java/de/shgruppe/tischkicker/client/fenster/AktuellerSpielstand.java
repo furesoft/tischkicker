@@ -1,6 +1,7 @@
 package de.shgruppe.tischkicker.client.fenster;
 
 import de.shgruppe.tischkicker.client.API;
+import de.shgruppe.tischkicker.client.ui.Colors;
 import de.shgruppe.tischkicker.client.ui.DataButton;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
@@ -14,17 +15,12 @@ import java.io.IOException;
 
 public class AktuellerSpielstand {
 
-    JLabel team1Name;
-    JLabel toreLbl;
-    JLabel team2Name;
+    JLabel team1Name, toreLbl, team2Name;
 
-    DataButton toreTeam1Erhoehen;
-    DataButton toreTeam1Verringern;
-    DataButton toreTeam2Erhoehen;
-    DataButton toreTeam2Verringern;
+    DataButton toreTeam1Erhoehen, toreTeam1Verringern, toreTeam2Erhoehen, toreTeam2Verringern;
 
-    JPanel farbanzeigeTeam1 = new JPanel();
-    JPanel farbanzeigeTeam2 = new JPanel();
+
+    JPanel farbanzeigeTeam1 = new JPanel(), farbanzeigeTeam2 = new JPanel();
 
     JButton seitenwechsel;
 
@@ -33,11 +29,10 @@ public class AktuellerSpielstand {
 
     JFrame frame = new JFrame();
 
-    int team1ID;
-    int team2ID;
+    int team1ID, team2ID;
 
     public AktuellerSpielstand(int width, int height) {
-        seitenwechsel = new JButton("<-->");
+        seitenwechsel = new DataButton("<-->");
         seitenwechsel.setToolTipText("Seitenwechsel");
         seitenwechsel.setBounds(0, 0, width, (int) (height * 0.2));
         seitenwechsel.setOpaque(true);
@@ -56,6 +51,7 @@ public class AktuellerSpielstand {
         team2Name = new JLabel("b");
         team2Name.setBounds(width - 150, seitenwechsel.getHeight(), width / 2, (int) (height * 0.3));
         team2Name.setOpaque(true);
+        toreLbl.setBackground(Colors.BACKGROUND);
 
         farbanzeigeTeam1.setBounds(team1Name.getX() - 25, team1Name.getY() + 70, 15, 15);
         farbanzeigeTeam1.setBackground(Color.WHITE);
@@ -78,6 +74,7 @@ public class AktuellerSpielstand {
         toreLbl = new JLabel();
         toreLbl.setOpaque(true);
         toreLbl.setFont(new Font("Arial", 0, 50));
+        toreLbl.setBackground(Colors.BACKGROUND);
 
         toreTeam2Erhoehen = new DataButton("+");
         toreTeam2Erhoehen.setToolTipText("Spielstand erhöhen");
@@ -91,38 +88,44 @@ public class AktuellerSpielstand {
         toreTeam2Verringern.setOpaque(true);
         toreTeam2Verringern.addActionListener(AktuellerSpielstand::buttonClick);
 
-        aufgebenTeam1Btn.setToolTipText("aufgeben");
+        aufgebenTeam1Btn.setToolTipText("Aufgeben");
         aufgebenTeam1Btn.setBounds(toreTeam1Verringern.getX(), height - 50, toreTeam1Erhoehen.getWidth(), 50);
         aufgebenTeam1Btn.setOpaque(true);
 
-        aufgebenTeam2Btn.setToolTipText("aufgeben");
+        aufgebenTeam2Btn.setToolTipText("Aufgeben");
         aufgebenTeam2Btn.setBounds(toreTeam2Verringern.getX(), height - 50, toreTeam2Erhoehen.getWidth(), 50);
         aufgebenTeam2Btn.setOpaque(true);
 
+        JPanel contentPanel = new JPanel();
 
-        frame.add(seitenwechsel);
-        frame.add(team1Name);
-        frame.add(team2Name);
-        frame.add(toreTeam1Erhoehen);
-        frame.add(toreTeam2Erhoehen);
-        frame.add(toreTeam1Verringern);
-        frame.add(toreTeam2Verringern);
-        frame.add(toreLbl);
+        contentPanel.add(seitenwechsel);
+        contentPanel.add(team1Name);
+        contentPanel.add(team2Name);
+        contentPanel.add(toreTeam1Erhoehen);
+        contentPanel.add(toreTeam2Erhoehen);
+        contentPanel.add(toreTeam1Verringern);
+        contentPanel.add(toreTeam2Verringern);
+        contentPanel.add(toreLbl);
 
-        frame.add(farbanzeigeTeam1);
-        frame.add(farbanzeigeTeam2);
+        contentPanel.add(farbanzeigeTeam1);
+        contentPanel.add(farbanzeigeTeam2);
 
-        frame.add(aufgebenTeam1Btn);
-        frame.add(aufgebenTeam2Btn);
+        contentPanel.add(aufgebenTeam1Btn);
+        contentPanel.add(aufgebenTeam2Btn);
 
-        frame.setSize(width + 6, height + 37);
+        contentPanel.setSize(width + 6, height + 37);
+        contentPanel.setLayout(null);
+        frame.setSize(contentPanel.getSize());
         frame.setLayout(null);
         frame.setResizable(false);
 
-        aufgebenTeam1Btn.addActionListener(e -> aufgebenClick(e));
+        aufgebenTeam1Btn.addActionListener(this::aufgebenClick);
 
-        aufgebenTeam2Btn.addActionListener(e -> aufgebenClick(e));
+        aufgebenTeam2Btn.addActionListener(this::aufgebenClick);
 
+        contentPanel.setBackground(Colors.BACKGROUND);
+
+        this.frame.add(contentPanel);
     }
 
     private static void buttonClick(ActionEvent e) {
@@ -139,7 +142,7 @@ public class AktuellerSpielstand {
     }
 
     private static Color getTeamFarbe(Tor.Seite seite) {
-        return seite == Tor.Seite.ROT ? Color.RED : Color.white;
+        return seite == Tor.Seite.ROT ? Color.RED : Color.WHITE;
     }
 
     private int getToreWidth() {
@@ -191,8 +194,7 @@ public class AktuellerSpielstand {
 
         try {
             API.aufgeben((int) btn.getData());
-        } catch (IOException ex) {
-        } catch (InterruptedException ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
