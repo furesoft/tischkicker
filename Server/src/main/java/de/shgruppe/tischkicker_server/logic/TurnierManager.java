@@ -65,7 +65,7 @@ public class TurnierManager {
                 spiele1.get(i).setTurnierID(aktuellesTurnier.getId());
                 spiele1.get(i).setGewinner(-1);
             }
-
+            spiele1 = spielRepository.saveAllAndFlush(spiele1);
             return spiele1;
         }
         else {

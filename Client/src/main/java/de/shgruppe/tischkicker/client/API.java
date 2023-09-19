@@ -2,6 +2,7 @@ package de.shgruppe.tischkicker.client;
 
 import com.google.gson.Gson;
 import de.shgruppe.tischkicker.client.fenster.TeamsInitialisierenFenster;
+import de.shgruppe.tischkicker.client.fenster.TurnierAuswahlFenster;
 import tischkicker.models.Spiel;
 import tischkicker.models.Spieler;
 import tischkicker.models.Turnier;
@@ -13,6 +14,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class API {
     private static final String URL = "http://localhost:8080";
@@ -208,7 +211,7 @@ public class API {
     }
 
     public static Turnier getTurnier(int turnierID) {
-        return getResource("/turniere" + turnierID, Turnier.class);
+        return getResource("/turniere/" + turnierID, Turnier.class);
     }
 
     public static Turnier[] getTurniere() {
@@ -318,11 +321,14 @@ public class API {
     }
 
     public static void turnierbaumGenerieren(Spiel[] spiele) {
-        Team[] teams = getTeams();
-        if (teams != null) {
-            double anzahlTeams = teams.length;
+        Turnier turnier = getTurnier(TurnierAuswahlFenster.aktuellesTurnier.getId());
+        List<Integer> teamIds = Arrays.stream(turnier.getTeamsIDs()).boxed().collect(Collectors.toList());
+        List<Team> teams = List.of(getTeams());
+        teams = teams.stream().filter(t -> teamIds.contains(t.getID())).collect(Collectors.toList());
+        if (teams.size() != 0) {
+            double anzahlTeams = teams.size();
             int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
-            App.turnierbaum.tunierbaumErstellen(teams.length, Arrays.asList(spiele));
+            App.turnierbaum.tunierbaumErstellen(teams.size(), Arrays.asList(spiele));
 
             for (int i = 0; i < spielfelderAnzahl; i++) {
                 // Problem, falls Turnier gestartet wird, obwohl schon Spiele vorhanden sind
