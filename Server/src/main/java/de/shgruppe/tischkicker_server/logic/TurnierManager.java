@@ -80,7 +80,8 @@ public class TurnierManager {
                         namen[h] = null;
                     }
                     else {
-                        namen[h] = teams.get(teamids[h] - 1).getName();
+                        int teamIDIndex = h;
+                        namen[h] = teams.stream().filter(t -> t.getId() == teamids[teamIDIndex]).findFirst().get().getName();
                     }
                 }
 
