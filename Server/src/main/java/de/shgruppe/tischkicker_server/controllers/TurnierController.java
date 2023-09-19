@@ -34,13 +34,15 @@ public class TurnierController {
         Optional<Turnier> turnier = repository.findById(id);
         return Hilfsmethoden.optionalCheck(turnier, id);
     }
-
+/*
     @GetMapping("/turniere/{datum}")
     public Turnier turnierbyDatum(@PathVariable Date datum) {
         // return repository.findByDate(datum);
         //ToDo: Nicht implementiert
         return null;
     }
+
+ */
 
     @GetMapping("/turniere")
     public List<Turnier> alleTurniereHolen() {
