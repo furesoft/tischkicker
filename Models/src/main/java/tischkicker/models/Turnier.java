@@ -119,7 +119,7 @@ public class Turnier {
 
     @Override
     public String toString() {
-        if (!turnierName.isEmpty())
+        if (turnierName != null)
         {
             return turnierName;
         }
