@@ -8,6 +8,8 @@ import java.util.List;
 
 @Entity
 public class Team {
+
+
     public String spieler;
     public String name;
     @Transient
@@ -19,6 +21,14 @@ public class Team {
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    public String getSpieler() {
+        return spieler;
+    }
+
+    public void setSpieler(String spieler) {
+        this.spieler = spieler;
+    }
 
     public int getId()
     {

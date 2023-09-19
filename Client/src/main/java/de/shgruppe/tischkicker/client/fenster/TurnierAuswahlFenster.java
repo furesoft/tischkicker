@@ -2,7 +2,6 @@ package de.shgruppe.tischkicker.client.fenster;
 
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
-import de.shgruppe.tischkicker.client.ui.Colors;
 import tischkicker.models.Spiel;
 import tischkicker.models.Turnier;
 

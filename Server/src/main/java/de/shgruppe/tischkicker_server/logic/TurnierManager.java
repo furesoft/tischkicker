@@ -31,14 +31,14 @@ public class TurnierManager {
     public static Map<Integer, List<Team>> alleTeams = new HashMap<>();
 
     public static void teamHinzufuegen (Team team) {
-        if(alleTeams.containsKey(aktuellesTurnier.getID())) {
-            alleTeams.get(aktuellesTurnier.getID()).add(team);
+        if(alleTeams.containsKey(aktuellesTurnier.getId())) {
+            alleTeams.get(aktuellesTurnier.getId()).add(team);
         }
         else {
             List<Team> teams = new ArrayList<>();
             teams.add(team);
 
-            alleTeams.put(aktuellesTurnier.getID(), teams);
+            alleTeams.put(aktuellesTurnier.getId(), teams);
         }
     }
 
@@ -62,7 +62,7 @@ public class TurnierManager {
             aktuellesTurnier = turnierRepository.saveAndFlush(aktuellesTurnier);
 
             for (int i = 0; i < spiele1.size(); i++) {
-                spiele1.get(i).setTurnierID(aktuellesTurnier.getID());
+                spiele1.get(i).setTurnierID(aktuellesTurnier.getId());
                 spiele1.get(i).setGewinner(-1);
             }
 
