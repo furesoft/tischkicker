@@ -7,8 +7,6 @@ import tischkicker.models.Turnier;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -78,22 +76,17 @@ public class TurnierAuswahlFenster extends JFrame {
         });
 
 
-        turnierButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int id = ((Turnier) turniereComboBox.getSelectedItem()).getID();
-                var SpieleZuTurnier = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
-                                            .collect(Collectors.toList());
+        turnierButton.addActionListener(e -> {
+            int id = ((Turnier) turniereComboBox.getSelectedItem()).getID();
+            var SpieleZuTurnier = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
+                                        .collect(Collectors.toList());
 
-                Spiel[] spiele = API.startTurnier(id);
-                turnierbaumGenerieren(spiele);
+            Spiel[] spiele = API.startTurnier(id);
+            turnierbaumGenerieren(spiele);
 
-                if (SpieleZuTurnier.size() != 0) {
-                    App.turnierbaum.ergebnisAmAnfang(spiele);
-                }
+            if (SpieleZuTurnier.size() != 0) {
+                App.turnierbaum.ergebnisAmAnfang(spiele);
             }
-
-
         });
 
     }
