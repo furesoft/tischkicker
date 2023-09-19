@@ -42,6 +42,7 @@ public class TurnierBaum {
         panel.add(starteSpiel);
         hinweis.setBounds(300, 20, 250, 50);
         hinweis.setText("* = Zufälliger Verlierer dieser Spiel-Phase");
+        hinweis.setForeground(Colors.HINWEIS_SCHRIFT);
 
         panel.add(hinweis);
 
