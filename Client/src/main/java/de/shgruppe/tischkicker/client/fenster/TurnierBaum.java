@@ -260,7 +260,7 @@ public class TurnierBaum {
     }
 
     // wird aufgerufen um bei einem bereits laufenden Turnier den Turnierbaum richtig zu laden
-    public void ergebnisAmAnfang(Spiel[] spiels) {
+    public void ladeSpieleAmAnfang(Spiel[] spiels) {
         // alle Spiele des Turniers
         for (int i = 0; i < spiels.length; i++) {
             // alle Spielfelder des Turnierbaums
@@ -273,8 +273,7 @@ public class TurnierBaum {
                 }
                 if (spiels[i].getSpielID() == alleSpielfelder.get(h).spiel.getSpielID()) {
                     alleSpielfelder.get(h).setTeamnames(spiels[i]);
-                    if (spiels[i].getGewinner() > 0)
-                    {
+                    if (spiels[i].getGewinner() > 0) {
                         alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
                         alleSpielfelder.get(h).toreTeam2.setText(String.valueOf(spiels[i].getToreteam2()));
                         alleSpielfelder.get(h).setGewinner(spiels[i].getGewinner());
