@@ -13,6 +13,23 @@ import java.util.stream.Collectors;
 public class Spiel {
     @Column(name = "datum")
     private Date spieldatum;
+
+    public String getTeams() {
+        return teams;
+    }
+
+    public void setTeams(String teams) {
+        this.teams = teams;
+    }
+
+    public String getSpiele() {
+        return spiele;
+    }
+
+    public void setSpiele(String spiele) {
+        this.spiele = spiele;
+    }
+
     @Column(name = "teams")
     private String teams;
 
@@ -153,7 +170,7 @@ public class Spiel {
 
     @JsonIgnore
     public int[] getTeamIDs() {
-        if (teamIDs == null) {
+        if (teamIDs == null && teams != null) {
             return Arrays.stream(teams.split(",")).mapToInt(Integer::parseInt).toArray();
         }
 

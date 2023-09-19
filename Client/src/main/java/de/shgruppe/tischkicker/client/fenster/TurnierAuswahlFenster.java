@@ -73,7 +73,7 @@ public class TurnierAuswahlFenster extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int id = ((Turnier) turniereComboBox.getSelectedItem())
-                        .getID();
+                        .getId();
                 var SpieleZuTurnier = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id).collect(Collectors.toList());
 
                 Spiel[] spiele = API.startTurnier(id);

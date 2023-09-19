@@ -14,6 +14,8 @@ public class Turnier {
 
     @Column(name = "enddatum")
     private String enddatum;
+
+
     @Column(name = "spiele")
     private String spiele;
 
@@ -48,16 +50,36 @@ public class Turnier {
         this.startdatum = startdatum;
     }
 
-    public int getID() {
-        return id;
-    }
-
     public String getEnddatum() {
         return enddatum;
     }
 
     public void setEnddatum(String enddatum) {
         this.enddatum = enddatum;
+    }
+
+    public String getSpiele() {
+        return spiele;
+    }
+
+    public void setSpiele(String spiele) {
+        this.spiele = spiele;
+    }
+
+    public String getTeams() {
+        return teams;
+    }
+
+    public void setTeams(String teams) {
+        this.teams = teams;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @JsonIgnore
