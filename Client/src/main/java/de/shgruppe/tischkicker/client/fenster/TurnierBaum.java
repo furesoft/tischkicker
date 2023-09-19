@@ -189,7 +189,7 @@ public class TurnierBaum {
      * Blockiert das aktuell angeklickte Spielfeld
      */
     public void lock() {
-        selectedSpielfeld.background.setBackground(selectedSpielfeld.normal);
+        selectedSpielfeld.background.setBackground(Colors.SPIELFELD_NORMAL);
 
         aktuellesSpiel = null;
         selectedSpielfeld = null;
@@ -220,14 +220,14 @@ public class TurnierBaum {
         }
 
         if (selectedSpielfeld != null) {
-            selectedSpielfeld.background.setBackground(spielfeld.normal);
+            selectedSpielfeld.background.setBackground(Colors.SPIELFELD_NORMAL);
         }
         else {
-            spielfeld.background.setBackground(spielfeld.normal);
+            spielfeld.background.setBackground(Colors.SPIELFELD_NORMAL);
         }
 
         if (selectedSpielfeld == spielfeld) {
-            selectedSpielfeld.background.setBackground(spielfeld.normal);
+            selectedSpielfeld.background.setBackground(Colors.SPIELFELD_NORMAL);
             starteSpiel.setVisible(false);
             selectedSpielfeld = null;
 
@@ -235,7 +235,7 @@ public class TurnierBaum {
         else {
             selectedSpielfeld = spielfeld;
             starteSpiel.setVisible(true);
-            spielfeld.background.setBackground(spielfeld.selected);
+            spielfeld.background.setBackground(Colors.SPIELFELD_SELECTED);
         }
 
         frame.repaint();

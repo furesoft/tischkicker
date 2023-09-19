@@ -16,12 +16,9 @@ import static de.shgruppe.tischkicker.client.API.turnierbaumGenerieren;
 
 public class TurnierAuswahlFenster extends JFrame {
 
-
     public static Turnier aktuellesTurnier;
 
     public TurnierAuswahlFenster() {
-
-
         Turnier[] alleTurniere = API.getTurniere();
 
         this.setSize(600, 600);
@@ -78,7 +75,7 @@ public class TurnierAuswahlFenster extends JFrame {
 
 
         turnierButton.addActionListener(e -> {
-            int id = ((Turnier) turniereComboBox.getSelectedItem()).getID();
+            int id = ((Turnier) turniereComboBox.getSelectedItem()).getId();
             var SpieleZuTurnier = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
                                         .collect(Collectors.toList());
 
