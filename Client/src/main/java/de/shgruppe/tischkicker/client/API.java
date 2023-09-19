@@ -15,6 +15,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class API {
@@ -133,6 +134,7 @@ public class API {
         }
     }
 
+
     public static void deleteTeam(int id) {
         try {
             // HTTP-POST-Anfrage erstellen
@@ -241,6 +243,25 @@ public class API {
         return null;
     }
 
+    public static void turnierupdate(Turnier turnier)  {
+
+        String jsonData= gson.toJson(turnier);
+        HttpRequest request = createRequest("/turnierupdaten").POST(HttpRequest.BodyPublishers.ofString(jsonData,StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> response = null;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (response.statusCode() != 200) {
+            System.out.println("Turnier updaten für  " + turnier + " schiefgegangen.");
+        }
+    }
     public static void spielStarten(Spiel spiel) {
         try {
             String jsonData = gson.toJson(spiel);

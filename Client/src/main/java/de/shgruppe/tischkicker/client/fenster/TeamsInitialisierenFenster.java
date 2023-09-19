@@ -11,8 +11,11 @@ import tischkicker.models.Spieler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,10 +26,12 @@ import static de.shgruppe.tischkicker.client.API.*;
 
 public class TeamsInitialisierenFenster extends JFrame {
     public static List<Team> teams = new ArrayList<>();// Liste aller Teams
+    private final JTextField turnierFeld = new JFormattedTextField();//Textfeld für Turniernamen
     private final JTextField playerField = new JTextField(15);// Textfeld für Spielername
     private final JTextField teamNameField = new JTextField(15);// Textfeld für Teamname
     private final JButton saveButtonTeams = new JButton("Speichern");// Button zum Speichern der bearbeiteten Teamnamen
     private final JButton saveButtonPlayers = new JButton("Speichern");// Button zum Speichern der bearbeiteten Spielernamen
+    private final JButton addTurniernameButton ;
     private final JButton addPlayerButton;// Button zum Hinzufügen von Spielern
     private final JButton addTeamButton;// Button zum Hinzufügen von Teams
     private final JButton addConfigButton;// Button zum Öffnen der Konfigurationsansicht
@@ -56,6 +61,9 @@ public class TeamsInitialisierenFenster extends JFrame {
         tempPlayers = new ArrayList<>();
         initRows();
 
+        addTurniernameButton = new JButton("Turniername Speichern");
+            addTurniernameButton.addActionListener(e -> addturniername ());
+
         addPlayerButton = new JButton("Spieler hinzufügen");
         // Aufruf der Methode zum Hinzufügen von Spielern
         addPlayerButton.addActionListener(e -> addPlayer());
@@ -79,12 +87,13 @@ public class TeamsInitialisierenFenster extends JFrame {
             if (!turnierSpiele.isEmpty()) {
                 App.turnierbaum.ladeSpieleAmAnfang(spiele);
             }
+
         });
 
 
         addConfigButton = new JButton("Bearbeiten");
         addConfigButton.setEnabled(false);
-
+        // Aufruf der Methode zur Konfiguration von Spielern und Teams
         addConfigButton.addActionListener(e -> {
             initializeUI();
         });
@@ -93,7 +102,7 @@ public class TeamsInitialisierenFenster extends JFrame {
             updatePlayerNames();
             outputTextArea.append("Spielername gespeichert!\n");
         });
-
+        hauptPanel.add(addTurniernameButton);
         hauptPanel.add(addPlayerButton);
         hauptPanel.add(addTeamButton);
         hauptPanel.add(startButton);
@@ -108,6 +117,13 @@ public class TeamsInitialisierenFenster extends JFrame {
         hauptPanel.setLayout(new GridLayout(9, 2, 11, 11));
         add(hauptPanel);
 
+
+
+        JLabel turnierNameLabel = new JLabel("Turniername:");
+        turnierNameLabel.setForeground(new Color(0, 255, 255));
+        hauptPanel.add(turnierNameLabel);
+        hauptPanel.add(turnierFeld);
+
         JLabel label = new JLabel("Spieler:");
         label.setForeground(Colors.InputForeground);
         hauptPanel.add(label);
@@ -119,11 +135,14 @@ public class TeamsInitialisierenFenster extends JFrame {
         hauptPanel.add(teamNameField);
 
         teamNameField.setText("Erst alle Spieler hinzufügen");
+        turnierFeld.setText("Bitte nur einen Turniernamen eingeben");
+
     }
 
     private void addPlayer() {
         String player = playerField.getText();
         if (!player.isEmpty()) {
+            // Hinzufügen des Spielers zur temporären Liste
             tempPlayers.add(player);
             outputTextArea.append("Spieler '" + player + "' wurde hinzugefügt.\n");
             playerField.setText("");
@@ -261,11 +280,14 @@ public class TeamsInitialisierenFenster extends JFrame {
 
         bearbeitenFenster.add(tabbedPane);
         bearbeitenFenster.setVisible(true);
+
+
     }
 
 
     // Methode zum Aktualisieren von Spielernamen
     private void updatePlayerNames() {
+
         int playerIndex = 0;
 
         List<Spieler> spielers = List.of(Objects.requireNonNull(getSpieler()));
@@ -279,6 +301,7 @@ public class TeamsInitialisierenFenster extends JFrame {
 
             for (int j = 0; j < team.getNumberOfPlayersPerTeam(); j++) {
                 String newPlayerName = playerNameFields.get(playerIndex).getText();
+
 
                 //buttonNamen
                 if (!newPlayerName.equals(Objects.requireNonNull(spielers).get(playerIndex).getName())) {
@@ -303,6 +326,7 @@ public class TeamsInitialisierenFenster extends JFrame {
 
     }
 
+    // Methode zum Aktualisieren von Teamnamen
     private void updateTeamNames() {
 
         List<Team> teamsVonAPIAnfrage = List.of(Objects.requireNonNull(getTeams()));
@@ -318,7 +342,9 @@ public class TeamsInitialisierenFenster extends JFrame {
                 spielerTab.repaint();
 
             }
+
         }
+
     }
 
 
@@ -380,6 +406,7 @@ public class TeamsInitialisierenFenster extends JFrame {
 
     }
 
+    // Methode zum Initialisieren des ActionListeners zum Speichern von Teamnamen
     public void initActionListener() {
         saveButtonTeams.addActionListener(e -> {
             updateTeamNames();
@@ -387,4 +414,18 @@ public class TeamsInitialisierenFenster extends JFrame {
             outputTextArea.append("Teamnamen gespeichert!\n");
         });
     }
+
+         public void addturniername()  {
+          String aktuellerturniername = turnierFeld.getText();
+
+
+             if (!aktuellerturniername.isEmpty()&&!aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben")){
+                 addTurniernameButton.setEnabled(false);
+                 TurnierAuswahlFenster.aktuellesTurnier.setTurnierName(aktuellerturniername);
+                 API.turnierupdate(TurnierAuswahlFenster.aktuellesTurnier);
+             }
+
+
+         }
+
 }

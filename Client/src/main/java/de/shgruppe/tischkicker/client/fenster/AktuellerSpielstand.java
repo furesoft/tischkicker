@@ -51,7 +51,7 @@ public class AktuellerSpielstand {
         team2Name = new JLabel("b");
         team2Name.setBounds(width - 150, seitenwechsel.getHeight(), width / 2, (int) (height * 0.3));
         team2Name.setOpaque(true);
-        toreLbl.setBackground(Colors.BACKGROUND);
+        team2Name.setBackground(Colors.BACKGROUND);
 
         farbanzeigeTeam1.setBounds(team1Name.getX() - 25, team1Name.getY() + 70, 15, 15);
         farbanzeigeTeam1.setBackground(Color.WHITE);

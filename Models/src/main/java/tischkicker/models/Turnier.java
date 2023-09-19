@@ -34,6 +34,11 @@ public class Turnier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+
+
+    @Column(name = "Turniername")
+    private String turnierName;
+
     public boolean isGespielt() {
         return gespielt;
     }
@@ -124,6 +129,15 @@ public class Turnier {
 
         return startdatum + " - " + enddatum + " : " + id;
     }
+    public String getTurnierName() {
+        return turnierName;
+    }
+
+    public void setTurnierName(String turnierName) {
+        this.turnierName = turnierName;
+    }
+
+
 
 
 }
