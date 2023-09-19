@@ -14,8 +14,7 @@ public class Spielfeld {
     public JLabel team2;
     public JLabel toreTeam1;
     public JLabel toreTeam2;
-    public Color selected = new Color(36, 157, 255);
-    public Color normal = new Color(149, 157, 158);
+
     boolean besterVerlierer = false;
     JPanel frame;
 
@@ -29,27 +28,21 @@ public class Spielfeld {
      * @param height gibt die Höhe eines Spielfelds an.
      */
     public Spielfeld(JPanel frame, int x, int y, int width, int height) {
-        // Der Konstruktor erstellt ein Spielfeld in einem Java-Swing-Fenster (JPanel).
-
         this.frame = frame;
 
-        // Erzeugt ein JLabel für den Hintergrund des Spielfelds.
         background = new JLabel(" ");
 
-        // Erzeugt JLabels für die Teamnamen und Tore des ersten Teams.
         team1 = new JLabel(" ");
         toreTeam1 = new JLabel(" ");
 
-        // Erzeugt JLabels für die Teamnamen und Tore des zweiten Teams.
         team2 = new JLabel(" ");
         toreTeam2 = new JLabel(" ");
 
-        // Setzt die Position und Größe des Hintergrund-JLabels.
         background.setBounds(x, y, width, height);
         // Macht den Hintergrund undurchsichtig.
         background.setOpaque(true);
         // Setzt die Hintergrundfarbe des Spielfeld-Hintergrunds.
-        background.setBackground(normal);
+        background.setBackground(Colors.SPIELFELD_NORMAL);
 
         // Setzt die Position, Größe und Hintergrundfarbe des ersten Teams.
         team1.setBounds(x + 5, y + 5, width - 10, ((height - 10) / 2));
@@ -82,10 +75,10 @@ public class Spielfeld {
      */
     public void setGewinner(int id) {
         if (spiel.getTeamIDs()[0] == id) {
-            team1.setBackground(Color.GREEN);
+            team1.setBackground(Colors.GEWINNER);
         }
         else {
-            team2.setBackground(Color.GREEN);
+            team2.setBackground(Colors.GEWINNER);
         }
 
         frame.repaint();
@@ -162,8 +155,10 @@ public class Spielfeld {
      */
     public void setY(int y) {
         background.setBounds(background.getX(), y, background.getWidth(), background.getHeight());
+
         team1.setBounds(team1.getX(), y + 5, team1.getWidth(), team1.getHeight());
         team2.setBounds(team2.getX(), (int) (y + 5 + (background.getHeight() * 0.9) / 2), team2.getWidth(), team2.getHeight());
+
         toreTeam1.setBounds(toreTeam1.getX(), y + 5, toreTeam1.getWidth(), toreTeam1.getHeight());
         toreTeam2.setBounds(toreTeam2.getX(), (int) (y + 5 + (background.getHeight() * 0.9) / 2), toreTeam2.getWidth(), toreTeam2.getHeight());
     }

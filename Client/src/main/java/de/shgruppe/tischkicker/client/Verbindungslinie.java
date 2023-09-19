@@ -1,9 +1,9 @@
 package de.shgruppe.tischkicker.client;
 
+import de.shgruppe.tischkicker.client.ui.Colors;
 import de.shgruppe.tischkicker.client.ui.Spielfeld;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Verbindungslinie {
 
@@ -61,19 +61,19 @@ public class Verbindungslinie {
         JLabel linie1 = new JLabel(" ");
         linie1.setBounds(spielfeld3.background.getX() - (spielfeld3.background.getX() - (spielfeld1.background.getX() + spielfeld1.background.getWidth())) / 2, spielfeld3.background.getY() + (spielfeld3.background.getHeight() / 2), (spielfeld3.background.getX() - (spielfeld1.background.getX() + spielfeld1.background.getWidth())) / 2, linienStaerke);
         linie1.setOpaque(true);
-        linie1.setBackground(Color.BLACK);
+        linie1.setBackground(Colors.VERBINDUNGSLINIE);
 
         // Linie 2
         JLabel linie2 = new JLabel(" ");
         linie2.setBounds(spielfeld1.background.getX() + spielfeld1.background.getWidth() + (spielfeld3.background.getX() - (spielfeld1.background.getX() + spielfeld1.background.getWidth())) / 2, spielfeld1.background.getY() + (spielfeld1.background.getHeight() / 2), linienStaerke, (spielfeld3.background.getY() + (spielfeld3.background.getHeight()) / 2) - (spielfeld1.background.getY() + (spielfeld1.background.getHeight()) / 2));
         linie2.setOpaque(true);
-        linie2.setBackground(Color.BLACK);
+        linie2.setBackground(Colors.VERBINDUNGSLINIE);
 
         // Linie 3
         JLabel linie3 = new JLabel(" ");
         linie3.setBounds(spielfeld1.background.getX() + spielfeld1.background.getWidth(), spielfeld1.background.getY() + (spielfeld1.background.getHeight()) / 2, (spielfeld3.background.getX() - (spielfeld1.background.getX() + spielfeld1.background.getWidth())) / 2, linienStaerke);
         linie3.setOpaque(true);
-        linie3.setBackground(Color.BLACK);
+        linie3.setBackground(Colors.VERBINDUNGSLINIE);
 
         // Füge die Linien zum Panel hinzu
         frame.add(linie1);
@@ -95,19 +95,19 @@ public class Verbindungslinie {
         JLabel linie1 = new JLabel(" ");
         linie1.setBounds((spielfeld2.background.getX() + spielfeld2.background.getWidth()), (spielfeld2.background.getY() + (spielfeld2.background.getHeight() / 2)), (spielfeld3.background.getX() - (spielfeld2.background.getX() + spielfeld2.background.getWidth())) / 2, linienStaerke);
         linie1.setOpaque(true);
-        linie1.setBackground(Color.BLACK);
+        linie1.setBackground(Colors.VERBINDUNGSLINIE);
 
         // Linie 2
         JLabel linie2 = new JLabel(" ");
         linie2.setBounds(spielfeld3.background.getX() - (spielfeld3.background.getX() - (spielfeld2.background.getX() + spielfeld2.background.getWidth())) / 2, ((spielfeld3.background.getY()) + (spielfeld3.background.getHeight() / 2)), linienStaerke, (((spielfeld2.background.getY()) + ((spielfeld2.background.getHeight()) / 2)) - ((spielfeld3.background.getY()) + ((spielfeld3.background.getHeight()) / 2))) + linienStaerke);
         linie2.setOpaque(true);
-        linie2.setBackground(Color.BLACK);
+        linie2.setBackground(Colors.VERBINDUNGSLINIE);
 
         // Linie 3
         JLabel linie3 = new JLabel(" ");
         linie3.setBounds(spielfeld3.background.getX() - (spielfeld3.background.getX() - (spielfeld2.background.getX() + spielfeld2.background.getWidth())) / 2, ((spielfeld3.background.getY()) + (spielfeld3.background.getHeight() / 2)), (spielfeld3.background.getX()) - (spielfeld3.background.getX() - (spielfeld3.background.getX() - (spielfeld2.background.getX() + spielfeld2.background.getWidth())) / 2), linienStaerke);
         linie3.setOpaque(true);
-        linie3.setBackground(Color.BLACK);
+        linie3.setBackground(Colors.VERBINDUNGSLINIE);
 
         // Füge die Linien zum Panel hinzu
         frame.add(linie1);

@@ -42,6 +42,7 @@ public class TurnierBaum {
         panel.add(starteSpiel);
         hinweis.setBounds(300, 20, 250, 50);
         hinweis.setText("* = Zufälliger Verlierer dieser Spiel-Phase");
+        hinweis.setForeground(Colors.HINWEIS_SCHRIFT);
 
         panel.add(hinweis);
 
@@ -189,7 +190,7 @@ public class TurnierBaum {
      * Blockiert das aktuell angeklickte Spielfeld
      */
     public void lock() {
-        selectedSpielfeld.background.setBackground(selectedSpielfeld.normal);
+        selectedSpielfeld.background.setBackground(Colors.SPIELFELD_NORMAL);
 
         aktuellesSpiel = null;
         selectedSpielfeld = null;
@@ -215,19 +216,19 @@ public class TurnierBaum {
         int[] teamids = spielfeld.spiel.getTeamIDs();
 
 
-        if (teamids[0] < 0 || teamids[1] < 0 || spielfeld.spiel.getGewinner() > 0) {
+        if (teamids[0] < 0 || teamids[1] < 0 || spielfeld.spiel.getGewinnerID() > 0) {
             return;
         }
 
         if (selectedSpielfeld != null) {
-            selectedSpielfeld.background.setBackground(spielfeld.normal);
+            selectedSpielfeld.background.setBackground(Colors.SPIELFELD_NORMAL);
         }
         else {
-            spielfeld.background.setBackground(spielfeld.normal);
+            spielfeld.background.setBackground(Colors.SPIELFELD_NORMAL);
         }
 
         if (selectedSpielfeld == spielfeld) {
-            selectedSpielfeld.background.setBackground(spielfeld.normal);
+            selectedSpielfeld.background.setBackground(Colors.SPIELFELD_NORMAL);
             starteSpiel.setVisible(false);
             selectedSpielfeld = null;
 
@@ -235,7 +236,7 @@ public class TurnierBaum {
         else {
             selectedSpielfeld = spielfeld;
             starteSpiel.setVisible(true);
-            spielfeld.background.setBackground(spielfeld.selected);
+            spielfeld.background.setBackground(Colors.SPIELFELD_SELECTED);
         }
 
         frame.repaint();
@@ -272,10 +273,10 @@ public class TurnierBaum {
                 }
                 if (spiels[i].getSpielID() == alleSpielfelder.get(h).spiel.getSpielID()) {
                     alleSpielfelder.get(h).setTeamnames(spiels[i]);
-                    if (spiels[i].getGewinner() > 0) {
+                    if (spiels[i].getGewinnerID() > 0) {
                         alleSpielfelder.get(h).toreTeam1.setText(String.valueOf((spiels[i].getToreteam1())));
                         alleSpielfelder.get(h).toreTeam2.setText(String.valueOf(spiels[i].getToreteam2()));
-                        alleSpielfelder.get(h).setGewinner(spiels[i].getGewinner());
+                        alleSpielfelder.get(h).setGewinner(spiels[i].getGewinnerID());
                     }
                     /*
                     if (spiels[i].getToreteam1() > 0 || spiels[i].getToreteam2() > 0) {
