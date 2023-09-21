@@ -12,6 +12,9 @@ public class Hint {
         textbox.setForeground(Color.GRAY);
         textbox.setText(hint);
         textbox.setFont(hintFont);
-        textbox.addFocusListener(new HintListener(defaultFont, defaultForeground, textbox, hint, hintFont));
+
+        HintListener listener = new HintListener(defaultFont, defaultForeground, textbox, hint, hintFont);
+        textbox.addFocusListener(listener);
+        
     }
 }

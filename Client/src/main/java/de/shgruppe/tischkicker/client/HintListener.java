@@ -20,11 +20,10 @@ public class HintListener implements FocusListener {
         this.hintFont = hintFont;
     }
 
-
     @Override
     public void focusGained(FocusEvent e) {
         textbox.setFont(new Font("Arial", 0, defaultFont.getSize()));
-        textbox.setForeground(Color.BLACK);
+        textbox.setForeground(defaultForeground);
 
         if (textbox.getText().equals(hint)) {
             textbox.setText("");
