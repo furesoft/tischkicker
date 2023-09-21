@@ -111,11 +111,12 @@ public class TeamsInitialisierenFenster extends JFrame {
 
     private void addPlayer() {
         String player = playerField.getText();
-        if (!player.isEmpty()) {
+        if (!player.isEmpty() && !player.equals("Spieler")) {
             // Hinzufügen des Spielers zur temporären Liste
             tempPlayers.add(player);
             outputTextArea.append("Spieler '" + player + "' wurde hinzugefügt.\n");
-            playerField.setText("");
+            Hint.reset(playerField);
+
             addTeamButton.setEnabled(true);
         }
         else {
