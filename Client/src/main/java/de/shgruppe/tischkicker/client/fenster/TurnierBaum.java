@@ -44,7 +44,6 @@ public class TurnierBaum {
 
         panel.add(hinweis);
 
-
         frame.setSize(1920, 1080);
         int anzahlTeams = API.getTeams().length;
         //                   x=                  y=Fertig
@@ -53,9 +52,7 @@ public class TurnierBaum {
         // panel.setBackground(Color.GREEN);
         panel.setLayout(null);
 
-
         frame.add(scrollPane);
-
 
         starteSpiel.addActionListener(e -> {
             App.spielstandAnzeige.show();
