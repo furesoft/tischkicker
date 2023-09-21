@@ -20,6 +20,8 @@ public class TurnierAuswahlFenster extends JFrame {
     public static Turnier aktuellesTurnier;
 
     public TurnierAuswahlFenster() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         Turnier[] alleTurniere = API.getTurniere();
 
         this.setSize(600, 600);
