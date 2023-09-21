@@ -40,6 +40,10 @@ public class SpielManager {
 
     @Autowired
     TurnierRepository turnierRepository;
+
+    @Autowired
+    Statistics stats;
+
     private SpielErgebnis ergebnis = new SpielErgebnis();
     private boolean tauscheTeams = false;
     private SpielHolder team1 = new SpielHolder();
@@ -120,12 +124,11 @@ public class SpielManager {
         if (maxTore == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben()) {
             ergebnis.spiel.setToreteam1(team1.tore);
             ergebnis.spiel.setToreteam2(team2.tore);
-            if (ergebnis.toreTeam1 == anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben())
-            {
+
+            if (ergebnis.toreTeam1 == anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben()) {
                 ergebnis.spiel.setGewinnerID(ergebnis.teams[0].getId());
             }
-            if (ergebnis.toreTeam2 == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben())
-            {
+            if (ergebnis.toreTeam2 == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben()) {
                 ergebnis.spiel.setGewinnerID(ergebnis.teams[1].getId());
             }
             spielRepository.saveAndFlush(ergebnis.spiel);
@@ -145,6 +148,9 @@ public class SpielManager {
                 tmsg.setTurnier(turnier.get());
 
                 SocketHandler.broadcast(tmsg);
+
+                stats.incrementTeamTore(ergebnis.teams[0], ergebnis.toreTeam1, ergebnis.toreTeam2);
+                stats.incrementTeamTore(ergebnis.teams[1], ergebnis.toreTeam2, ergebnis.toreTeam1);
             }
 
             SpielBeendetMessage msg = new SpielBeendetMessage();
