@@ -3,6 +3,7 @@ package de.shgruppe.tischkicker.client.fenster;
 
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
+import de.shgruppe.tischkicker.client.Hint;
 import de.shgruppe.tischkicker.client.Team;
 import de.shgruppe.tischkicker.client.ui.Colors;
 import de.shgruppe.tischkicker.client.ui.DataButton;
@@ -127,7 +128,7 @@ public class TeamsInitialisierenFenster extends JFrame {
         hauptPanel.add(teamname);
         hauptPanel.add(teamNameField);
 
-        turnierFeld.setText("Bitte nur einen Turniernamen eingeben");
+        Hint.enableFor(turnierFeld, "Turniername");
     }
 
     private void addPlayer() {
