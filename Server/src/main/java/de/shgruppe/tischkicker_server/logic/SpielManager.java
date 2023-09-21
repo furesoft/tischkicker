@@ -74,7 +74,17 @@ public class SpielManager {
         ergebnis.seiteTeam2 = Tor.Seite.ROT;
         ergebnis.seiteTeam1 = Tor.Seite.WEISS;
 
+        anzahlToreBisGewonnen = getTurnier(spiel.getTurnierID()).getMaximalToreBisGewonnen();
+
+        if (anzahlToreBisGewonnen == 0) {
+            anzahlToreBisGewonnen = 10;
+        }
+
         SocketHandler.broadcast(ergebnis);
+    }
+
+    private Turnier getTurnier(int turnierID) {
+        return turnierManager.turnierRepository.findById(turnierID).get();
     }
 
     private Team[] getTeamsForSpiel(Spiel spiel) {
@@ -196,11 +206,9 @@ public class SpielManager {
     }
 
     public void seitenWechsel() throws IOException {
-
         Tor.Seite tmpSeite = ergebnis.seiteTeam1;
         ergebnis.seiteTeam1 = ergebnis.seiteTeam2;
         ergebnis.seiteTeam2 = tmpSeite;
-
 
         SocketHandler.broadcast(ergebnis);
     }

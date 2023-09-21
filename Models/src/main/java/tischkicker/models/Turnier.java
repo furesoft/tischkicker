@@ -33,11 +33,18 @@ public class Turnier {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-
-
+    @Column(name = "MAXIMAL_TORE_BIS_GEWONNEN")
+    private int maximalToreBisGewonnen;
     @Column(name = "Turniername")
     private String turnierName;
+
+    public int getMaximalToreBisGewonnen() {
+        return maximalToreBisGewonnen;
+    }
+
+    public void setMaximalToreBisGewonnen(int maximalToreBisGewonnen) {
+        this.maximalToreBisGewonnen = maximalToreBisGewonnen;
+    }
 
     public boolean isGespielt() {
         return gespielt;
@@ -119,8 +126,7 @@ public class Turnier {
 
     @Override
     public String toString() {
-        if (turnierName != null)
-        {
+        if (turnierName != null) {
             return turnierName;
         }
 
@@ -130,6 +136,7 @@ public class Turnier {
 
         return startdatum + " - " + enddatum + " : " + id;
     }
+
     public String getTurnierName() {
         return turnierName;
     }
@@ -137,8 +144,6 @@ public class Turnier {
     public void setTurnierName(String turnierName) {
         this.turnierName = turnierName;
     }
-
-
 
 
 }
