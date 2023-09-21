@@ -67,10 +67,7 @@ public class TeamsInitialisierenFenster extends JFrame {
 
         addTeamButton = new JButton("Team hinzufügen");
 
-        addTeamButton.setEnabled(false);
-        // Aufruf der Methode zum Hinzufügen von Teams
         addTeamButton.addActionListener(e -> addTeam());
-
 
         startButton = new JButton("Start");
         startButton.addActionListener(e -> {
@@ -130,9 +127,7 @@ public class TeamsInitialisierenFenster extends JFrame {
         hauptPanel.add(teamname);
         hauptPanel.add(teamNameField);
 
-        teamNameField.setText("Erst alle Spieler hinzufügen");
         turnierFeld.setText("Bitte nur einen Turniernamen eingeben");
-
     }
 
     private void addPlayer() {
@@ -151,6 +146,11 @@ public class TeamsInitialisierenFenster extends JFrame {
 
     private void addTeam() {
         String teamName = teamNameField.getText();
+
+        if (teamName.isEmpty()) {
+            teamName = tempPlayers.get(0);
+        }
+
         if (!teamName.isEmpty() && !tempPlayers.isEmpty()) {
             Team team = new Team(tempPlayers, teamName);
             teams.add(team);
@@ -161,7 +161,6 @@ public class TeamsInitialisierenFenster extends JFrame {
             playerField.setText("");
             teamNameField.setText("");
             addConfigButton.setEnabled(true);
-
         }
         else {
             outputTextArea.append("Mindestens ein Spieler und ein Teamname erforderlich!\n");

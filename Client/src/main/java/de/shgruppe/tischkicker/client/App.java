@@ -20,12 +20,9 @@ public class App {
             ex.printStackTrace();
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                turnierbaum.frame.setVisible(false);
-                new TurnierAuswahlFenster().setVisible(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            turnierbaum.frame.setVisible(false);
+            new TurnierAuswahlFenster().setVisible(true);
         });
 
 
