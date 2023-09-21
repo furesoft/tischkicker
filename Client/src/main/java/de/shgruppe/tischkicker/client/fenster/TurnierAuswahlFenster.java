@@ -3,6 +3,7 @@ package de.shgruppe.tischkicker.client.fenster;
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
 import de.shgruppe.tischkicker.client.ui.Colors;
+import de.shgruppe.tischkicker.client.ui.DataButton;
 import tischkicker.models.Spiel;
 import tischkicker.models.Turnier;
 
@@ -30,7 +31,7 @@ public class TurnierAuswahlFenster extends JFrame {
         this.add(panel);
         panel.setVisible(true);
 
-        JButton turnierErstellenButton = new JButton("Neues Turnier");
+        DataButton turnierErstellenButton = new DataButton("Neues Turnier");
         turnierErstellenButton.setForeground(Colors.BUTTON_SCHRIFT);
 
         turnierErstellenButton.setBackground(Colors.BUTTON_BACKGROUND);
@@ -41,7 +42,7 @@ public class TurnierAuswahlFenster extends JFrame {
         });
 
 
-        JButton turnierButton = new JButton("Turnier anzeigen");
+        DataButton turnierButton = new DataButton("Turnier anzeigen");
         turnierButton.setSize(50, 50);
         turnierButton.setBackground(Colors.BUTTON_BACKGROUND);
         turnierButton.setForeground(Colors.BUTTON_SCHRIFT);
@@ -78,7 +79,8 @@ public class TurnierAuswahlFenster extends JFrame {
         turnierButton.addActionListener(e -> {
             Turnier turnier = ((Turnier) turniereComboBox.getSelectedItem());
 
-            aktuellesTurnier = turnier;
+            aktuellesTurnier = Arrays.stream(alleTurniere).filter(t -> t.getId() == turnier.getId()).findFirst().get();
+
             var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == turnier.getId())
                                       .collect(Collectors.toList());
 

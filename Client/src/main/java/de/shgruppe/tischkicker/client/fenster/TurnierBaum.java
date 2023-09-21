@@ -4,6 +4,7 @@ import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
 import de.shgruppe.tischkicker.client.Verbindungslinie;
 import de.shgruppe.tischkicker.client.ui.Colors;
+import de.shgruppe.tischkicker.client.ui.DataButton;
 import de.shgruppe.tischkicker.client.ui.Spielfeld;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
@@ -26,9 +27,8 @@ public class TurnierBaum {
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
     ArrayList<Spielfeld> alleSpielfelder = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
-    JButton starteSpiel = new JButton("Spiel starten");
+    DataButton starteSpiel = new DataButton("Spiel starten");
     JPanel panel;
-
 
     public TurnierBaum() {
 
@@ -55,7 +55,6 @@ public class TurnierBaum {
 
 
         frame.add(scrollPane);
-
 
 
         starteSpiel.addActionListener(e -> {

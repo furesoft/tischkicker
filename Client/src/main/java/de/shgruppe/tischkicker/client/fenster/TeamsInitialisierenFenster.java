@@ -11,11 +11,8 @@ import tischkicker.models.Spieler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +28,7 @@ public class TeamsInitialisierenFenster extends JFrame {
     private final JTextField teamNameField = new JTextField(15);// Textfeld für Teamname
     private final JButton saveButtonTeams = new JButton("Speichern");// Button zum Speichern der bearbeiteten Teamnamen
     private final JButton saveButtonPlayers = new JButton("Speichern");// Button zum Speichern der bearbeiteten Spielernamen
-    private final JButton addTurniernameButton ;
+    private final JButton addTurniernameButton;
     private final JButton addPlayerButton;// Button zum Hinzufügen von Spielern
     private final JButton addTeamButton;// Button zum Hinzufügen von Teams
     private final JButton addConfigButton;// Button zum Öffnen der Konfigurationsansicht
@@ -62,7 +59,7 @@ public class TeamsInitialisierenFenster extends JFrame {
         initRows();
 
         addTurniernameButton = new JButton("Turniername Speichern");
-            addTurniernameButton.addActionListener(e -> addturniername ());
+        addTurniernameButton.addActionListener(e -> addturniername());
 
         addPlayerButton = new JButton("Spieler hinzufügen");
         // Aufruf der Methode zum Hinzufügen von Spielern
@@ -116,7 +113,6 @@ public class TeamsInitialisierenFenster extends JFrame {
         outputTextArea.setEditable(false);
         hauptPanel.setLayout(new GridLayout(9, 2, 11, 11));
         add(hauptPanel);
-
 
 
         JLabel turnierNameLabel = new JLabel("Turniername:");
@@ -415,17 +411,15 @@ public class TeamsInitialisierenFenster extends JFrame {
         });
     }
 
-         public void addturniername()  {
-          String aktuellerturniername = turnierFeld.getText();
+    public void addturniername() {
+        String aktuellerturniername = turnierFeld.getText();
 
+        if (!aktuellerturniername.isEmpty() && !aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben")) {
+            addTurniernameButton.setEnabled(false);
 
-             if (!aktuellerturniername.isEmpty()&&!aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben")){
-                 addTurniernameButton.setEnabled(false);
-                 TurnierAuswahlFenster.aktuellesTurnier.setTurnierName(aktuellerturniername);
-                 API.turnierupdate(TurnierAuswahlFenster.aktuellesTurnier);
-             }
-
-
-         }
+            TurnierAuswahlFenster.aktuellesTurnier.setTurnierName(aktuellerturniername);
+            API.turnierupdate(TurnierAuswahlFenster.aktuellesTurnier);
+        }
+    }
 
 }
