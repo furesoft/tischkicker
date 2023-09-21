@@ -5,14 +5,14 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-public class HintMouseListener implements FocusListener {
+public class HintListener implements FocusListener {
     private final Font defaultFont;
     private final Color defaultForeground;
     private final JTextField textbox;
     private final String hint;
     private final Font hintFont;
 
-    public HintMouseListener(Font defaultFont, Color defaultForeground, JTextField textbox, String hint, Font hintFont) {
+    public HintListener(Font defaultFont, Color defaultForeground, JTextField textbox, String hint, Font hintFont) {
         this.defaultFont = defaultFont;
         this.defaultForeground = defaultForeground;
         this.textbox = textbox;
