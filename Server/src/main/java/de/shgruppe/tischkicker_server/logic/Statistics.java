@@ -2,8 +2,9 @@ package de.shgruppe.tischkicker_server.logic;
 
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import tischkicker.models.Team;
-
+@Component
 public class Statistics {
     @Autowired
     TeamRepository teamRepository;
