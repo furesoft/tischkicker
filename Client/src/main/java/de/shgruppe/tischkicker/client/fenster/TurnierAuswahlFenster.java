@@ -31,7 +31,7 @@ public class TurnierAuswahlFenster extends JFrame {
         this.add(panel);
         panel.setVisible(true);
 
-        DataButton turnierErstellenButton = new DataButton("Neues Turnier");
+        DataButton turnierErstellenButton = new DataButton("Neues Turnier", true);
         turnierErstellenButton.setForeground(Colors.BUTTON_SCHRIFT);
 
         turnierErstellenButton.setBackground(Colors.BUTTON_BACKGROUND);
@@ -42,7 +42,7 @@ public class TurnierAuswahlFenster extends JFrame {
         });
 
 
-        DataButton turnierButton = new DataButton("Turnier anzeigen");
+        DataButton turnierButton = new DataButton("Turnier anzeigen", true);
         turnierButton.setSize(50, 50);
         turnierButton.setBackground(Colors.BUTTON_BACKGROUND);
         turnierButton.setForeground(Colors.BUTTON_SCHRIFT);
@@ -92,5 +92,6 @@ public class TurnierAuswahlFenster extends JFrame {
             }
         });
 
+        setLocationRelativeTo(null);
     }
 }

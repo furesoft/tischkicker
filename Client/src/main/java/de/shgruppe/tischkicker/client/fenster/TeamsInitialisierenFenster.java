@@ -202,7 +202,7 @@ public class TeamsInitialisierenFenster extends JFrame {
 
                 spielerNameField.setColumns(20);
 
-                deletePlayerButton = new DataButton("Löschen");
+                deletePlayerButton = new DataButton("Löschen", true);
                 deletePlayerButton.setData(spielerName);
 
                 buttonNamen.add(deletePlayerButton);
@@ -255,8 +255,6 @@ public class TeamsInitialisierenFenster extends JFrame {
             //sadeleteButtonundTeamnamen.add(deleteTeamButton);
 
             teamPanel.add(deleteButtonundTeamnamen);
-
-
         }
 
         bearbeitenFenster.addWindowListener(new WindowAdapter() {
@@ -277,7 +275,7 @@ public class TeamsInitialisierenFenster extends JFrame {
         bearbeitenFenster.add(tabbedPane);
         bearbeitenFenster.setVisible(true);
 
-
+        setLocationRelativeTo(null);
     }
 
 

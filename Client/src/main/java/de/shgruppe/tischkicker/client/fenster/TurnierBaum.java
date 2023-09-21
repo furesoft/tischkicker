@@ -27,7 +27,7 @@ public class TurnierBaum {
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
     ArrayList<Spielfeld> alleSpielfelder = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
-    DataButton starteSpiel = new DataButton("Spiel starten");
+    DataButton starteSpiel = new DataButton("Spiel starten", true);
     JPanel panel;
 
     public TurnierBaum() {

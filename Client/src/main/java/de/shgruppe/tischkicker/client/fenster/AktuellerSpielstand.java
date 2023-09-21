@@ -24,18 +24,17 @@ public class AktuellerSpielstand {
 
     JButton seitenwechsel;
 
-    DataButton aufgebenTeam1Btn = new DataButton("X");
-    DataButton aufgebenTeam2Btn = new DataButton("X");
+    DataButton aufgebenTeam1Btn = new DataButton("X", false);
+    DataButton aufgebenTeam2Btn = new DataButton("X", false);
 
     JFrame frame = new JFrame();
 
     int team1ID, team2ID;
 
     public AktuellerSpielstand(int width, int height) {
-        seitenwechsel = new DataButton("<-->");
+        seitenwechsel = new DataButton("<-->", false);
         seitenwechsel.setToolTipText("Seitenwechsel");
         seitenwechsel.setBounds(0, 0, width, (int) (height * 0.2));
-        seitenwechsel.setOpaque(true);
         seitenwechsel.addActionListener(e -> {
             try {
                 API.seitenwechsel();
@@ -49,29 +48,29 @@ public class AktuellerSpielstand {
         team1Name.setOpaque(true);
         team1Name.setBackground(Colors.BACKGROUND);
         team1Name.setForeground(Colors.SCHRIFT);
+        team1Name.setFont(new Font("Arial", 0, 30));
 
         team2Name = new JLabel("b");
         team2Name.setBounds(width - 150, seitenwechsel.getHeight(), width / 2, (int) (height * 0.3));
         team2Name.setOpaque(true);
         team2Name.setBackground(Colors.BACKGROUND);
         team2Name.setForeground(Colors.SCHRIFT);
+        team2Name.setFont(new Font("Arial", 0, 30));
 
-        farbanzeigeTeam1.setBounds(team1Name.getX() - 25, team1Name.getY() + 70, 15, 15);
+        farbanzeigeTeam1.setBounds(team1Name.getX() - 35, team1Name.getY() + 70, 25, 25);
         farbanzeigeTeam1.setBackground(Color.WHITE);
 
-        farbanzeigeTeam2.setBounds(team2Name.getX() - 25, team2Name.getY() + 70, 15, 15);
+        farbanzeigeTeam2.setBounds(team2Name.getX() - 35, team2Name.getY() + 70, 25, 25);
         farbanzeigeTeam2.setBackground(Color.RED);
 
-        toreTeam1Erhoehen = new DataButton("+");
+        toreTeam1Erhoehen = new DataButton("+", false);
         toreTeam1Erhoehen.setToolTipText("Spielstand erhöhen");
         toreTeam1Erhoehen.setBounds(0, team1Name.getY() + team1Name.getHeight(), (int) (width * 0.1), (int) (height * 0.25));
-        toreTeam1Erhoehen.setOpaque(true);
         toreTeam1Erhoehen.addActionListener(AktuellerSpielstand::buttonClick);
 
-        toreTeam1Verringern = new DataButton("-");
+        toreTeam1Verringern = new DataButton("-", false);
         toreTeam1Verringern.setToolTipText("Spielstand verringern");
         toreTeam1Verringern.setBounds(0, toreTeam1Erhoehen.getY() + toreTeam1Erhoehen.getHeight(), (int) (width * 0.1), (int) (height * 0.25) - 50);
-        toreTeam1Verringern.setOpaque(true);
         toreTeam1Verringern.addActionListener(AktuellerSpielstand::buttonClick);
 
         toreLbl = new JLabel();
@@ -80,25 +79,21 @@ public class AktuellerSpielstand {
         toreLbl.setBackground(Colors.BACKGROUND);
         toreLbl.setForeground(Colors.SCHRIFT);
 
-        toreTeam2Erhoehen = new DataButton("+");
+        toreTeam2Erhoehen = new DataButton("+", false);
         toreTeam2Erhoehen.setToolTipText("Spielstand erhöhen");
         toreTeam2Erhoehen.setBounds(width - toreTeam1Erhoehen.getWidth() - 10, toreTeam1Erhoehen.getY(), toreTeam1Erhoehen.getWidth(), toreTeam1Erhoehen.getHeight());
-        toreTeam2Erhoehen.setOpaque(true);
         toreTeam2Erhoehen.addActionListener(AktuellerSpielstand::buttonClick);
 
-        toreTeam2Verringern = new DataButton("-");
+        toreTeam2Verringern = new DataButton("-", false);
         toreTeam2Verringern.setToolTipText("Spielstand verringern");
         toreTeam2Verringern.setBounds(width - toreTeam1Verringern.getWidth() - 10, toreTeam1Verringern.getY(), toreTeam1Verringern.getWidth(), toreTeam1Verringern.getHeight());
-        toreTeam2Verringern.setOpaque(true);
         toreTeam2Verringern.addActionListener(AktuellerSpielstand::buttonClick);
 
         aufgebenTeam1Btn.setToolTipText("Aufgeben");
         aufgebenTeam1Btn.setBounds(toreTeam1Verringern.getX(), height - 50, toreTeam1Erhoehen.getWidth(), 50);
-        aufgebenTeam1Btn.setOpaque(true);
 
         aufgebenTeam2Btn.setToolTipText("Aufgeben");
         aufgebenTeam2Btn.setBounds(toreTeam2Verringern.getX(), height - 50, toreTeam2Erhoehen.getWidth(), 50);
-        aufgebenTeam2Btn.setOpaque(true);
 
         JPanel contentPanel = new JPanel();
 
@@ -130,6 +125,8 @@ public class AktuellerSpielstand {
         contentPanel.setBackground(Colors.BACKGROUND);
 
         this.frame.add(contentPanel);
+
+        frame.setLocationRelativeTo(null);
     }
 
     private static void buttonClick(ActionEvent e) {

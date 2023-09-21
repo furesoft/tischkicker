@@ -9,12 +9,14 @@ public class DataButton extends JButton implements MouseListener {
     private Object data;
     private boolean isMouseOver;
 
-    public DataButton(String text) {
+    public DataButton(String text, boolean roundBorder) {
         setText(text);
         setForeground(Colors.BUTTON_SCHRIFT);
         setBackground(Colors.BUTTON_BACKGROUND);
 
-        setBorder(new RoundedBorder(23));
+        if (roundBorder) {
+            setBorder(new RoundedBorder(23));
+        }
         setOpaque(true);
 
         Dimension size = getPreferredSize();
@@ -35,6 +37,11 @@ public class DataButton extends JButton implements MouseListener {
 
     @Override
     protected void paintComponent(Graphics g) {
+        if (!(getBorder() instanceof RoundedBorder)) {
+            super.paintComponent(g);
+            return;
+        }
+
         Graphics2D g2 = (Graphics2D) g;
         RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2.setRenderingHints(rh);
