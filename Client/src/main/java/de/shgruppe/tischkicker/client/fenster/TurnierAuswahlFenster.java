@@ -59,7 +59,7 @@ public class TurnierAuswahlFenster extends JFrame {
         panel.add(turniereComboBox);
 
         turniereComboBox.setBackground(Color.WHITE);
-        turniereComboBox.setForeground(Color.WHITE);
+        turniereComboBox.setForeground(Color.BLACK);
         turniereComboBox.setBounds(50, 100, 200, 50);
         turniereComboBox.setVisible(true);
 
@@ -76,16 +76,16 @@ public class TurnierAuswahlFenster extends JFrame {
 
 
         turnierButton.addActionListener(e -> {
-            int id = ((Turnier) turniereComboBox.getSelectedItem()).getId();
-            //Todo liste nach nunier von id
-            aktuellesTurnier = alleTurniere[id - 1];
-            var SpieleZuTurnier = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
-                                        .collect(Collectors.toList());
+            Turnier turnier = ((Turnier) turniereComboBox.getSelectedItem());
 
-            Spiel[] spiele = API.startTurnier(id);
+            aktuellesTurnier = turnier;
+            var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == turnier.getId())
+                                      .collect(Collectors.toList());
+
+            Spiel[] spiele = API.startTurnier(turnier.getId());
             turnierbaumGenerieren(spiele);
 
-            if (SpieleZuTurnier.size() != 0) {
+            if (!turnierSpiele.isEmpty()) {
                 App.turnierbaum.ladeSpieleAmAnfang(spiele);
             }
         });
