@@ -25,11 +25,12 @@ import static de.shgruppe.tischkicker.client.API.*;
 public class TeamsInitialisierenFenster extends JFrame {
     public static List<Team> teams = new ArrayList<>();
     private final JTextField turnierFeld = new JFormattedTextField();
+    private final JSpinner torAnzahlFeld = new JSpinner();
     private final JTextField playerField = new JTextField(15);
     private final JTextField teamNameField = new JTextField(15);
     private final JButton saveButtonTeams = new JButton("Speichern");
     private final JButton saveButtonPlayers = new JButton("Speichern");
-    private final JButton addTurniernameButton;
+    private final JButton addDataTurnierButton;
     private final JButton addPlayerButton;
     private final JButton addTeamButton;
     private final JButton addConfigButton;
@@ -57,8 +58,8 @@ public class TeamsInitialisierenFenster extends JFrame {
         tempPlayers = new ArrayList<>();
         initRows();
 
-        addTurniernameButton = new JButton("Turniername Speichern");
-        addTurniernameButton.addActionListener(e -> addturniername());
+        addDataTurnierButton = new JButton("Turnier Speichern");
+        addDataTurnierButton.addActionListener(e -> setDataTurnier());
 
         addPlayerButton = new JButton("Spieler hinzufügen");
         // Aufruf der Methode zum Hinzufügen von Spielern
@@ -74,7 +75,7 @@ public class TeamsInitialisierenFenster extends JFrame {
         addConfigButton = new JButton("Bearbeiten");
         addConfigButton.setEnabled(false);
 
-        hauptPanel.add(addTurniernameButton);
+        hauptPanel.add(addDataTurnierButton);
         hauptPanel.add(addPlayerButton);
         hauptPanel.add(addTeamButton);
         hauptPanel.add(startButton);
@@ -90,9 +91,14 @@ public class TeamsInitialisierenFenster extends JFrame {
         add(hauptPanel);
 
         JLabel turnierNameLabel = new JLabel("Turniername:");
-        turnierNameLabel.setForeground(new Color(0, 255, 255));
+        turnierNameLabel.setForeground(Colors.InputForeground);
         hauptPanel.add(turnierNameLabel);
         hauptPanel.add(turnierFeld);
+
+        JLabel torAnzahlLabel = new JLabel("Tor-Anzahl:");
+        torAnzahlLabel.setForeground(Colors.InputForeground);
+        hauptPanel.add(torAnzahlLabel);
+        hauptPanel.add(torAnzahlFeld);
 
         JLabel label = new JLabel("Spieler:");
         label.setForeground(Colors.InputForeground);
@@ -107,6 +113,7 @@ public class TeamsInitialisierenFenster extends JFrame {
         Hint.enableFor(turnierFeld, "Turniername");
         Hint.enableFor(teamNameField, "Teamname");
         Hint.enableFor(playerField, "Spieler");
+
     }
 
     private void addPlayer() {
@@ -398,12 +405,13 @@ public class TeamsInitialisierenFenster extends JFrame {
         });
     }
 
-    public void addturniername() {
+    public void setDataTurnier() {
         String aktuellerturniername = turnierFeld.getText();
-
-        if (!aktuellerturniername.isEmpty() && !aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben")) {
-            addTurniernameButton.setEnabled(false);
-
+        int tore = (int) torAnzahlFeld.getValue();
+        if (!aktuellerturniername.isEmpty() && !aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben")
+            && tore > 0) {
+            addDataTurnierButton.setEnabled(false);
+            TurnierAuswahlFenster.aktuellesTurnier.setMaximalToreBisGewonnen(tore);
             TurnierAuswahlFenster.aktuellesTurnier.setTurnierName(aktuellerturniername);
             API.turnierupdate(TurnierAuswahlFenster.aktuellesTurnier);
         }
