@@ -95,7 +95,7 @@ public class TeamsInitialisierenFenster extends JFrame {
         hauptPanel.add(turnierNameLabel);
         hauptPanel.add(turnierFeld);
 
-        JLabel torAnzahlLabel = new JLabel("Tor-Anzahl:");
+        JLabel torAnzahlLabel = new JLabel("Tor-Anzahl (0-99):");
         torAnzahlLabel.setForeground(Colors.InputForeground);
         hauptPanel.add(torAnzahlLabel);
         hauptPanel.add(torAnzahlFeld);
@@ -409,7 +409,7 @@ public class TeamsInitialisierenFenster extends JFrame {
         String aktuellerturniername = turnierFeld.getText();
         int tore = (int) torAnzahlFeld.getValue();
         if (!aktuellerturniername.isEmpty() && !aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben")
-            && tore > 0) {
+            && tore > 0 && tore < 99) {
             addDataTurnierButton.setEnabled(false);
             TurnierAuswahlFenster.aktuellesTurnier.setMaximalToreBisGewonnen(tore);
             TurnierAuswahlFenster.aktuellesTurnier.setTurnierName(aktuellerturniername);

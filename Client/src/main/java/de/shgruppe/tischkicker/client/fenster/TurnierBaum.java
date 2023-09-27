@@ -24,6 +24,7 @@ public class TurnierBaum {
     Spielfeld selectedSpielfeld;
     Spielfeld aktuellesSpiel;
     JLabel hinweis = new JLabel();
+    JLabel tore = new JLabel();
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
     ArrayList<Spielfeld> alleSpielfelder = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
@@ -41,8 +42,11 @@ public class TurnierBaum {
         hinweis.setBounds(300, 20, 250, 50);
         hinweis.setText("* = Zufälliger Verlierer dieser Spiel-Phase");
         hinweis.setForeground(Colors.HINWEIS_SCHRIFT);
-
         panel.add(hinweis);
+
+        tore.setBounds(100,20,100,50);
+        tore.setForeground(Colors.HINWEIS_SCHRIFT);
+        panel.add(tore);
 
         frame.setSize(1920, 1080);
         int anzahlTeams = API.getTeams().length;
@@ -68,6 +72,7 @@ public class TurnierBaum {
     public int tunierbaumErstellen(double anzahlTeams, List<Spiel> spiele) {
 
         frame.setTitle(TurnierAuswahlFenster.aktuellesTurnier.getTurnierName());
+        tore.setText("Max-Tore = "+TurnierAuswahlFenster.aktuellesTurnier.getMaximalToreBisGewonnen());
         int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
         int teamAnzahl = (int) anzahlTeams;
         double spielfelderAnzahlDouble; // Zwischenspeicher für die Berechnungen und den Abbruch der Do-While Schleife
