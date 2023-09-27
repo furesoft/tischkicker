@@ -7,6 +7,7 @@ import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tischkicker.messages.SiegerTreppchenMessage;
 import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.messages.TurnierBeendetMessage;
@@ -16,6 +17,7 @@ import tischkicker.models.Tor;
 import tischkicker.models.Turnier;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -159,6 +161,11 @@ public class SpielManager {
 
                 SocketHandler.broadcast(tmsg);
 
+                SiegerTreppchenMessage treppchenMessage = new SiegerTreppchenMessage();
+                treppchenMessage.teams = getTreppchenTeams();
+
+                SocketHandler.broadcast(treppchenMessage);
+
                 stats.incrementTeamTore(ergebnis.teams[0], ergebnis.toreTeam1, ergebnis.toreTeam2);
                 stats.incrementTeamTore(ergebnis.teams[1], ergebnis.toreTeam2, ergebnis.toreTeam1);
             }
@@ -167,8 +174,8 @@ public class SpielManager {
             msg.setGewinner(getGewinner(ergebnis.spiel));
             msg.setSpiel(ergebnis.spiel);
             msg.setNeuesSpiel(neuesSpiel);
-            SocketHandler.broadcast(msg);
 
+            SocketHandler.broadcast(msg);
 
             if (!ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()) {
                 reset();
@@ -176,6 +183,56 @@ public class SpielManager {
 
             spielVorbei = true;
         }
+    }
+
+    private Team[] getTreppchenTeams() {
+        ArrayList<Team> teams = new ArrayList<>();
+
+        Team erster = getGewinner(ergebnis.spiel);
+        Team zweiter = Arrays.stream(ergebnis.teams).filter(t -> t.getId() != erster.getId()).findFirst().get();
+
+        int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
+        Spiel[] spieleVorherigePhase = (Spiel[]) spielRepository.findAll().stream()
+                                                                .filter(s -> s.getQualifikation() == vorheridePhasenID)
+                                                                .toArray();
+        ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase);
+        Team dritter = getBestVerlierer(verliererTeams);
+
+        teams.add(erster);
+        teams.add(zweiter);
+        teams.add(dritter);
+
+        return (Team[]) teams.toArray();
+    }
+
+    private Team getBestVerlierer(ArrayList<Team> verliererTeams) {
+        Team besterVerlierer = null;
+
+        for (Team team : verliererTeams) {
+            if (besterVerlierer == null) {
+                besterVerlierer = team;
+                continue;
+            }
+
+            if (team.getGesamttore() > besterVerlierer.getGesamttore()) {
+                besterVerlierer = team;
+            }
+        }
+
+        return besterVerlierer;
+    }
+
+    private ArrayList<Team> getVerliererTeams(Spiel[] spieleVorherigePhase) {
+        ArrayList<Team> teams = new ArrayList<>();
+
+        for (Spiel spiel : spieleVorherigePhase) {
+            int verliereID = Arrays.stream(spiel.getTeamIDs()).filter(id -> id != spiel.getGewinnerID()).findFirst()
+                                   .getAsInt();
+
+            teams.add(teamRepository.findById(verliereID).get());
+        }
+
+        return teams;
     }
 
     private Team getGewinner(Spiel spiel) {

@@ -10,7 +10,6 @@ import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Turnier;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,17 +29,10 @@ public class TurnierController {
     @GetMapping("/turniere/{id}")
     public Turnier einzelnesTurnierHolen(@PathVariable int id) {
         Optional<Turnier> turnier = repository.findById(id);
+
         return Hilfsmethoden.optionalCheck(turnier, id);
     }
-/*
-    @GetMapping("/turniere/{datum}")
-    public Turnier turnierbyDatum(@PathVariable Date datum) {
-        // return repository.findByDate(datum);
-        //ToDo: Nicht implementiert
-        return null;
-    }
 
- */
 
     @GetMapping("/turniere")
     public List<Turnier> alleTurniereHolen() {
@@ -69,8 +61,8 @@ public class TurnierController {
         return turnier;
     }
 
-   @PostMapping("/turnierupdaten")
+    @PostMapping("/turnierupdaten")
     public void updateturnier(@RequestBody Turnier turnier) {
-       repository.saveAndFlush(turnier);
-   }
+        repository.saveAndFlush(turnier);
+    }
 }

@@ -3,13 +3,11 @@ package de.shgruppe.tischkicker.client.websockets;
 import com.google.gson.Gson;
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
+import de.shgruppe.tischkicker.client.ui.Siegertreppchen;
 import de.shgruppe.tischkicker.client.ui.Spielfeld;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import tischkicker.messages.Message;
-import tischkicker.messages.MessageType;
-import tischkicker.messages.SpielBeendetMessage;
-import tischkicker.messages.SpielErgebnis;
+import tischkicker.messages.*;
 import tischkicker.models.Spiel;
 
 import java.net.URI;
@@ -42,8 +40,12 @@ class Websocket extends WebSocketClient {
             System.out.printf(String.valueOf(Thread.currentThread().getId()));
             App.turnierbaum.ergebnisUebertragen(spielergebnis);
         }
-        else if (deserializedMessage.type == MessageType.Phasenaenderung) {
-            //ToDo: implementiere spiel in nächster phase anzeigen
+        else if (deserializedMessage.type == MessageType.SiegerTreppchen) {
+            SiegerTreppchenMessage treppchenMessage = gson.fromJson(message, SiegerTreppchenMessage.class);
+
+            Siegertreppchen treppchen = new Siegertreppchen();
+            treppchen.setTeams(treppchenMessage.teams);
+            treppchen.setVisible(true);
         }
         else if (deserializedMessage.type == MessageType.SpielBeendet) {
             SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);

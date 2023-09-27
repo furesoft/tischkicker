@@ -70,7 +70,6 @@ public class TeamsInitialisierenFenster extends JFrame {
 
         startButton = new JButton("Start");
 
-
         addConfigButton = new JButton("Bearbeiten");
         addConfigButton.setEnabled(false);
 
@@ -163,10 +162,10 @@ public class TeamsInitialisierenFenster extends JFrame {
         spielerTab = new JPanel();
         spielerTab.setLayout(new BoxLayout(spielerTab, BoxLayout.PAGE_AXIS));
 
-        // Sammeln aller Spieler aller Teams in einer Liste
         List<Spieler> spielers = List.of(Objects.requireNonNull(getSpieler()));
 
         int playerIndex = 0;
+
         // Teamnamen hinzufügen
         for (Team team : teams) {
             JLabel teamLabel = new JLabel("Team " + team.getName());
@@ -255,7 +254,6 @@ public class TeamsInitialisierenFenster extends JFrame {
     }
 
 
-    // Methode zum Aktualisieren von Spielernamen
     private void updatePlayerNames() {
         int playerIndex = 0;
 
@@ -271,16 +269,14 @@ public class TeamsInitialisierenFenster extends JFrame {
             for (int j = 0; j < team.getNumberOfPlayersPerTeam(); j++) {
                 String newPlayerName = playerNameFields.get(playerIndex).getText();
 
-
-                //buttonNamen
                 if (!newPlayerName.equals(Objects.requireNonNull(spielers).get(playerIndex).getName())) {
                     API.spielerAnpassen(spielers.get(playerIndex).getId(), newPlayerName);
                     for (int h = 0; h < buttonNamen.size(); h++) {
                         if (!buttonNamen.get(playerIndex).getData().equals(newPlayerName)) {
                             buttonNamen.get(playerIndex).setData(newPlayerName);
-
                         }
                     }
+
                     System.out.println(spielers.get(playerIndex).getId());
                     team.setPlayerName(j, newPlayerName);
 
@@ -299,12 +295,11 @@ public class TeamsInitialisierenFenster extends JFrame {
         List<Team> teamsVonAPIAnfrage = List.of(Objects.requireNonNull(getTeams()));
         for (int i = 0; i < teams.size(); i++) {
             Team team = teams.get(i);
-            String teamNameField = teamNameFields.get(i).getText();
+            String teamName = teamNameFields.get(i).getText();
 
-
-            if (!teamNameField.equals(Objects.requireNonNull(teamsVonAPIAnfrage).get(i).getName())) {
-                API.teamNamenAendern(teamsVonAPIAnfrage.get(i).getID(), teamNameField);
-                team.setName(teamNameField);
+            if (!teamName.equals(Objects.requireNonNull(teamsVonAPIAnfrage).get(i).getName())) {
+                API.teamNamenAendern(teamsVonAPIAnfrage.get(i).getID(), teamName);
+                team.setName(teamName);
 
                 spielerTab.invalidate();
                 spielerTab.repaint();
@@ -328,14 +323,12 @@ public class TeamsInitialisierenFenster extends JFrame {
                 if (spielers.get(playerIndex).getName().equals(playerNameToBeRemoved)) {
 
                     if (team.players.size() > 1) {
-                        // Spielerpanel löschen
                         spielerTab.remove(btn.getParent());
                         spielerTab.invalidate();
                         buttonNamen.remove(playerIndex);
                         team.players.remove(playerName);
                         deleteSpieler(spielers.get(playerIndex).getId());
                         playerNameFields.remove(playerIndex);
-                        // Entferne das Panel des Spielers aus dem spielerPanel
                         spielerTab.repaint();
                         //spielerPanel.revalidate();
 
