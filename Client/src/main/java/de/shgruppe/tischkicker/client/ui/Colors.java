@@ -14,4 +14,7 @@ public class Colors {
     public static final Color InputForeground = new Color(0, 255, 255);
     public static final Color SpielfeldName = Color.white;
     public static final Color SCHRIFT = new Color(210, 210, 210);
+    public static final Color TreppchenZweiter = new Color(201, 197, 195);
+    public static final Color TreppchenErster = new Color(149, 157, 158);
+    public static final Color TreppchenDritter = new Color(209, 210, 209);
 }

@@ -19,7 +19,9 @@ import tischkicker.models.Turnier;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 class SpielHolder {
     public int teamID;
@@ -185,16 +187,16 @@ public class SpielManager {
         }
     }
 
-    private Team[] getTreppchenTeams() {
+    private ArrayList<Team> getTreppchenTeams() {
         ArrayList<Team> teams = new ArrayList<>();
 
         Team erster = getGewinner(ergebnis.spiel);
         Team zweiter = Arrays.stream(ergebnis.teams).filter(t -> t.getId() != erster.getId()).findFirst().get();
 
         int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
-        Spiel[] spieleVorherigePhase = (Spiel[]) spielRepository.findAll().stream()
-                                                                .filter(s -> s.getQualifikation() == vorheridePhasenID)
-                                                                .toArray();
+        List<Spiel> spieleVorherigePhase = spielRepository.findAll().stream()
+                                                          .filter(s -> s.getQualifikation() == vorheridePhasenID)
+                                                          .collect(Collectors.toList());
         ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase);
         Team dritter = getBestVerlierer(verliererTeams);
 
@@ -202,7 +204,7 @@ public class SpielManager {
         teams.add(zweiter);
         teams.add(dritter);
 
-        return (Team[]) teams.toArray();
+        return teams;
     }
 
     private Team getBestVerlierer(ArrayList<Team> verliererTeams) {
@@ -222,7 +224,7 @@ public class SpielManager {
         return besterVerlierer;
     }
 
-    private ArrayList<Team> getVerliererTeams(Spiel[] spieleVorherigePhase) {
+    private ArrayList<Team> getVerliererTeams(List<Spiel> spieleVorherigePhase) {
         ArrayList<Team> teams = new ArrayList<>();
 
         for (Spiel spiel : spieleVorherigePhase) {

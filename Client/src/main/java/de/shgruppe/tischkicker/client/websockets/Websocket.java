@@ -3,7 +3,7 @@ package de.shgruppe.tischkicker.client.websockets;
 import com.google.gson.Gson;
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
-import de.shgruppe.tischkicker.client.ui.Siegertreppchen;
+import de.shgruppe.tischkicker.client.fenster.Siegertreppchen;
 import de.shgruppe.tischkicker.client.ui.Spielfeld;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -59,12 +59,9 @@ class Websocket extends WebSocketClient {
 
             holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI();
 
-
             App.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
             App.turnierbaum.block();
-
         }
-
     }
 
     private void holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI() {

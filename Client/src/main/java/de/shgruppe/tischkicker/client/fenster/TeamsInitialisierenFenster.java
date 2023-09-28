@@ -81,6 +81,8 @@ public class TeamsInitialisierenFenster extends JFrame {
         hauptPanel.add(new JScrollPane(outputTextArea));
 
         initActionListener();
+
+        setLocationRelativeTo(null);
     }
 
     private void initRows() {
