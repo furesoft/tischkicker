@@ -49,7 +49,6 @@ public class TeamsInitialisierenFenster extends JFrame {
 
     public TeamsInitialisierenFenster() {
         setTitle("Team App");
-        setSize(600, 500);
 
         hauptPanel.setBackground(Colors.BACKGROUND);
         hauptPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
