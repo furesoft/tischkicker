@@ -42,7 +42,7 @@ class Websocket extends WebSocketClient {
             System.out.printf(String.valueOf(Thread.currentThread().getId()));
             App.turnierbaum.ergebnisUebertragen(spielergebnis);
         }
-        else if (deserializedMessage.type == MessageType.Phasenaenderung) {
+        else if (deserializedMessage.type == MessageType.TurnierBeendet) {
             //ToDo: implementiere spiel in nächster phase anzeigen
         }
         else if (deserializedMessage.type == MessageType.SpielBeendet) {

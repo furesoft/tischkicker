@@ -39,12 +39,12 @@ public class TurnierBaum {
         starteSpiel.setBounds(50, 20, 150, 50);
 
         panel.add(starteSpiel);
-        hinweis.setBounds(300, 20, 250, 50);
+        hinweis.setBounds(500, 20, 250, 50);
         hinweis.setText("* = Zufälliger Verlierer dieser Spiel-Phase");
         hinweis.setForeground(Colors.HINWEIS_SCHRIFT);
         panel.add(hinweis);
 
-        tore.setBounds(100,20,100,50);
+        tore.setBounds(300,20,100,50);
         tore.setForeground(Colors.HINWEIS_SCHRIFT);
         panel.add(tore);
 
@@ -73,6 +73,7 @@ public class TurnierBaum {
 
         frame.setTitle(TurnierAuswahlFenster.aktuellesTurnier.getTurnierName());
         tore.setText("Max-Tore = "+TurnierAuswahlFenster.aktuellesTurnier.getMaximalToreBisGewonnen());
+        alleSpielfelder.clear();
         int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
         int teamAnzahl = (int) anzahlTeams;
         double spielfelderAnzahlDouble; // Zwischenspeicher für die Berechnungen und den Abbruch der Do-While Schleife
@@ -323,6 +324,13 @@ public class TurnierBaum {
                 }
             }
         }
+    }
+    public void resetTurnierBaum ()
+    {
+        panel.removeAll();
+        panel.add(starteSpiel);
+        panel.add(hinweis);
+        panel.add(tore);
     }
 }
 

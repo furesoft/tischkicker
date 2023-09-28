@@ -359,6 +359,8 @@ public class API {
             }
 
             App.turnierbaum.frame.setVisible(true);
+            App.turnierbaum.frame.repaint();
+            App.turnierbaum.frame.revalidate();
         }
         else {
             // TODO Fehlermeldung ausgeben, falls keine Teams vorhanden sind (null), zum Beispiel mit Exception werfen

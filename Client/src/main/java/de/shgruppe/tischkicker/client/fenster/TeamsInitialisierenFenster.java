@@ -95,10 +95,11 @@ public class TeamsInitialisierenFenster extends JFrame {
         hauptPanel.add(turnierNameLabel);
         hauptPanel.add(turnierFeld);
 
-        JLabel torAnzahlLabel = new JLabel("Tor-Anzahl (0-99):");
+        JLabel torAnzahlLabel = new JLabel("Tor-Anzahl (1-99):");
         torAnzahlLabel.setForeground(Colors.InputForeground);
         hauptPanel.add(torAnzahlLabel);
         hauptPanel.add(torAnzahlFeld);
+        torAnzahlFeld.setValue(10); // standardmäßig 10 Tore bis Gewinn
 
         JLabel label = new JLabel("Spieler:");
         label.setForeground(Colors.InputForeground);
@@ -394,6 +395,7 @@ public class TeamsInitialisierenFenster extends JFrame {
             if (!turnierSpiele.isEmpty()) {
                 App.turnierbaum.ladeSpieleAmAnfang(spiele);
             }
+            this.setVisible(false);
         });
         addConfigButton.addActionListener(e -> {
             initializeUI();
@@ -408,6 +410,7 @@ public class TeamsInitialisierenFenster extends JFrame {
     public void setDataTurnier() {
         String aktuellerturniername = turnierFeld.getText();
         int tore = (int) torAnzahlFeld.getValue();
+
         if (!aktuellerturniername.isEmpty() && !aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben")
             && tore > 0 && tore < 99) {
             addDataTurnierButton.setEnabled(false);
@@ -415,5 +418,9 @@ public class TeamsInitialisierenFenster extends JFrame {
             TurnierAuswahlFenster.aktuellesTurnier.setTurnierName(aktuellerturniername);
             API.turnierupdate(TurnierAuswahlFenster.aktuellesTurnier);
         }
+
+        TurnierAuswahlFenster.turniereComboBox.addItem(TurnierAuswahlFenster.aktuellesTurnier);
+        TurnierAuswahlFenster.alleTurniere.add(TurnierAuswahlFenster.aktuellesTurnier);
+
     }
 }

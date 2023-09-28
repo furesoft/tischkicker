@@ -9,7 +9,9 @@ import tischkicker.models.Turnier;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static de.shgruppe.tischkicker.client.API.getSpieleFromServer;
@@ -18,11 +20,14 @@ import static de.shgruppe.tischkicker.client.API.turnierbaumGenerieren;
 public class TurnierAuswahlFenster extends JFrame {
 
     public static Turnier aktuellesTurnier;
+    static JComboBox turniereComboBox = new JComboBox();
+
+    static ArrayList<Turnier> alleTurniere;
 
     public TurnierAuswahlFenster() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Turnier[] alleTurniere = API.getTurniere();
+        alleTurniere = new ArrayList<>(List.of(API.getTurniere()));
 
         this.setSize(600, 600);
 
@@ -39,49 +44,55 @@ public class TurnierAuswahlFenster extends JFrame {
         turnierErstellenButton.setBackground(Colors.BUTTON_BACKGROUND);
 
         turnierErstellenButton.addActionListener(e -> {
-            aktuellesTurnier = API.erstelleTurnier();
+            App.turnierbaum.resetTurnierBaum();
+            Turnier turnier = API.erstelleTurnier();
+            aktuellesTurnier = turnier;
+
+            //aktuellesTurnier = API.erstelleTurnier();
             new TeamsInitialisierenFenster().setVisible(true);
         });
 
 
-        DataButton turnierButton = new DataButton("Turnier anzeigen", true);
-        turnierButton.setSize(50, 50);
-        turnierButton.setBackground(Colors.BUTTON_BACKGROUND);
-        turnierButton.setForeground(Colors.BUTTON_SCHRIFT);
-        turnierButton.setBounds(50, 200, 200, 50);
-        panel.add(turnierButton);
-        turnierButton.setVisible(true);
+        DataButton turnierStartenButton = new DataButton("Turnier anzeigen", true);
+        turnierStartenButton.setSize(50, 50);
+        turnierStartenButton.setBackground(Colors.BUTTON_BACKGROUND);
+        turnierStartenButton.setForeground(Colors.BUTTON_SCHRIFT);
+        turnierStartenButton.setBounds(50, 200, 200, 50);
+        panel.add(turnierStartenButton);
+        turnierStartenButton.setVisible(true);
 
         turnierErstellenButton.setBounds(300, 100, 150, 50);
         panel.add(turnierErstellenButton);
         turnierErstellenButton.setVisible(true);
 
 
-        JComboBox turniereComboBox = new JComboBox(alleTurniere);
-
         panel.add(turniereComboBox);
 
         turniereComboBox.setBackground(Color.WHITE);
         turniereComboBox.setForeground(Color.BLACK);
         turniereComboBox.setBounds(50, 100, 200, 50);
+        for (Turnier value : alleTurniere) {
+            turniereComboBox.addItem(value);
+        }
         turniereComboBox.setVisible(true);
 
         turniereComboBox.addActionListener(e -> {
             Turnier selectedTurnier = (Turnier) turniereComboBox.getSelectedItem();
 
             if (selectedTurnier.isGespielt()) {
-                turnierButton.setText("Turnier anzeigen");
+                turnierStartenButton.setText("Turnier anzeigen");
             }
             else {
-                turnierButton.setText("Turnier starten/fortsetzen");
+                turnierStartenButton.setText("Turnier starten/fortsetzen");
             }
         });
 
 
-        turnierButton.addActionListener(e -> {
+        turnierStartenButton.addActionListener(e -> {
+            App.turnierbaum.resetTurnierBaum();
             Turnier turnier = ((Turnier) turniereComboBox.getSelectedItem());
 
-            aktuellesTurnier = Arrays.stream(alleTurniere).filter(t -> t.getId() == turnier.getId()).findFirst().get();
+            aktuellesTurnier = alleTurniere.stream().filter(t -> t.getId() == turnier.getId()).findFirst().get();
 
             var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == turnier.getId())
                                       .collect(Collectors.toList());
