@@ -10,6 +10,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import tischkicker.messages.*;
 import tischkicker.models.Spiel;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,12 @@ class Websocket extends WebSocketClient {
         else if (deserializedMessage.type == MessageType.SiegerTreppchen) {
             SiegerTreppchenMessage treppchenMessage = gson.fromJson(message, SiegerTreppchenMessage.class);
 
-            Siegertreppchen treppchen = new Siegertreppchen();
+            Siegertreppchen treppchen = null;
+            try {
+                treppchen = new Siegertreppchen();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             treppchen.setTeams(treppchenMessage.teams);
             treppchen.setVisible(true);
         }
@@ -65,10 +71,8 @@ class Websocket extends WebSocketClient {
     }
 
     private void holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI() {
-        // Alle Spiele vom Server holen
         List<Spiel> alleSpieleMitTeamnamen = Arrays.asList(API.getSpieleFromServer());
 
-        // Alle Teamnamen aktualisieren.
         App.turnierbaum.updateTeamnames(alleSpieleMitTeamnamen);
     }
 

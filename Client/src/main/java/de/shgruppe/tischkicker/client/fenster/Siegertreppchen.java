@@ -5,20 +5,21 @@ import tischkicker.models.Team;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 
 public class Siegertreppchen extends Frame {
 
-    JLabel treppchenPlatz1 = new JLabel("   #1", SwingConstants.CENTER);
-    JLabel treppchenPlatz2 = new JLabel("   #2", SwingConstants.CENTER);
-    JLabel treppchenPlatz3 = new JLabel("   #3", SwingConstants.CENTER);
+    JLabel treppchenPlatz1 = new JLabel("", SwingConstants.CENTER);
+    JLabel treppchenPlatz2 = new JLabel("", SwingConstants.CENTER);
+    JLabel treppchenPlatz3 = new JLabel("", SwingConstants.CENTER);
 
-    public Siegertreppchen() {
+    public Siegertreppchen() throws IOException {
         int x = 15;
         int y = 15;
-        int width = 150;
-        int height = 100;
+        int width = 800;
+        int height = 750;
         int unterschied = 28;
 
         setSize(width, height);
@@ -39,6 +40,14 @@ public class Siegertreppchen extends Frame {
         add(treppchenPlatz3);
 
         setLocationRelativeTo(null);
+
+        JLabel jlb = new JLabel();
+        jlb.setIcon(new ImageIcon(getClass().getResourceAsStream("podium.png").readAllBytes()));
+
+        add(jlb);
+
+        this.setResizable(false);
+        this.pack();
     }
 
     public void setTeams(List<Team> teams) {
