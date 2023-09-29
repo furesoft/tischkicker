@@ -3,15 +3,14 @@ package de.shgruppe.tischkicker.client.websockets;
 import com.google.gson.Gson;
 import de.shgruppe.tischkicker.client.API;
 import de.shgruppe.tischkicker.client.App;
+import de.shgruppe.tischkicker.client.fenster.Siegertreppchen;
 import de.shgruppe.tischkicker.client.ui.Spielfeld;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import tischkicker.messages.Message;
-import tischkicker.messages.MessageType;
-import tischkicker.messages.SpielBeendetMessage;
-import tischkicker.messages.SpielErgebnis;
+import tischkicker.messages.*;
 import tischkicker.models.Spiel;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -42,8 +41,17 @@ class Websocket extends WebSocketClient {
             System.out.printf(String.valueOf(Thread.currentThread().getId()));
             App.turnierbaum.ergebnisUebertragen(spielergebnis);
         }
-        else if (deserializedMessage.type == MessageType.TurnierBeendet) {
-            //ToDo: implementiere spiel in nächster phase anzeigen
+        else if (deserializedMessage.type == MessageType.SiegerTreppchen) {
+            SiegerTreppchenMessage treppchenMessage = gson.fromJson(message, SiegerTreppchenMessage.class);
+
+            Siegertreppchen treppchen = null;
+            try {
+                treppchen = new Siegertreppchen();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            treppchen.setTeams(treppchenMessage.teams);
+            treppchen.setVisible(true);
         }
         else if (deserializedMessage.type == MessageType.SpielBeendet) {
             SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);
@@ -57,19 +65,14 @@ class Websocket extends WebSocketClient {
 
             holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI();
 
-
             App.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
             App.turnierbaum.block();
-
         }
-
     }
 
     private void holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI() {
-        // Alle Spiele vom Server holen
         List<Spiel> alleSpieleMitTeamnamen = Arrays.asList(API.getSpieleFromServer());
 
-        // Alle Teamnamen aktualisieren.
         App.turnierbaum.updateTeamnames(alleSpieleMitTeamnamen);
     }
 
