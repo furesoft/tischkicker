@@ -1,7 +1,5 @@
 package tischkicker.messages;
 
 public enum MessageType {
-    SpielErgebnis, Phasenaenderung,
-
-    SpielBeendet,
+    SpielErgebnis, Phasenaenderung, TurnierBeendet, SpielBeendet, SiegerTreppchen
 }

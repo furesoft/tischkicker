@@ -5,18 +5,17 @@ import javax.persistence.*;
 @Entity
 public class Spieler {
     private String name;
-    private String abteilung;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
+    private int id;
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -24,14 +23,7 @@ public class Spieler {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.replace("\"", "");
     }
 
-    public String getAbteilung() {
-        return this.abteilung;
-    }
-
-    public void setAbteilung(String abteilung) {
-        this.abteilung = abteilung;
-    }
 }

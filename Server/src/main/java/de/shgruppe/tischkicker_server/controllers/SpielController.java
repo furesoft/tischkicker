@@ -1,16 +1,15 @@
 package de.shgruppe.tischkicker_server.controllers;
 
-import de.shgruppe.tischkicker_server.errorhandling.Hilfsmethoden;
+import de.shgruppe.tischkicker_server.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.logic.SpielManager;
+import de.shgruppe.tischkicker_server.logic.TeamNameGetter;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
-import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tischkicker.models.Spiel;
-import tischkicker.models.Team;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,11 +24,17 @@ public class SpielController {
     SpielRepository spielRepository;
 
     @Autowired
-    TeamRepository teamRepository;
+    TeamNameGetter teamNameGetter;
 
     @GetMapping("/spiele")
     public List<Spiel> alleSpieleHolen() {
-        return spielRepository.findAll();
+        List<Spiel> alleSpiele = spielRepository.findAll();
+
+        alleSpiele.stream().forEach(spiel -> {
+            ergaenzeTeamnamen(spiel);
+        });
+
+        return alleSpiele;
     }
 
     @GetMapping("/spiele/{id}")
@@ -38,25 +43,25 @@ public class SpielController {
 
         Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel, id);
 
-        int[] teamIDs = spiel1.getTeamIDs();
-
-        Optional<Team> team1 = teamRepository.findById(teamIDs[0]);
-        Optional<Team> team2 = teamRepository.findById(teamIDs[2]);
-
-        Team t1 = Hilfsmethoden.optionalCheck(team1, teamIDs[0]);
-        Team t2 = Hilfsmethoden.optionalCheck(team2, teamIDs[2]);
-
-        spiel1.setTeamNames(t1.getName(), t2.getName());
+        ergaenzeTeamnamen(spiel1);
 
         return spiel1;
     }
 
-    @PostMapping("/spiel/start/{id}")
-    public void spielStarten(@PathVariable int id) {
-        Optional<Spiel> spiel = spielRepository.findById(id);
+    private void ergaenzeTeamnamen(Spiel spiel) {
+        int[] teamIDs = spiel.getTeamIDs();
+        String teamname1 = teamNameGetter.getTeamName(teamIDs[0]);
+        String teamname2 = teamNameGetter.getTeamName(teamIDs[1]);
 
-        Spiel spiel1 = Hilfsmethoden.optionalCheck(spiel, id);
-        spielManager.spielStarten(spiel1);
+        spiel.setTeamNames(teamname1, teamname2);
+    }
+
+    @PostMapping("/spiel/start/{id}")
+    public void spielStarten(@PathVariable int id) throws IOException {
+        Optional<Spiel> spielAusDb = spielRepository.findById(id);
+
+        Spiel spiel = Hilfsmethoden.optionalCheck(spielAusDb, id);
+        spielManager.spielStarten(spiel);
     }
 
     @PostMapping("/spiel/aufgeben/{id}")

@@ -1,37 +1,53 @@
 package de.shgruppe.tischkicker_server.logic;
 
+import de.shgruppe.tischkicker_server.Hilfsmethoden;
 import de.shgruppe.tischkicker_server.SocketHandler;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
+import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tischkicker.messages.SiegerTreppchenMessage;
 import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.messages.SpielErgebnis;
+import tischkicker.messages.TurnierBeendetMessage;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Tor;
+import tischkicker.models.Turnier;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 class SpielHolder {
     public int teamID;
 
     public int tore;
-
 }
 
 @Component
 public class SpielManager {
 
     public boolean spielVorbei = false;
-    public int anzahltoreBisGewonnen = 10;
+    public int anzahlToreBisGewonnen = 10;
+
     @Autowired
     SpielRepository spielRepository;
     @Autowired
     TeamRepository teamRepository;
     @Autowired
     TurnierManager turnierManager;
+
+    @Autowired
+    TurnierRepository turnierRepository;
+
+    @Autowired
+    Statistics stats;
+
     private SpielErgebnis ergebnis = new SpielErgebnis();
     private boolean tauscheTeams = false;
     private SpielHolder team1 = new SpielHolder();
@@ -50,7 +66,7 @@ public class SpielManager {
         spielVorbei = false;
     }
 
-    public void spielStarten(Spiel spiel) {
+    public void spielStarten(Spiel spiel) throws IOException {
         reset();
 
         ergebnis.spiel = spiel;
@@ -61,6 +77,18 @@ public class SpielManager {
 
         ergebnis.seiteTeam2 = Tor.Seite.ROT;
         ergebnis.seiteTeam1 = Tor.Seite.WEISS;
+
+        anzahlToreBisGewonnen = getTurnier(spiel.getTurnierID()).getMaximalToreBisGewonnen();
+
+        if (anzahlToreBisGewonnen == 0) {
+            anzahlToreBisGewonnen = 10;
+        }
+
+        SocketHandler.broadcast(ergebnis);
+    }
+
+    private Turnier getTurnier(int turnierID) {
+        return turnierManager.turnierRepository.findById(turnierID).get();
     }
 
     private Team[] getTeamsForSpiel(Spiel spiel) {
@@ -86,11 +114,13 @@ public class SpielManager {
     }
 
     private int getIdVonSeite(Tor.Seite seite) {
-        return getInfo(seite).teamID;
-    }
+        if (this.ergebnis.seiteTeam1 == seite) {
+            return team1.teamID;
+        }
+        else {
+            return team2.teamID;
+        }
 
-    private SpielHolder getInfo(Tor.Seite seite) {
-        return seite == Tor.Seite.ROT ? team1 : team2;
     }
 
     private SpielHolder getInfoByID(int id) {
@@ -101,15 +131,46 @@ public class SpielManager {
         return team2;
     }
 
-    /***
-     * Wenn Seitenwechsel aktiviert ist, wird bei der hälfte des maximums der Spiele um zu gewinnen ein Seitenwechsel durchgeführt.
-     * Wenn diese erreicht ist, ist das Spiel vorbei und wird in die Datenbank gespeichert.
-     */
     private void triggerSpielMode() throws IOException {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
 
-        if (maxTore == anzahltoreBisGewonnen) {
-            Spiel neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+        // Abfrage, ob die Gewinnbedingungen erfüllt wurden
+        if (maxTore == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben()) {
+            ergebnis.spiel.setToreteam1(team1.tore);
+            ergebnis.spiel.setToreteam2(team2.tore);
+
+            if (ergebnis.toreTeam1 == anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben()) {
+                ergebnis.spiel.setGewinnerID(ergebnis.teams[0].getId());
+            }
+            if (ergebnis.toreTeam2 == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben()) {
+                ergebnis.spiel.setGewinnerID(ergebnis.teams[1].getId());
+            }
+            spielRepository.saveAndFlush(ergebnis.spiel);
+
+            Spiel neuesSpiel = null;
+            try {
+                neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
+            } catch (TurnierBeendetException e) {
+                Optional<Turnier> turnier = turnierRepository.findById(ergebnis.spiel.getTurnierID());
+
+                turnier.get().setEnddatum(Hilfsmethoden.ermittleDatum());
+                turnier.get().setGespielt(true);
+
+                turnierRepository.saveAndFlush(turnier.get());
+
+                TurnierBeendetMessage tmsg = new TurnierBeendetMessage();
+                tmsg.setTurnier(turnier.get());
+
+                SocketHandler.broadcast(tmsg);
+
+                SiegerTreppchenMessage treppchenMessage = new SiegerTreppchenMessage();
+                treppchenMessage.teams = getTreppchenTeams();
+
+                SocketHandler.broadcast(treppchenMessage);
+
+                stats.incrementTeamTore(ergebnis.teams[0], ergebnis.toreTeam1, ergebnis.toreTeam2);
+                stats.incrementTeamTore(ergebnis.teams[1], ergebnis.toreTeam2, ergebnis.toreTeam1);
+            }
 
             SpielBeendetMessage msg = new SpielBeendetMessage();
             msg.setGewinner(getGewinner(ergebnis.spiel));
@@ -118,29 +179,94 @@ public class SpielManager {
 
             SocketHandler.broadcast(msg);
 
-            reset();
+
+            if (!ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()) {
+                reset();
+            }
 
             spielVorbei = true;
         }
     }
 
+    private ArrayList<Team> getTreppchenTeams() {
+        ArrayList<Team> teams = new ArrayList<>();
+
+        Team erster = getGewinner(ergebnis.spiel);
+        Team zweiter = Arrays.stream(ergebnis.teams).filter(t -> t.getId() != erster.getId()).findFirst().get();
+
+        int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
+        List<Spiel> spieleVorherigePhase = spielRepository.findAll().stream()
+                                                          .filter(s -> s.getQualifikation() == vorheridePhasenID)
+                                                          .collect(Collectors.toList());
+        ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase);
+        Team dritter = getBestVerlierer(verliererTeams);
+
+        teams.add(erster);
+        teams.add(zweiter);
+        teams.add(dritter);
+
+        return teams;
+    }
+
+    private Team getBestVerlierer(ArrayList<Team> verliererTeams) {
+        Team besterVerlierer = null;
+
+        for (Team team : verliererTeams) {
+            if (besterVerlierer == null) {
+                besterVerlierer = team;
+                continue;
+            }
+
+            if (team.getGesamttore() > besterVerlierer.getGesamttore()) {
+                besterVerlierer = team;
+            }
+        }
+
+        return besterVerlierer;
+    }
+
+    private ArrayList<Team> getVerliererTeams(List<Spiel> spieleVorherigePhase) {
+        ArrayList<Team> teams = new ArrayList<>();
+
+        for (Spiel spiel : spieleVorherigePhase) {
+            int verliereID = Arrays.stream(spiel.getTeamIDs()).filter(id -> id != spiel.getGewinnerID()).findFirst()
+                                   .getAsInt();
+
+            teams.add(teamRepository.findById(verliereID).get());
+        }
+
+        return teams;
+    }
+
     private Team getGewinner(Spiel spiel) {
         Team team = ergebnis.teams[1];
 
-        if (ergebnis.toreTeam1 > ergebnis.toreTeam2) {
+        if (ergebnis.teams[0].isAufgegeben()) {
+            team = ergebnis.teams[1];
+            team.setId(spiel.getTeamIDs()[1]);
+        }
+
+        if (ergebnis.teams[1].isAufgegeben()) {
+            team = ergebnis.teams[0];
+            team.setId(spiel.getTeamIDs()[0]);
+        }
+
+        if (ergebnis.toreTeam1 > ergebnis.toreTeam2 && !ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()) {
             team = ergebnis.teams[0];
             team.setId(spiel.getTeamIDs()[0]);
             return team;
         }
 
-        team.setId(spiel.getTeamIDs()[1]);
+        if (ergebnis.toreTeam1 < ergebnis.toreTeam2 && !ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()) {
+            team = ergebnis.teams[1];
+            team.setId(spiel.getTeamIDs()[1]);
+        }
 
         return team;
     }
 
     public void seitenWechsel() throws IOException {
         Tor.Seite tmpSeite = ergebnis.seiteTeam1;
-
         ergebnis.seiteTeam1 = ergebnis.seiteTeam2;
         ergebnis.seiteTeam2 = tmpSeite;
 
@@ -200,20 +326,22 @@ public class SpielManager {
         aufgegebenTeam.setAufgegeben(true);
         teamRepository.saveAndFlush(aufgegebenTeam);
 
-        SpielBeendetMessage msg = new SpielBeendetMessage();
+        triggerSpielMode();
+
+        /*SpielBeendetMessage msg = new SpielBeendetMessage();
         msg.setGewinner(getGewinnerWennAufgegeben(id));
         msg.setSpiel(ergebnis.spiel);
 
         SocketHandler.broadcast(msg);
 
-        reset();
+        reset();*/
     }
 
-    private Team getGewinnerWennAufgegeben(int id) {
+    /*private Team getGewinnerWennAufgegeben(int id) {
         if (ergebnis.spiel.getTeamIDs()[0] == id) {
             return ergebnis.teams[1];
         }
 
         return ergebnis.teams[0];
-    }
+    }*/
 }
