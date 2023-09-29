@@ -170,6 +170,7 @@ public class SpielManager {
             SocketHandler.broadcast(msg);
 
 
+
             if (!ergebnis.teams[0].isAufgegeben() && !ergebnis.teams[1].isAufgegeben()) {
                 reset();
             }

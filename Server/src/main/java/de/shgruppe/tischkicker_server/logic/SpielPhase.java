@@ -1,13 +1,16 @@
 package de.shgruppe.tischkicker_server.logic;
 
+import de.shgruppe.tischkicker_server.SocketHandler;
 import de.shgruppe.tischkicker_server.repositories.SpielRepository;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,7 +36,7 @@ public class SpielPhase {
      *
      * @param ergebnis Das Spielergebnis des zuletzt gespielten Spiels
      */
-    public Spiel empfangeEndergebnis(SpielErgebnis ergebnis) throws TurnierBeendetException {
+    public Spiel empfangeEndergebnis(SpielErgebnis ergebnis) throws TurnierBeendetException, IOException {
         Team gewinnerTeam = getGewinnerTeam(ergebnis);
 
         // wir bekommen das ergebnis mit der SpielID.
@@ -102,11 +105,20 @@ public class SpielPhase {
                         break;
                     }
                 }
+                if (i == spieleVorbei.size()-1)
+                {
+                    int teamdID = (uebriegesSpiel.getTeamIDs()[0]);
+                    String tName = teamNameGetter.getTeamName(teamdID);
+                    uebriegesSpiel.setTeams(teamdID,teamdID);
+                    uebriegesSpiel.setTeamNames(tName,tName);
+                    break;
+                }
             }
         }
 
         //wenn Nachfolger, dann Nachfolgespiel aktualisieren.
         Spiel naechstesSpiel = maybeNaechstesSpiel.get();
+
 
         int team1 = naechstesSpiel.getTeamIDs()[0];
         int team2 = naechstesSpiel.getTeamIDs()[1];
