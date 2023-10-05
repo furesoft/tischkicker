@@ -162,10 +162,12 @@ public class SpielManager {
 
                 SocketHandler.broadcast(tmsg);
 
+                /*
                 SiegerTreppchenMessage treppchenMessage = new SiegerTreppchenMessage();
                 treppchenMessage.teams = getTreppchenTeams();
 
                 SocketHandler.broadcast(treppchenMessage);
+                 */
 
                 stats.incrementTeamTore(ergebnis.teams[0], ergebnis.toreTeam1, ergebnis.toreTeam2);
                 stats.incrementTeamTore(ergebnis.teams[1], ergebnis.toreTeam2, ergebnis.toreTeam1);
