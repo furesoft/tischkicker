@@ -105,6 +105,7 @@ public class SpielPhase {
                         break;
                     }
                 }
+                /*
                 if (i == spieleVorbei.size()-1)
                 {
                     int teamdID = (uebriegesSpiel.getTeamIDs()[0]);
@@ -113,6 +114,8 @@ public class SpielPhase {
                     uebriegesSpiel.setTeamNames(tName,tName);
                     break;
                 }
+
+                 */
             }
         }
 

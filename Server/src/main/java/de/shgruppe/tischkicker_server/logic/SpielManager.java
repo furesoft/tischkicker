@@ -193,17 +193,23 @@ public class SpielManager {
 
         Team erster = getGewinner(ergebnis.spiel);
         Team zweiter = Arrays.stream(ergebnis.teams).filter(t -> t.getId() != erster.getId()).findFirst().get();
+        teams.add(erster);
+        teams.add(zweiter);
 
         int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
         List<Spiel> spieleVorherigePhase = spielRepository.findAll().stream()
+                                                            .filter(s -> s.getTurnierID() == ergebnis.spiel.getTurnierID())
                                                           .filter(s -> s.getQualifikation() == vorheridePhasenID)
                                                           .collect(Collectors.toList());
-        ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase);
-        Team dritter = getBestVerlierer(verliererTeams);
-
-        teams.add(erster);
-        teams.add(zweiter);
-        teams.add(dritter);
+        if (spieleVorherigePhase.size() > 0) {
+            ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase,erster,zweiter);
+            Team dritter = getBestVerlierer(verliererTeams);
+            teams.add(dritter);
+        }
+        else
+        {
+            teams.add(null);
+        }
 
         return teams;
     }
@@ -225,14 +231,16 @@ public class SpielManager {
         return besterVerlierer;
     }
 
-    private ArrayList<Team> getVerliererTeams(List<Spiel> spieleVorherigePhase) {
+    private ArrayList<Team> getVerliererTeams(List<Spiel> spieleVorherigePhase, Team erster, Team zweiter) {
         ArrayList<Team> teams = new ArrayList<>();
 
         for (Spiel spiel : spieleVorherigePhase) {
             int verliereID = Arrays.stream(spiel.getTeamIDs()).filter(id -> id != spiel.getGewinnerID()).findFirst()
                                    .getAsInt();
-
-            teams.add(teamRepository.findById(verliereID).get());
+            if (verliereID != zweiter.getId() && verliereID != erster.getId())
+            {
+                teams.add(teamRepository.findById(verliereID).get());
+            }
         }
 
         return teams;
