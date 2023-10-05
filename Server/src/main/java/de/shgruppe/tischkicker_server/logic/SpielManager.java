@@ -116,8 +116,7 @@ public class SpielManager {
     private int getIdVonSeite(Tor.Seite seite) {
         if (this.ergebnis.seiteTeam1 == seite) {
             return team1.teamID;
-        }
-        else {
+        } else {
             return team2.teamID;
         }
 
@@ -163,10 +162,12 @@ public class SpielManager {
 
                 SocketHandler.broadcast(tmsg);
 
+                /*
                 SiegerTreppchenMessage treppchenMessage = new SiegerTreppchenMessage();
                 treppchenMessage.teams = getTreppchenTeams();
 
                 SocketHandler.broadcast(treppchenMessage);
+                 */
 
                 stats.incrementTeamTore(ergebnis.teams[0], ergebnis.toreTeam1, ergebnis.toreTeam2);
                 stats.incrementTeamTore(ergebnis.teams[1], ergebnis.toreTeam2, ergebnis.toreTeam1);
@@ -196,8 +197,10 @@ public class SpielManager {
 
         int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
         List<Spiel> spieleVorherigePhase = spielRepository.findAll().stream()
-                                                          .filter(s -> s.getQualifikation() == vorheridePhasenID)
-                                                          .collect(Collectors.toList());
+                .filter(s -> s.getQualifikation() == vorheridePhasenID)
+                .filter(s -> s.getTurnierID() == ergebnis.spiel.getTurnierID())
+                .collect(Collectors.toList());
+
         ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase);
         Team dritter = getBestVerlierer(verliererTeams);
 
@@ -230,7 +233,7 @@ public class SpielManager {
 
         for (Spiel spiel : spieleVorherigePhase) {
             int verliereID = Arrays.stream(spiel.getTeamIDs()).filter(id -> id != spiel.getGewinnerID()).findFirst()
-                                   .getAsInt();
+                    .getAsInt();
 
             teams.add(teamRepository.findById(verliereID).get());
         }
