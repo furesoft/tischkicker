@@ -11,9 +11,11 @@ import tischkicker.models.Tor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 
-public class AktuellerSpielstand extends JFrame {
+public class AktuellerSpielstand extends JFrame implements KeyListener {
 
     JLabel team1Name, toreLbl, team2Name;
 
@@ -26,7 +28,7 @@ public class AktuellerSpielstand extends JFrame {
 
     DataButton aufgebenTeam1Btn = new DataButton("X", false);
     DataButton aufgebenTeam2Btn = new DataButton("X", false);
-    
+
 
     int team1ID, team2ID;
 
@@ -126,6 +128,8 @@ public class AktuellerSpielstand extends JFrame {
         this.add(contentPanel);
 
         this.setLocationRelativeTo(null);
+
+        this.addKeyListener(this);
     }
 
     private static void buttonClick(ActionEvent e) {
@@ -226,5 +230,22 @@ public class AktuellerSpielstand extends JFrame {
 
     public void hide() {
         this.setVisible(false);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        if (e.getKeyChar() == ' ') {
+            seitenwechsel.doClick();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }
