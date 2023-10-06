@@ -15,12 +15,14 @@ public class Turnier {
     @Column(name = "enddatum")
     private String enddatum;
 
-
     @Column(name = "spiele")
     private String spiele;
 
     @Column(name = "gespielt")
     private boolean gespielt;
+
+    @Column(name = "tordifferenz")
+    private int tordifferenz;
     @Transient
     private int[] spieleIDs;
 
@@ -37,6 +39,14 @@ public class Turnier {
     private int maximalToreBisGewonnen;
     @Column(name = "Turniername")
     private String turnierName;
+
+    public int getTordifferenz() {
+        return tordifferenz;
+    }
+
+    public void setTordifferenz(int tordifferenz) {
+        this.tordifferenz = tordifferenz;
+    }
 
     public int getMaximalToreBisGewonnen() {
         return maximalToreBisGewonnen;
