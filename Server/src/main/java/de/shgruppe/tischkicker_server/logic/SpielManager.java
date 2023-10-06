@@ -134,7 +134,7 @@ public class SpielManager {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
         int aktuelleTordifferenz = Math.abs(ergebnis.spiel.getToreteam1() - ergebnis.spiel.getToreteam2()); // absolute tordifferenz
 
-        return aktuelleTordifferenz == TurnierManager.aktuellesTurnier.getTordifferenz() || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben();
+        return maxTore >= anzahlToreBisGewonnen && aktuelleTordifferenz >= TurnierManager.aktuellesTurnier.getTordifferenz() || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben();
     }
 
     private void triggerSpielMode() throws IOException {
