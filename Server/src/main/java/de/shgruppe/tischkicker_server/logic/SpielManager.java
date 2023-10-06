@@ -130,14 +130,18 @@ public class SpielManager {
         return team2;
     }
 
-    private void triggerSpielMode() throws IOException {
+    private boolean hatSpielerGewonnen() {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
+        int aktuelleTordifferenz = Math.abs(ergebnis.spiel.getToreteam1() - ergebnis.spiel.getToreteam2()); // absolute tordifferenz
 
-        // Abfrage, ob die Gewinnbedingungen erfüllt wurden
-        if (maxTore == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben()) {
-            ergebnis.spiel.setToreteam1(team1.tore);
-            ergebnis.spiel.setToreteam2(team2.tore);
+        return aktuelleTordifferenz == TurnierManager.aktuellesTurnier.getTordifferenz() && maxTore >= anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben();
+    }
 
+    private void triggerSpielMode() throws IOException {
+        ergebnis.spiel.setToreteam1(team1.tore);
+        ergebnis.spiel.setToreteam2(team2.tore);
+
+        if (hatSpielerGewonnen()) {
             if (ergebnis.toreTeam1 == anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben()) {
                 ergebnis.spiel.setGewinnerID(ergebnis.teams[0].getId());
             }
@@ -194,6 +198,8 @@ public class SpielManager {
 
         Team erster = getGewinner(ergebnis.spiel);
         Team zweiter = Arrays.stream(ergebnis.teams).filter(t -> t.getId() != erster.getId()).findFirst().get();
+        teams.add(erster);
+        teams.add(zweiter);
 
         int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
         List<Spiel> spieleVorherigePhase = spielRepository.findAll().stream()
@@ -228,7 +234,7 @@ public class SpielManager {
         return besterVerlierer;
     }
 
-    private ArrayList<Team> getVerliererTeams(List<Spiel> spieleVorherigePhase) {
+    private ArrayList<Team> getVerliererTeams(List<Spiel> spieleVorherigePhase, Team erster, Team zweiter) {
         ArrayList<Team> teams = new ArrayList<>();
 
         for (Spiel spiel : spieleVorherigePhase) {

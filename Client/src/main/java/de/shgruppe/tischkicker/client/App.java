@@ -8,7 +8,8 @@ import de.shgruppe.tischkicker.client.websockets.WebsocketConnection;
 import javax.swing.*;
 
 public class App {
-    public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(500, 500);
+    public static AktuellerSpielstand spielstandAnzeige = new AktuellerSpielstand(750, 750);
+    // alte Größe war 500 * 500
     public static TurnierBaum turnierbaum = new TurnierBaum();
 
 
@@ -26,7 +27,5 @@ public class App {
         });
 
 
-        //in Bearbeitung
-        //Siegertreppchen sieger = new Siegertreppchen(f, 1400, 900, 150, 100, 28);
     }
 }
