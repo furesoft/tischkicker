@@ -203,16 +203,18 @@ public class SpielManager {
 
         int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
         List<Spiel> spieleVorherigePhase = spielRepository.findAll().stream()
-                .filter(s -> s.getQualifikation() == vorheridePhasenID)
-                .filter(s -> s.getTurnierID() == ergebnis.spiel.getTurnierID())
-                .collect(Collectors.toList());
-
-        ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase);
-        Team dritter = getBestVerlierer(verliererTeams);
-
-        teams.add(erster);
-        teams.add(zweiter);
-        teams.add(dritter);
+                                                            .filter(s -> s.getTurnierID() == ergebnis.spiel.getTurnierID())
+                                                          .filter(s -> s.getQualifikation() == vorheridePhasenID)
+                                                          .collect(Collectors.toList());
+        if (spieleVorherigePhase.size() > 0) {
+            ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase,erster,zweiter);
+            Team dritter = getBestVerlierer(verliererTeams);
+            teams.add(dritter);
+        }
+        else
+        {
+            teams.add(null);
+        }
 
         return teams;
     }
@@ -239,9 +241,11 @@ public class SpielManager {
 
         for (Spiel spiel : spieleVorherigePhase) {
             int verliereID = Arrays.stream(spiel.getTeamIDs()).filter(id -> id != spiel.getGewinnerID()).findFirst()
-                    .getAsInt();
-
-            teams.add(teamRepository.findById(verliereID).get());
+                                   .getAsInt();
+            if (verliereID != zweiter.getId() && verliereID != erster.getId())
+            {
+                teams.add(teamRepository.findById(verliereID).get());
+            }
         }
 
         return teams;
