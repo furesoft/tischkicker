@@ -51,16 +51,16 @@ public class AktuellerSpielstand {
         team1Name.setFont(new Font("Arial", 0, 30));
 
         team2Name = new JLabel("b");
-        team2Name.setBounds(width - 150, seitenwechsel.getHeight(), width / 2, (int) (height * 0.3));
+        team2Name.setBounds(width - 250, seitenwechsel.getHeight(), width / 2, (int) (height * 0.3));
         team2Name.setOpaque(true);
         team2Name.setBackground(Colors.BACKGROUND);
         team2Name.setForeground(Colors.SCHRIFT);
         team2Name.setFont(new Font("Arial", 0, 30));
 
-        farbanzeigeTeam1.setBounds(team1Name.getX() - 35, team1Name.getY() + 70, 25, 25);
+        farbanzeigeTeam1.setBounds(team1Name.getX() - 35, team1Name.getY() + 100, 25, 25);
         farbanzeigeTeam1.setBackground(Color.WHITE);
 
-        farbanzeigeTeam2.setBounds(team2Name.getX() - 35, team2Name.getY() + 70, 25, 25);
+        farbanzeigeTeam2.setBounds(team2Name.getX() - 35, team2Name.getY() + 100, 25, 25);
         farbanzeigeTeam2.setBackground(Color.RED);
 
         toreTeam1Erhoehen = new DataButton("+", false);

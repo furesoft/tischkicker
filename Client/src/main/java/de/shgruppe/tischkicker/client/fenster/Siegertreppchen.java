@@ -18,7 +18,6 @@ public class Siegertreppchen extends JFrame {
     private Point posZweiter = new Point(1090,700);
     private Point posDritter = new Point(190,800);
 
-    int width = 50;
     int height = 50;
     int textsize = 50;
 
@@ -60,11 +59,13 @@ public class Siegertreppchen extends JFrame {
         if (teams.get(2) != null)
         {
             treppchenPlatz3.setText(teams.get(2).getName());
-            treppchenPlatz3.setBounds(posDritter.x - getTeamsWidth(treppchenPlatz3)/2 , posDritter.y,width,height);
+            int platz3width = getTeamsWidth(treppchenPlatz3);
+            treppchenPlatz3.setBounds(posDritter.x - platz3width/2 , posDritter.y,platz3width,height);
         }
-
-        treppchenPlatz1.setBounds(posErster.x - getTeamsWidth(treppchenPlatz1) / 2, posErster.y, width, height);
-        treppchenPlatz2.setBounds(posZweiter.x - getTeamsWidth(treppchenPlatz2) / 2, posZweiter.y, width, height);
+        int platz1width = getTeamsWidth(treppchenPlatz1);
+        treppchenPlatz1.setBounds(posErster.x - platz1width / 2, posErster.y, platz1width, height);
+        int platz2width = getTeamsWidth(treppchenPlatz2);
+        treppchenPlatz2.setBounds(posZweiter.x - platz2width / 2, posZweiter.y, platz2width, height);
     }
 
     //TODO
