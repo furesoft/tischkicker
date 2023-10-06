@@ -68,8 +68,6 @@ public class Siegertreppchen extends JFrame {
         treppchenPlatz2.setBounds(posZweiter.x - platz2width / 2, posZweiter.y, platz2width, height);
     }
 
-    //TODO
-    // Bug bei längeren Namen, werden dann einfach nur 3 Punkte angezeigt
 
     public int getTeamsWidth(JLabel jLabel)
     {
