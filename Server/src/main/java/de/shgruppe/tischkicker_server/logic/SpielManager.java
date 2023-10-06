@@ -7,7 +7,6 @@ import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tischkicker.messages.SiegerTreppchenMessage;
 import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.messages.TurnierBeendetMessage;
@@ -116,7 +115,8 @@ public class SpielManager {
     private int getIdVonSeite(Tor.Seite seite) {
         if (this.ergebnis.seiteTeam1 == seite) {
             return team1.teamID;
-        } else {
+        }
+        else {
             return team2.teamID;
         }
 
@@ -203,11 +203,11 @@ public class SpielManager {
 
         int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
         List<Spiel> spieleVorherigePhase = spielRepository.findAll().stream()
-                .filter(s -> s.getQualifikation() == vorheridePhasenID)
-                .filter(s -> s.getTurnierID() == ergebnis.spiel.getTurnierID())
-                .collect(Collectors.toList());
+                                                          .filter(s -> s.getQualifikation() == vorheridePhasenID)
+                                                          .filter(s -> s.getTurnierID() == ergebnis.spiel.getTurnierID())
+                                                          .collect(Collectors.toList());
 
-        ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase);
+        ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase, erster, zweiter);
         Team dritter = getBestVerlierer(verliererTeams);
 
         teams.add(erster);
@@ -239,7 +239,7 @@ public class SpielManager {
 
         for (Spiel spiel : spieleVorherigePhase) {
             int verliereID = Arrays.stream(spiel.getTeamIDs()).filter(id -> id != spiel.getGewinnerID()).findFirst()
-                    .getAsInt();
+                                   .getAsInt();
 
             teams.add(teamRepository.findById(verliereID).get());
         }

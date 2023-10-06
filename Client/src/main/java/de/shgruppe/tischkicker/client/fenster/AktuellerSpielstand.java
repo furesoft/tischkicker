@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
-public class AktuellerSpielstand {
+public class AktuellerSpielstand extends JFrame {
 
     JLabel team1Name, toreLbl, team2Name;
 
@@ -26,8 +26,7 @@ public class AktuellerSpielstand {
 
     DataButton aufgebenTeam1Btn = new DataButton("X", false);
     DataButton aufgebenTeam2Btn = new DataButton("X", false);
-
-    JFrame frame = new JFrame();
+    
 
     int team1ID, team2ID;
 
@@ -114,9 +113,9 @@ public class AktuellerSpielstand {
 
         contentPanel.setSize(width + 6, height + 37);
         contentPanel.setLayout(null);
-        frame.setSize(contentPanel.getSize());
-        frame.setLayout(null);
-        frame.setResizable(false);
+        this.setSize(contentPanel.getSize());
+        this.setLayout(null);
+        this.setResizable(false);
 
         aufgebenTeam1Btn.addActionListener(this::aufgebenClick);
 
@@ -124,9 +123,9 @@ public class AktuellerSpielstand {
 
         contentPanel.setBackground(Colors.BACKGROUND);
 
-        this.frame.add(contentPanel);
+        this.add(contentPanel);
 
-        frame.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
     }
 
     private static void buttonClick(ActionEvent e) {
@@ -147,7 +146,7 @@ public class AktuellerSpielstand {
     }
 
     private int getToreWidth() {
-        FontMetrics metrics = frame.getGraphics().getFontMetrics(toreLbl.getFont());
+        FontMetrics metrics = this.getGraphics().getFontMetrics(toreLbl.getFont());
 
         return SwingUtilities.computeStringWidth(metrics, toreLbl.getText());
     }
@@ -157,7 +156,7 @@ public class AktuellerSpielstand {
 
         int fontWidth = getToreWidth();
 
-        toreLbl.setBounds(frame.getWidth() / 2 - fontWidth / 2, toreTeam1Erhoehen.getY() - 13, fontWidth, (int) (frame.getHeight() * 0.5));
+        toreLbl.setBounds(this.getWidth() / 2 - fontWidth / 2, toreTeam1Erhoehen.getY() - 13, fontWidth, (int) (this.getHeight() * 0.5));
     }
 
     public void aktualisiereDaten(SpielErgebnis ergebnis) {
@@ -187,7 +186,7 @@ public class AktuellerSpielstand {
         farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam1));
         farbanzeigeTeam2.setBackground(getTeamFarbe(ergebnis.seiteTeam2));
 
-        frame.repaint();
+        this.repaint();
     }
 
     private void aufgebenClick(ActionEvent e) {
@@ -220,12 +219,12 @@ public class AktuellerSpielstand {
     }
 
     public void show() {
-        frame.setVisible(true);
+        this.setVisible(true);
 
         setTore("0 : 0");
     }
 
     public void hide() {
-        frame.setVisible(false);
+        this.setVisible(false);
     }
 }
