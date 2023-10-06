@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static de.shgruppe.tischkicker.client.API.*;
+import static de.shgruppe.tischkicker.client.fenster.TurnierAuswahlFenster.aktuellesTurnier;
 
 public class TeamsInitialisierenFenster extends JFrame {
     public static List<Team> teams = new ArrayList<>();
@@ -28,6 +29,7 @@ public class TeamsInitialisierenFenster extends JFrame {
     private final JSpinner torAnzahlFeld = new JSpinner();
     private final JTextField playerField = new JTextField(15);
     private final JTextField teamNameField = new JTextField(15);
+    private final JSpinner tordifferenzFeld = new JSpinner();
     private final JButton saveButtonTeams = new JButton("Speichern");
     private final JButton saveButtonPlayers = new JButton("Speichern");
     private final JButton addDataTurnierButton;
@@ -102,6 +104,12 @@ public class TeamsInitialisierenFenster extends JFrame {
         hauptPanel.add(torAnzahlLabel);
         hauptPanel.add(torAnzahlFeld);
         torAnzahlFeld.setValue(10); // standardmäßig 10 Tore bis Gewinn
+
+        JLabel torDifferenzLabel = new JLabel("Tor-Differenz (0-99):");
+        torDifferenzLabel.setForeground(Colors.InputForeground);
+        hauptPanel.add(torDifferenzLabel);
+        hauptPanel.add(tordifferenzFeld);
+        tordifferenzFeld.setValue(0); // standardmäßig keine Tordifferenz
 
         JLabel label = new JLabel("Spieler:");
         label.setForeground(Colors.InputForeground);
@@ -381,7 +389,7 @@ public class TeamsInitialisierenFenster extends JFrame {
         });
 
         startButton.addActionListener(e -> {
-            int id = TurnierAuswahlFenster.aktuellesTurnier.getId();
+            int id = aktuellesTurnier.getId();
             var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
                                       .collect(Collectors.toList());
 
@@ -406,17 +414,19 @@ public class TeamsInitialisierenFenster extends JFrame {
     public void setDataTurnier() {
         String aktuellerturniername = turnierFeld.getText();
         int tore = (int) torAnzahlFeld.getValue();
+        int torDifferenz = (int) tordifferenzFeld.getValue();
 
-        if (!aktuellerturniername.isEmpty() && !aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben")
-            && tore > 0 && tore < 99) {
+        if (!aktuellerturniername.isEmpty() && !aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben") && tore > 0 && tore < 99) {
             addDataTurnierButton.setEnabled(false);
-            TurnierAuswahlFenster.aktuellesTurnier.setMaximalToreBisGewonnen(tore);
-            TurnierAuswahlFenster.aktuellesTurnier.setTurnierName(aktuellerturniername);
-            API.turnierupdate(TurnierAuswahlFenster.aktuellesTurnier);
+            aktuellesTurnier.setMaximalToreBisGewonnen(tore);
+            aktuellesTurnier.setTurnierName(aktuellerturniername);
+            aktuellesTurnier.setTordifferenz(torDifferenz);
+
+            API.turnierupdate(aktuellesTurnier);
         }
 
-        TurnierAuswahlFenster.turniereComboBox.addItem(TurnierAuswahlFenster.aktuellesTurnier);
-        TurnierAuswahlFenster.alleTurniere.add(TurnierAuswahlFenster.aktuellesTurnier);
+        TurnierAuswahlFenster.turniereComboBox.addItem(aktuellesTurnier);
+        TurnierAuswahlFenster.alleTurniere.add(aktuellesTurnier);
 
     }
 }

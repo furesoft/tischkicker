@@ -131,14 +131,18 @@ public class SpielManager {
         return team2;
     }
 
-    private void triggerSpielMode() throws IOException {
+    private boolean hatSpielerGewonnen() {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
+        int aktuelleTordifferenz = Math.abs(ergebnis.spiel.getToreteam1() - ergebnis.spiel.getToreteam2()); // absolute tordifferenz
 
-        // Abfrage, ob die Gewinnbedingungen erfüllt wurden
-        if (maxTore == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben()) {
-            ergebnis.spiel.setToreteam1(team1.tore);
-            ergebnis.spiel.setToreteam2(team2.tore);
+        return aktuelleTordifferenz == TurnierManager.aktuellesTurnier.getTordifferenz() && maxTore >= anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben();
+    }
 
+    private void triggerSpielMode() throws IOException {
+        ergebnis.spiel.setToreteam1(team1.tore);
+        ergebnis.spiel.setToreteam2(team2.tore);
+
+        if (hatSpielerGewonnen()) {
             if (ergebnis.toreTeam1 == anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben()) {
                 ergebnis.spiel.setGewinnerID(ergebnis.teams[0].getId());
             }
@@ -198,16 +202,15 @@ public class SpielManager {
 
         int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
         List<Spiel> spieleVorherigePhase = spielRepository.findAll().stream()
-                                                            .filter(s -> s.getTurnierID() == ergebnis.spiel.getTurnierID())
+                                                          .filter(s -> s.getTurnierID() == ergebnis.spiel.getTurnierID())
                                                           .filter(s -> s.getQualifikation() == vorheridePhasenID)
                                                           .collect(Collectors.toList());
         if (spieleVorherigePhase.size() > 0) {
-            ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase,erster,zweiter);
+            ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase, erster, zweiter);
             Team dritter = getBestVerlierer(verliererTeams);
             teams.add(dritter);
         }
-        else
-        {
+        else {
             teams.add(null);
         }
 
@@ -237,8 +240,7 @@ public class SpielManager {
         for (Spiel spiel : spieleVorherigePhase) {
             int verliereID = Arrays.stream(spiel.getTeamIDs()).filter(id -> id != spiel.getGewinnerID()).findFirst()
                                    .getAsInt();
-            if (verliereID != zweiter.getId() && verliereID != erster.getId())
-            {
+            if (verliereID != zweiter.getId() && verliereID != erster.getId()) {
                 teams.add(teamRepository.findById(verliereID).get());
             }
         }
