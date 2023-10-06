@@ -41,7 +41,7 @@ class Websocket extends WebSocketClient {
             System.out.printf(String.valueOf(Thread.currentThread().getId()));
             App.turnierbaum.ergebnisUebertragen(spielergebnis);
         }
-        /*
+
         else if (deserializedMessage.type == MessageType.SiegerTreppchen) {
             SiegerTreppchenMessage treppchenMessage = gson.fromJson(message, SiegerTreppchenMessage.class);
 
@@ -55,7 +55,7 @@ class Websocket extends WebSocketClient {
             treppchen.setVisible(true);
         }
 
-         */
+
         else if (deserializedMessage.type == MessageType.SpielBeendet) {
             SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);
             App.spielstandAnzeige.hide();

@@ -415,8 +415,8 @@ public class TeamsInitialisierenFenster extends JFrame {
         String aktuellerturniername = turnierFeld.getText();
         int tore = (int) torAnzahlFeld.getValue();
         int torDifferenz = (int) tordifferenzFeld.getValue();
-
-        if (!aktuellerturniername.isEmpty() && !aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben") && tore > 0 && tore < 99) {
+        boolean torDatenCheck = tore > 0 && tore < 99 && torDifferenz >= 0 && torDifferenz < 99;
+        if (!aktuellerturniername.isEmpty() && !aktuellerturniername.equals("Bitte nur einen Turniernamen eingeben") && torDatenCheck) {
             addDataTurnierButton.setEnabled(false);
             aktuellesTurnier.setMaximalToreBisGewonnen(tore);
             aktuellesTurnier.setTurnierName(aktuellerturniername);

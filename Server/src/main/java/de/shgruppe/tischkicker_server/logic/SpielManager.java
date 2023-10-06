@@ -142,10 +142,10 @@ public class SpielManager {
         ergebnis.spiel.setToreteam2(team2.tore);
 
         if (hatSpielerGewonnen()) {
-            if (ergebnis.toreTeam1 == anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben()) {
+            if (ergebnis.toreTeam1 >= anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben()) {
                 ergebnis.spiel.setGewinnerID(ergebnis.teams[0].getId());
             }
-            if (ergebnis.toreTeam2 == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben()) {
+            if (ergebnis.toreTeam2 >= anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben()) {
                 ergebnis.spiel.setGewinnerID(ergebnis.teams[1].getId());
             }
             spielRepository.saveAndFlush(ergebnis.spiel);
@@ -166,12 +166,12 @@ public class SpielManager {
 
                 SocketHandler.broadcast(tmsg);
 
-                /*
+
                 SiegerTreppchenMessage treppchenMessage = new SiegerTreppchenMessage();
                 treppchenMessage.teams = getTreppchenTeams();
 
                 SocketHandler.broadcast(treppchenMessage);
-                 */
+
 
                 stats.incrementTeamTore(ergebnis.teams[0], ergebnis.toreTeam1, ergebnis.toreTeam2);
                 stats.incrementTeamTore(ergebnis.teams[1], ergebnis.toreTeam2, ergebnis.toreTeam1);
