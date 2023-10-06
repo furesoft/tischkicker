@@ -106,7 +106,7 @@ public class SpielPhase {
                     }
                 }
                 /*
-                if (i == spieleVorbei.size()-1)
+                if (i == spieleVorbei.size()-1 && (teamID1 == -2 || teamID2 == -2))
                 {
                     int teamdID = (uebriegesSpiel.getTeamIDs()[0]);
                     String tName = teamNameGetter.getTeamName(teamdID);
