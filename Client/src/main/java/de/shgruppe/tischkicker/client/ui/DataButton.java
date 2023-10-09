@@ -55,7 +55,7 @@ public class DataButton extends JButton implements MouseListener {
 
         FontMetrics metrics = g.getFontMetrics();
         int textWidth = metrics.stringWidth(getText());
-        int textHeight = metrics.getDescent();
+        int textHeight = metrics.getDescent() - metrics.getAscent();
 
         g.setColor(getForeground());
         g.drawString(getText(), getWidth() / 2 - textWidth / 2, getHeight() / 2 - textHeight / 2);
