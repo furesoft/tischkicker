@@ -105,47 +105,47 @@ public class SpielPhase {
                         break;
                     }
                 }
-                /*
+
                 if (i == spieleVorbei.size()-1 && (teamID1 == -2 || teamID2 == -2))
                 {
-                    int teamdID = (uebriegesSpiel.getTeamIDs()[0]);
-                    String tName = teamNameGetter.getTeamName(teamdID);
-                    uebriegesSpiel.setTeams(teamdID,teamdID);
-                    uebriegesSpiel.setTeamNames(tName,tName);
+                    Spiel nachFolgeSpiel = findeSpieleMitNachfolgerVonSpiel(uebriegesSpiel.getSpielID(), uebriegesSpiel.getTurnierID()).get();
+                    Optional<Team> uebrigesTeam = teamRepository.findById(uebriegesSpiel.getTeamIDs()[0]);
+                    teamNachfolgespielSetzen(nachFolgeSpiel, uebrigesTeam.get());
+
                     break;
                 }
-
-                 */
             }
         }
 
         //wenn Nachfolger, dann Nachfolgespiel aktualisieren.
         Spiel naechstesSpiel = maybeNaechstesSpiel.get();
+        teamNachfolgespielSetzen(naechstesSpiel, gewinnerTeam);
 
-
-        int team1 = naechstesSpiel.getTeamIDs()[0];
-        int team2 = naechstesSpiel.getTeamIDs()[1];
+        return naechstesSpiel;
+    }
+    public void teamNachfolgespielSetzen(Spiel nachfolgeSpiel, Team gewinner)
+    {
+        int team1 = nachfolgeSpiel.getTeamIDs()[0];
+        int team2 = nachfolgeSpiel.getTeamIDs()[1];
 
         // -1 == noch nicht gespielt, -2 == bester-verlierer
         if (team1 < 0) {
             //setze Gewinner als team1
-            team1 = gewinnerTeam.getId();
+            team1 = gewinner.getId();
         }
         else {
             //setze Gewiiner Team2
-            team2 = gewinnerTeam.getId();
+            team2 = gewinner.getId();
         }
 
-        naechstesSpiel.setTeams(team1, team2);
+        nachfolgeSpiel.setTeams(team1, team2);
 
-        naechstesSpiel = spielRepository.saveAndFlush(naechstesSpiel);
+        nachfolgeSpiel = spielRepository.saveAndFlush(nachfolgeSpiel);
 
         String team1Name = teamNameGetter.getTeamName(team1);
         String team2Name = teamNameGetter.getTeamName(team2);
 
-        naechstesSpiel.setTeamNames(team1Name, team2Name);
-
-        return naechstesSpiel;
+        nachfolgeSpiel.setTeamNames(team1Name, team2Name);
     }
 
     private Optional<Spiel> findeSpieleMitNachfolgerVonSpiel(int spielIdBeendetesSpiel, int turnierID) {
