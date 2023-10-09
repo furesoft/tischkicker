@@ -79,14 +79,9 @@ public class TurnierAuswahlFenster extends JFrame {
         turniereComboBox.addActionListener(e -> {
             Turnier selectedTurnier = (Turnier) turniereComboBox.getSelectedItem();
 
-            if (selectedTurnier.isGespielt()) {
-                turnierStartenButton.setText("Turnier anzeigen");
-            }
-            else {
-                turnierStartenButton.setText("Turnier starten/fortsetzen");
-            }
+            setButtonText(selectedTurnier, turnierStartenButton);
         });
-
+        setButtonText(alleTurniere.get(0), turnierStartenButton);
 
         turnierStartenButton.addActionListener(e -> {
             App.turnierbaum.resetTurnierBaum();
@@ -106,5 +101,14 @@ public class TurnierAuswahlFenster extends JFrame {
         });
 
         setLocationRelativeTo(null);
+    }
+
+    private static void setButtonText(Turnier selectedTurnier, DataButton turnierStartenButton) {
+        if (selectedTurnier.isGespielt()) {
+            turnierStartenButton.setText("Turnier anzeigen");
+        }
+        else {
+            turnierStartenButton.setText("Turnier starten/fortsetzen");
+        }
     }
 }

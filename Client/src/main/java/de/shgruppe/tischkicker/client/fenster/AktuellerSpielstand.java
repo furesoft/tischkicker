@@ -11,11 +11,9 @@ import tischkicker.models.Tor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 
-public class AktuellerSpielstand extends JFrame implements KeyListener {
+public class AktuellerSpielstand {
 
     JLabel team1Name, toreLbl, team2Name;
 
@@ -29,6 +27,7 @@ public class AktuellerSpielstand extends JFrame implements KeyListener {
     DataButton aufgebenTeam1Btn = new DataButton("X", false);
     DataButton aufgebenTeam2Btn = new DataButton("X", false);
 
+    JFrame frame = new JFrame();
 
     int team1ID, team2ID;
 
@@ -115,9 +114,9 @@ public class AktuellerSpielstand extends JFrame implements KeyListener {
 
         contentPanel.setSize(width + 6, height + 37);
         contentPanel.setLayout(null);
-        this.setSize(contentPanel.getSize());
-        this.setLayout(null);
-        this.setResizable(false);
+        frame.setSize(contentPanel.getSize());
+        frame.setLayout(null);
+        frame.setResizable(false);
 
         aufgebenTeam1Btn.addActionListener(this::aufgebenClick);
 
@@ -125,11 +124,9 @@ public class AktuellerSpielstand extends JFrame implements KeyListener {
 
         contentPanel.setBackground(Colors.BACKGROUND);
 
-        this.add(contentPanel);
+        frame.add(contentPanel);
 
-        this.setLocationRelativeTo(null);
-
-        this.addKeyListener(this);
+        frame.setLocationRelativeTo(null);
     }
 
     private static void buttonClick(ActionEvent e) {
@@ -150,7 +147,7 @@ public class AktuellerSpielstand extends JFrame implements KeyListener {
     }
 
     private int getToreWidth() {
-        FontMetrics metrics = this.getGraphics().getFontMetrics(toreLbl.getFont());
+        FontMetrics metrics = frame.getGraphics().getFontMetrics(toreLbl.getFont());
 
         return SwingUtilities.computeStringWidth(metrics, toreLbl.getText());
     }
@@ -160,7 +157,7 @@ public class AktuellerSpielstand extends JFrame implements KeyListener {
 
         int fontWidth = getToreWidth();
 
-        toreLbl.setBounds(this.getWidth() / 2 - fontWidth / 2, toreTeam1Erhoehen.getY() - 13, fontWidth, (int) (this.getHeight() * 0.5));
+        toreLbl.setBounds(frame.getWidth() / 2 - fontWidth / 2, toreTeam1Erhoehen.getY() - 13, fontWidth, (int) (frame.getHeight() * 0.5));
     }
 
     public void aktualisiereDaten(SpielErgebnis ergebnis) {
@@ -190,7 +187,7 @@ public class AktuellerSpielstand extends JFrame implements KeyListener {
         farbanzeigeTeam1.setBackground(getTeamFarbe(ergebnis.seiteTeam1));
         farbanzeigeTeam2.setBackground(getTeamFarbe(ergebnis.seiteTeam2));
 
-        this.repaint();
+        frame.repaint();
     }
 
     private void aufgebenClick(ActionEvent e) {
@@ -223,29 +220,12 @@ public class AktuellerSpielstand extends JFrame implements KeyListener {
     }
 
     public void show() {
-        this.setVisible(true);
+        frame.setVisible(true);
 
         setTore("0 : 0");
     }
 
     public void hide() {
-        this.setVisible(false);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        if (e.getKeyChar() == ' ') {
-            seitenwechsel.doClick();
-        }
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
+        frame.setVisible(false);
     }
 }
