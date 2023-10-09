@@ -89,8 +89,7 @@ public class TurnierAuswahlFenster extends JFrame {
 
             aktuellesTurnier = alleTurniere.stream().filter(t -> t.getId() == turnier.getId()).findFirst().get();
 
-            var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == turnier.getId())
-                                      .collect(Collectors.toList());
+            var turnierSpiele = getSpieleVonTurnier(turnier);
 
             Spiel[] spiele = API.startTurnier(turnier.getId());
             turnierbaumGenerieren(spiele);
@@ -103,12 +102,27 @@ public class TurnierAuswahlFenster extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    private static List<Spiel> getSpieleVonTurnier(Turnier turnier) {
+        return Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == turnier.getId())
+                     .collect(Collectors.toList());
+    }
+
     private static void setButtonText(Turnier selectedTurnier, DataButton turnierStartenButton) {
         if (selectedTurnier.isGespielt()) {
             turnierStartenButton.setText("Turnier anzeigen");
         }
         else {
-            turnierStartenButton.setText("Turnier starten/fortsetzen");
+            List<Spiel> turnierSpiele = getSpieleVonTurnier(selectedTurnier);
+            boolean hatTurniergestartetesSpiel = turnierSpiele.stream()
+                                                              .filter(s -> s.getQualifikation() == 1 && s.getGewinnerID() > 0)
+                                                              .findAny().isPresent();
+
+            if (hatTurniergestartetesSpiel) {
+                turnierStartenButton.setText("Turnier fortsetzen");
+            }
+            else {
+                turnierStartenButton.setText("Turnier starten");
+            }
         }
     }
 }
