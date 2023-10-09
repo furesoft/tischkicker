@@ -84,18 +84,21 @@ public class TurnierAuswahlFenster extends JFrame {
         setButtonText(alleTurniere.get(0), turnierStartenButton);
 
         turnierStartenButton.addActionListener(e -> {
-            App.turnierbaum.resetTurnierBaum();
-            Turnier turnier = ((Turnier) turniereComboBox.getSelectedItem());
+            if (turniereComboBox.getSelectedIndex() != -1) {
+                App.turnierbaum.resetTurnierBaum();
+                Turnier turnier = ((Turnier) turniereComboBox.getSelectedItem());
 
-            aktuellesTurnier = alleTurniere.stream().filter(t -> t.getId() == turnier.getId()).findFirst().get();
+                aktuellesTurnier = alleTurniere.stream().filter(t -> t.getId() == turnier.getId()).findFirst().get();
 
-            var turnierSpiele = getSpieleVonTurnier(turnier);
+                var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == turnier.getId())
+                        .collect(Collectors.toList());
 
-            Spiel[] spiele = API.startTurnier(turnier.getId());
-            turnierbaumGenerieren(spiele);
+                Spiel[] spiele = API.startTurnier(turnier.getId());
+                turnierbaumGenerieren(spiele);
 
-            if (!turnierSpiele.isEmpty()) {
-                App.turnierbaum.ladeSpieleAmAnfang(spiele);
+                if (!turnierSpiele.isEmpty()) {
+                    App.turnierbaum.ladeSpieleAmAnfang(spiele);
+                }
             }
         });
 

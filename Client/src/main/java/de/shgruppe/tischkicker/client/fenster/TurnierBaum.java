@@ -25,6 +25,7 @@ public class TurnierBaum {
     Spielfeld aktuellesSpiel;
     JLabel hinweis = new JLabel();
     JLabel tore = new JLabel();
+    JLabel torDifferenz = new JLabel();
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
     ArrayList<Spielfeld> alleSpielfelder = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
@@ -47,6 +48,10 @@ public class TurnierBaum {
         tore.setBounds(300,20,100,50);
         tore.setForeground(Colors.HINWEIS_SCHRIFT);
         panel.add(tore);
+
+        torDifferenz.setBounds(850,20,100,50);
+        torDifferenz.setForeground(Colors.HINWEIS_SCHRIFT);
+        panel.add(torDifferenz);
 
         frame.setSize(1920, 1080);
         int anzahlTeams = API.getTeams().length;
@@ -73,6 +78,7 @@ public class TurnierBaum {
 
         frame.setTitle(TurnierAuswahlFenster.aktuellesTurnier.getTurnierName());
         tore.setText("Max-Tore = "+TurnierAuswahlFenster.aktuellesTurnier.getMaximalToreBisGewonnen());
+        torDifferenz.setText("Tor-Differenz = "+TurnierAuswahlFenster.aktuellesTurnier.getTordifferenz());
         alleSpielfelder.clear();
         int spielfelderAnzahl = (int) Math.round(anzahlTeams / 2);
         int teamAnzahl = (int) anzahlTeams;
@@ -331,6 +337,7 @@ public class TurnierBaum {
         panel.add(starteSpiel);
         panel.add(hinweis);
         panel.add(tore);
+        panel.add(torDifferenz);
     }
 }
 

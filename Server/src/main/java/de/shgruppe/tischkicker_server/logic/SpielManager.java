@@ -134,7 +134,7 @@ public class SpielManager {
         int maxTore = Math.max(ergebnis.toreTeam1, ergebnis.toreTeam2); // die größte Anzahl Tore der Teams holen, da diese relevant für den weiteren Schritt ist
         int aktuelleTordifferenz = Math.abs(ergebnis.spiel.getToreteam1() - ergebnis.spiel.getToreteam2()); // absolute tordifferenz
 
-        return aktuelleTordifferenz == TurnierManager.aktuellesTurnier.getTordifferenz() && maxTore >= anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben();
+        return maxTore >= anzahlToreBisGewonnen && aktuelleTordifferenz >= TurnierManager.aktuellesTurnier.getTordifferenz() || ergebnis.teams[0].isAufgegeben() || ergebnis.teams[1].isAufgegeben();
     }
 
     private void triggerSpielMode() throws IOException {
@@ -142,10 +142,10 @@ public class SpielManager {
         ergebnis.spiel.setToreteam2(team2.tore);
 
         if (hatSpielerGewonnen()) {
-            if (ergebnis.toreTeam1 == anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben()) {
+            if (ergebnis.toreTeam1 >= anzahlToreBisGewonnen || ergebnis.teams[1].isAufgegeben()) {
                 ergebnis.spiel.setGewinnerID(ergebnis.teams[0].getId());
             }
-            if (ergebnis.toreTeam2 == anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben()) {
+            if (ergebnis.toreTeam2 >= anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben()) {
                 ergebnis.spiel.setGewinnerID(ergebnis.teams[1].getId());
             }
             spielRepository.saveAndFlush(ergebnis.spiel);
@@ -166,12 +166,12 @@ public class SpielManager {
 
                 SocketHandler.broadcast(tmsg);
 
-                /*
+
                 SiegerTreppchenMessage treppchenMessage = new SiegerTreppchenMessage();
                 treppchenMessage.teams = getTreppchenTeams();
 
                 SocketHandler.broadcast(treppchenMessage);
-                 */
+
 
                 stats.incrementTeamTore(ergebnis.teams[0], ergebnis.toreTeam1, ergebnis.toreTeam2);
                 stats.incrementTeamTore(ergebnis.teams[1], ergebnis.toreTeam2, ergebnis.toreTeam1);
@@ -203,16 +203,17 @@ public class SpielManager {
 
         int vorheridePhasenID = ergebnis.spiel.getQualifikation() - 1;
         List<Spiel> spieleVorherigePhase = spielRepository.findAll().stream()
-                                                          .filter(s -> s.getQualifikation() == vorheridePhasenID)
                                                           .filter(s -> s.getTurnierID() == ergebnis.spiel.getTurnierID())
+                                                          .filter(s -> s.getQualifikation() == vorheridePhasenID)
                                                           .collect(Collectors.toList());
-
-        ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase, erster, zweiter);
-        Team dritter = getBestVerlierer(verliererTeams);
-
-        teams.add(erster);
-        teams.add(zweiter);
-        teams.add(dritter);
+        if (spieleVorherigePhase.size() > 0) {
+            ArrayList<Team> verliererTeams = getVerliererTeams(spieleVorherigePhase, erster, zweiter);
+            Team dritter = getBestVerlierer(verliererTeams);
+            teams.add(dritter);
+        }
+        else {
+            teams.add(null);
+        }
 
         return teams;
     }
@@ -240,8 +241,9 @@ public class SpielManager {
         for (Spiel spiel : spieleVorherigePhase) {
             int verliereID = Arrays.stream(spiel.getTeamIDs()).filter(id -> id != spiel.getGewinnerID()).findFirst()
                                    .getAsInt();
-
-            teams.add(teamRepository.findById(verliereID).get());
+            if (verliereID != zweiter.getId() && verliereID != erster.getId()) {
+                teams.add(teamRepository.findById(verliereID).get());
+            }
         }
 
         return teams;
