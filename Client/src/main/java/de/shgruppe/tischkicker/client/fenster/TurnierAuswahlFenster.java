@@ -79,14 +79,9 @@ public class TurnierAuswahlFenster extends JFrame {
         turniereComboBox.addActionListener(e -> {
             Turnier selectedTurnier = (Turnier) turniereComboBox.getSelectedItem();
 
-            if (selectedTurnier.isGespielt()) {
-                turnierStartenButton.setText("Turnier anzeigen");
-            }
-            else {
-                turnierStartenButton.setText("Turnier starten/fortsetzen");
-            }
+            setButtonText(selectedTurnier, turnierStartenButton);
         });
-
+        setButtonText(alleTurniere.get(0), turnierStartenButton);
 
         turnierStartenButton.addActionListener(e -> {
             if (turniereComboBox.getSelectedIndex() != -1) {
@@ -108,5 +103,29 @@ public class TurnierAuswahlFenster extends JFrame {
         });
 
         setLocationRelativeTo(null);
+    }
+
+    private static List<Spiel> getSpieleVonTurnier(Turnier turnier) {
+        return Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == turnier.getId())
+                     .collect(Collectors.toList());
+    }
+
+    private static void setButtonText(Turnier selectedTurnier, DataButton turnierStartenButton) {
+        if (selectedTurnier.isGespielt()) {
+            turnierStartenButton.setText("Turnier anzeigen");
+        }
+        else {
+            List<Spiel> turnierSpiele = getSpieleVonTurnier(selectedTurnier);
+            boolean hatTurniergestartetesSpiel = turnierSpiele.stream()
+                                                              .filter(s -> s.getQualifikation() == 1 && s.getGewinnerID() > 0)
+                                                              .findAny().isPresent();
+
+            if (hatTurniergestartetesSpiel) {
+                turnierStartenButton.setText("Turnier fortsetzen");
+            }
+            else {
+                turnierStartenButton.setText("Turnier starten");
+            }
+        }
     }
 }

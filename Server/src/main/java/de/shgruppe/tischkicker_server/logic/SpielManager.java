@@ -7,7 +7,6 @@ import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tischkicker.messages.SiegerTreppchenMessage;
 import tischkicker.messages.SpielBeendetMessage;
 import tischkicker.messages.SpielErgebnis;
 import tischkicker.messages.TurnierBeendetMessage;
@@ -116,7 +115,8 @@ public class SpielManager {
     private int getIdVonSeite(Tor.Seite seite) {
         if (this.ergebnis.seiteTeam1 == seite) {
             return team1.teamID;
-        } else {
+        }
+        else {
             return team2.teamID;
         }
 

@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 
 public class DataButton extends JButton implements MouseListener {
     private Object data;
-    private boolean isMouseOver;
 
     public DataButton(String text, boolean roundBorder) {
         setText(text);
@@ -55,7 +54,7 @@ public class DataButton extends JButton implements MouseListener {
 
         FontMetrics metrics = g.getFontMetrics();
         int textWidth = metrics.stringWidth(getText());
-        int textHeight = metrics.getDescent();
+        int textHeight = metrics.getDescent() - metrics.getAscent();
 
         g.setColor(getForeground());
         g.drawString(getText(), getWidth() / 2 - textWidth / 2, getHeight() / 2 - textHeight / 2);
@@ -78,13 +77,11 @@ public class DataButton extends JButton implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        isMouseOver = true;
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        isMouseOver = false;
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 }

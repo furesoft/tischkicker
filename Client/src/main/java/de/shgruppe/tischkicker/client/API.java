@@ -8,14 +8,15 @@ import tischkicker.models.Spieler;
 import tischkicker.models.Turnier;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class API {
@@ -193,7 +194,7 @@ public class API {
     }
 
     public static Spiel[] startTurnier(int id) {
-        return getResource("/turnier/"+id, Spiel[].class);
+        return getResource("/turnier/" + id, Spiel[].class);
     }
 
     public static Spieler[] getSpieler() {
@@ -220,7 +221,19 @@ public class API {
         return getResource("/turniere", Turnier[].class);
     }
 
+    public static void checkIfServerIsRunning() {
+        try {
+            InetAddress address = InetAddress.getByName("127.0.0.1");
+            boolean reachable = address.isReachable(10000);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static <T> T getResource(String path, Class<T> clazz) {
+        checkIfServerIsRunning();
 
         try {
             HttpRequest request = createRequest(path).GET().build();
@@ -243,11 +256,10 @@ public class API {
         return null;
     }
 
-    public static void turnierupdate(Turnier turnier)  {
-
-        String jsonData= gson.toJson(turnier);
-        HttpRequest request = createRequest("/turnierupdaten").POST(HttpRequest.BodyPublishers.ofString(jsonData,StandardCharsets.UTF_8))
-                .build();
+    public static void turnierupdate(Turnier turnier) {
+        String jsonData = gson.toJson(turnier);
+        HttpRequest request = createRequest("/turnierupdaten").POST(HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+                                                              .build();
 
         HttpResponse<String> response = null;
         try {
@@ -262,6 +274,7 @@ public class API {
             System.out.println("Turnier updaten für  " + turnier + " schiefgegangen.");
         }
     }
+
     public static void spielStarten(Spiel spiel) {
         try {
             String jsonData = gson.toJson(spiel);

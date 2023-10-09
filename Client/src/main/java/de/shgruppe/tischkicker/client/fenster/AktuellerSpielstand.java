@@ -124,7 +124,7 @@ public class AktuellerSpielstand {
 
         contentPanel.setBackground(Colors.BACKGROUND);
 
-        this.frame.add(contentPanel);
+        frame.add(contentPanel);
 
         frame.setLocationRelativeTo(null);
     }
