@@ -61,7 +61,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        de.shgruppe.tischkicker.client.API
+                                        de.shgruppe.tischkicker.client.App
                                     </mainClass>
                                 </manifest>
                             </archive>
