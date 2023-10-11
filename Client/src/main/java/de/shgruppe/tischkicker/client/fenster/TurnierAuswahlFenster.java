@@ -81,7 +81,10 @@ public class TurnierAuswahlFenster extends JFrame {
 
             setButtonText(selectedTurnier, turnierStartenButton);
         });
-        setButtonText(alleTurniere.get(0), turnierStartenButton);
+
+        if(!alleTurniere.isEmpty()) {
+            setButtonText(alleTurniere.get(0), turnierStartenButton);
+        }
 
         turnierStartenButton.addActionListener(e -> {
             if (turniereComboBox.getSelectedIndex() != -1) {
