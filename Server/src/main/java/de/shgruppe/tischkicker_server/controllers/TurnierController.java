@@ -65,4 +65,10 @@ public class TurnierController {
     public void updateturnier(@RequestBody Turnier turnier) {
         repository.saveAndFlush(turnier);
     }
+
+    @GetMapping("/turnier/quickplay")
+    public Spiel quickplayTurnier()
+    {
+        return turnierManager.quickplayTurnier();
+    }
 }

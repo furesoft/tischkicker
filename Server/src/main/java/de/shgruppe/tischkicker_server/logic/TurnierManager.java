@@ -30,6 +30,13 @@ public class TurnierManager {
     static Turnier aktuellesTurnier;
     public static Map<Integer, List<Team>> alleTeams = new HashMap<>();
 
+    public Spiel quickplayTurnier(){
+        Spiel quickSpiel = spielRepository.findById(0).get();
+        quickSpiel.setToreteam2(0);
+        quickSpiel.setToreteam2(0);
+        quickSpiel.setGewinnerID(-1);
+        return quickSpiel;
+    }
     public static void teamHinzufuegen (Team team) {
         if(alleTeams.containsKey(aktuellesTurnier.getId())) {
             alleTeams.get(aktuellesTurnier.getId()).add(team);

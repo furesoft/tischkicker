@@ -221,6 +221,8 @@ public class API {
         return getResource("/turniere", Turnier[].class);
     }
 
+    public static Spiel getQuickSpiel(){return getResource("/turnier/quickplay", Spiel.class);}
+
     public static void checkIfServerIsRunning() {
         try {
             InetAddress address = InetAddress.getByName("127.0.0.1");
@@ -324,11 +326,9 @@ public class API {
     }
 
     public static Spiel[] getSpieleFromServer() {
-
         try {
             HttpRequest request = createRequest("/spiele")
-
-                    .GET().build();
+                                .GET().build();
 
             // Die Anfrage an die API senden und die Antwort erhalten
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

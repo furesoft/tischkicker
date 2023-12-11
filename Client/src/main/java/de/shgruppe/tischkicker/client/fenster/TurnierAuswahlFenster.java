@@ -65,6 +65,12 @@ public class TurnierAuswahlFenster extends JFrame {
         panel.add(turnierErstellenButton);
         turnierErstellenButton.setVisible(true);
 
+        DataButton quickPlayButton = new DataButton("Schnellspiel", true);
+        quickPlayButton.setBounds(300,200,150,50);
+        quickPlayButton.setBackground(Colors.BUTTON_BACKGROUND);
+        quickPlayButton.setForeground(Colors.BUTTON_SCHRIFT);
+        panel.add(quickPlayButton);
+        quickPlayButton.setVisible(true);
 
         panel.add(turniereComboBox);
 
@@ -85,6 +91,11 @@ public class TurnierAuswahlFenster extends JFrame {
         if(!alleTurniere.isEmpty()) {
             setButtonText(alleTurniere.get(0), turnierStartenButton);
         }
+
+        quickPlayButton.addActionListener(e -> {
+            App.spielstandAnzeige.aktualisiereDaten(API.getQuickSpiel());
+            App.spielstandAnzeige.show();
+        });
 
         turnierStartenButton.addActionListener(e -> {
             if (turniereComboBox.getSelectedIndex() != -1) {
