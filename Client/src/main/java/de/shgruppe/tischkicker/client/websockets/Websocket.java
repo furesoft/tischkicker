@@ -39,7 +39,11 @@ class Websocket extends WebSocketClient {
             App.spielstandAnzeige.aktualisiereDaten(spielergebnis);
 
             System.out.printf(String.valueOf(Thread.currentThread().getId()));
-            App.turnierbaum.ergebnisUebertragen(spielergebnis);
+
+            //Falls Quickspiel
+            if(spielergebnis.spiel.getSpielID()!=1) {
+                App.turnierbaum.ergebnisUebertragen(spielergebnis);
+            }
         }
 
         else if (deserializedMessage.type == MessageType.SiegerTreppchen) {
@@ -66,10 +70,13 @@ class Websocket extends WebSocketClient {
                 App.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());
             }
 
-            holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI();
+            //Für den Fall QuickPlay
+            if(spielergebnis.getSpiel().getSpielID()!=1) {
+                holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI();
 
-            App.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
-            App.turnierbaum.block();
+                App.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());
+                App.turnierbaum.block();
+            }
         }
     }
 

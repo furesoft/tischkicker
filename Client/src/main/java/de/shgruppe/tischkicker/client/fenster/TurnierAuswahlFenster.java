@@ -93,16 +93,17 @@ public class TurnierAuswahlFenster extends JFrame {
         }
 
         quickPlayButton.addActionListener(e -> {
-            App.spielstandAnzeige.aktualisiereDaten(API.getQuickSpiel());
             App.spielstandAnzeige.show();
+            App.spielstandAnzeige.aktualisiereDaten(API.getQuickSpiel());
         });
 
         turnierStartenButton.addActionListener(e -> {
             if (turniereComboBox.getSelectedIndex() != -1) {
                 App.turnierbaum.resetTurnierBaum();
                 Turnier turnier = ((Turnier) turniereComboBox.getSelectedItem());
-
-                aktuellesTurnier = alleTurniere.stream().filter(t -> t.getId() == turnier.getId()).findFirst().get();
+                if (turnier.getId() != 1)
+                {
+                    aktuellesTurnier = alleTurniere.stream().filter(t -> t.getId() == turnier.getId()).findFirst().get();
 
                 var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == turnier.getId())
                         .collect(Collectors.toList());
@@ -113,6 +114,7 @@ public class TurnierAuswahlFenster extends JFrame {
                 if (!turnierSpiele.isEmpty()) {
                     App.turnierbaum.ladeSpieleAmAnfang(spiele);
                 }
+            }
             }
         });
 

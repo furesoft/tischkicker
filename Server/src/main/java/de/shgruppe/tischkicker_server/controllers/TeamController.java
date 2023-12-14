@@ -93,9 +93,7 @@ public class TeamController {
             Spieler s = new Spieler();
             s.setName(name);
 
-            spielerRepository.saveAndFlush(s);
-
-            s.setId((int) spielerRepository.count());
+            s = spielerRepository.saveAndFlush(s);
 
             ids.add(Integer.toString(s.getId()));
         }

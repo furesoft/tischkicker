@@ -1,6 +1,7 @@
 package de.shgruppe.tischkicker_server.controllers;
 
 import de.shgruppe.tischkicker_server.Hilfsmethoden;
+import de.shgruppe.tischkicker_server.logic.SpielManager;
 import de.shgruppe.tischkicker_server.logic.TurnierManager;
 import de.shgruppe.tischkicker_server.repositories.TeamRepository;
 import de.shgruppe.tischkicker_server.repositories.TurnierRepository;
@@ -10,6 +11,7 @@ import tischkicker.models.Spiel;
 import tischkicker.models.Team;
 import tischkicker.models.Turnier;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +26,9 @@ public class TurnierController {
 
     @Autowired
     TurnierManager turnierManager;
+
+    @Autowired
+    SpielManager spielManager;
 
 
     @GetMapping("/turniere/{id}")
@@ -67,8 +72,9 @@ public class TurnierController {
     }
 
     @GetMapping("/turnier/quickplay")
-    public Spiel quickplayTurnier()
-    {
-        return turnierManager.quickplayTurnier();
+    public Spiel quickplayTurnier() throws IOException {
+        Spiel quickSpiel = turnierManager.quickplayTurnier();
+        spielManager.spielStarten(quickSpiel);
+        return quickSpiel;
     }
 }

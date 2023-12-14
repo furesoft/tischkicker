@@ -149,33 +149,36 @@ public class SpielManager {
             if (ergebnis.toreTeam2 >= anzahlToreBisGewonnen || ergebnis.teams[0].isAufgegeben()) {
                 ergebnis.spiel.setGewinnerID(ergebnis.teams[1].getId());
             }
-            spielRepository.saveAndFlush(ergebnis.spiel);
-
+            if(ergebnis.spiel.getSpielID()!=0) {
+                spielRepository.saveAndFlush(ergebnis.spiel);
+            }
             Spiel neuesSpiel = null;
             try {
                 neuesSpiel = turnierManager.spielPhase.empfangeEndergebnis(ergebnis);
             } catch (TurnierBeendetException e) {
                 Optional<Turnier> turnier = turnierRepository.findById(ergebnis.spiel.getTurnierID());
 
-                turnier.get().setEnddatum(Hilfsmethoden.ermittleDatum());
-                turnier.get().setGespielt(true);
+                //Fall für Quickplay
+                if(ergebnis.spiel.getSpielID()!=1) {
+                    turnier.get().setEnddatum(Hilfsmethoden.ermittleDatum());
+                    turnier.get().setGespielt(true);
 
-                turnierRepository.saveAndFlush(turnier.get());
-
+                    turnierRepository.saveAndFlush(turnier.get());
+                }
                 TurnierBeendetMessage tmsg = new TurnierBeendetMessage();
                 tmsg.setTurnier(turnier.get());
 
                 SocketHandler.broadcast(tmsg);
 
+                //Für den Fall QuickPlay
+                if(ergebnis.spiel.getSpielID() !=1) {
+                    SiegerTreppchenMessage treppchenMessage = new SiegerTreppchenMessage();
+                    treppchenMessage.teams = getTreppchenTeams();
+                    SocketHandler.broadcast(treppchenMessage);
 
-                SiegerTreppchenMessage treppchenMessage = new SiegerTreppchenMessage();
-                treppchenMessage.teams = getTreppchenTeams();
-
-                SocketHandler.broadcast(treppchenMessage);
-
-
-                stats.incrementTeamTore(ergebnis.teams[0], ergebnis.toreTeam1, ergebnis.toreTeam2);
-                stats.incrementTeamTore(ergebnis.teams[1], ergebnis.toreTeam2, ergebnis.toreTeam1);
+                    stats.incrementTeamTore(ergebnis.teams[0], ergebnis.toreTeam1, ergebnis.toreTeam2);
+                    stats.incrementTeamTore(ergebnis.teams[1], ergebnis.toreTeam2, ergebnis.toreTeam1);
+                }
             }
 
             SpielBeendetMessage msg = new SpielBeendetMessage();
@@ -325,7 +328,10 @@ public class SpielManager {
 
         team.tore--;
 
-        spielRepository.save(ergebnis.spiel);
+        //Falls für Quickplay
+        if(ergebnis.spiel.getSpielID()!=1) {
+            spielRepository.save(ergebnis.spiel);
+        }
 
         setzeTorErgebnisse();
 
@@ -336,24 +342,11 @@ public class SpielManager {
         // Team als aufgegeben markieren und in Datenbank schreiben, sowie dem client mitteilen
         Team aufgegebenTeam = Arrays.stream(ergebnis.teams).filter(team -> team.getId() == id).findFirst().get();
         aufgegebenTeam.setAufgegeben(true);
-        teamRepository.saveAndFlush(aufgegebenTeam);
 
-        triggerSpielMode();
-
-        /*SpielBeendetMessage msg = new SpielBeendetMessage();
-        msg.setGewinner(getGewinnerWennAufgegeben(id));
-        msg.setSpiel(ergebnis.spiel);
-
-        SocketHandler.broadcast(msg);
-
-        reset();*/
-    }
-
-    /*private Team getGewinnerWennAufgegeben(int id) {
-        if (ergebnis.spiel.getTeamIDs()[0] == id) {
-            return ergebnis.teams[1];
+        //Fall für Quickplay
+        if(ergebnis.spiel.getSpielID()!=1) {
+            teamRepository.saveAndFlush(aufgegebenTeam);
         }
-
-        return ergebnis.teams[0];
-    }*/
+        triggerSpielMode();
+    }
 }
