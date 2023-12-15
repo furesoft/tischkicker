@@ -78,7 +78,9 @@ public class TurnierAuswahlFenster extends JFrame {
         turniereComboBox.setForeground(Color.BLACK);
         turniereComboBox.setBounds(50, 100, 200, 50);
         for (Turnier value : alleTurniere) {
-            turniereComboBox.addItem(value);
+            if(value.getId()!=1) {
+                turniereComboBox.addItem(value);
+            }
         }
         turniereComboBox.setVisible(true);
 
@@ -101,8 +103,6 @@ public class TurnierAuswahlFenster extends JFrame {
             if (turniereComboBox.getSelectedIndex() != -1) {
                 App.turnierbaum.resetTurnierBaum();
                 Turnier turnier = ((Turnier) turniereComboBox.getSelectedItem());
-                if (turnier.getId() != 1)
-                {
                     aktuellesTurnier = alleTurniere.stream().filter(t -> t.getId() == turnier.getId()).findFirst().get();
 
                 var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == turnier.getId())
@@ -114,7 +114,6 @@ public class TurnierAuswahlFenster extends JFrame {
                 if (!turnierSpiele.isEmpty()) {
                     App.turnierbaum.ladeSpieleAmAnfang(spiele);
                 }
-            }
             }
         });
 

@@ -63,15 +63,13 @@ class Websocket extends WebSocketClient {
         else if (deserializedMessage.type == MessageType.SpielBeendet) {
             SpielBeendetMessage spielergebnis = gson.fromJson(message, SpielBeendetMessage.class);
             App.spielstandAnzeige.hide();
-
+            //Für den Fall QuickPlay
+            if(spielergebnis.getSpiel().getSpielID()!=1) {
             Spielfeld f = App.turnierbaum.getNaechstesSpielfeld();
             if (f != null) {
                 f.spiel = spielergebnis.getNeuesSpiel();
                 App.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());
             }
-
-            //Für den Fall QuickPlay
-            if(spielergebnis.getSpiel().getSpielID()!=1) {
                 holeAlleSpieleVomServerUndAktualisiereTeamnamenDerGUI();
 
                 App.turnierbaum.setGewinner(spielergebnis.getGewinner(), spielergebnis.getSpiel());

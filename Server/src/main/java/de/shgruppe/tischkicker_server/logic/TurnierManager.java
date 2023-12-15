@@ -37,6 +37,7 @@ public class TurnierManager {
         quickSpiel.setToreteam2(0);
         quickSpiel.setToreteam2(0);
         quickSpiel.setGewinnerID(-1);
+        quickSpiel.setTeamNames("A","B");
         return quickSpiel;
     }
     public static void teamHinzufuegen (Team team) {
