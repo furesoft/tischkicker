@@ -49,7 +49,7 @@ public class TurnierBaum {
         tore.setForeground(Colors.HINWEIS_SCHRIFT);
         panel.add(tore);
 
-        torDifferenz.setBounds(850,20,100,50);
+        torDifferenz.setBounds(850,20,150,50);
         torDifferenz.setForeground(Colors.HINWEIS_SCHRIFT);
         panel.add(torDifferenz);
 

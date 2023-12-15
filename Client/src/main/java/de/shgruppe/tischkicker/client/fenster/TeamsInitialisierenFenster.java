@@ -48,7 +48,7 @@ public class TeamsInitialisierenFenster extends JFrame {
     private DataButton deletePlayerButton;
     private JFrame bearbeitenFenster;
     private JPanel spielerTab;
-
+    private int anzahlTeamsVonTurnier = 0;
 
     public TeamsInitialisierenFenster() {
         setTitle("Team App");
@@ -151,6 +151,7 @@ public class TeamsInitialisierenFenster extends JFrame {
 
         if (!teamName.isEmpty() && !tempPlayers.isEmpty()) {
             Team team = new Team(tempPlayers, teamName);
+            anzahlTeamsVonTurnier++;
             teams.add(team);
             API.sendTeamsToServer(team);
 
@@ -389,17 +390,21 @@ public class TeamsInitialisierenFenster extends JFrame {
         });
 
         startButton.addActionListener(e -> {
-            int id = aktuellesTurnier.getId();
-            var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
-                                      .collect(Collectors.toList());
+            if (anzahlTeamsVonTurnier >= 2 && !addDataTurnierButton.isEnabled())
+            {
+                anzahlTeamsVonTurnier = 0;
+                int id = aktuellesTurnier.getId();
+                var turnierSpiele = Arrays.stream(getSpieleFromServer()).filter(s -> s.getTurnierID() == id)
+                    .collect(Collectors.toList());
 
-            Spiel[] spiele = API.startTurnier(id);
-            turnierbaumGenerieren(spiele);
+                Spiel[] spiele = API.startTurnier(id);
+                turnierbaumGenerieren(spiele);
 
-            if (!turnierSpiele.isEmpty()) {
-                App.turnierbaum.ladeSpieleAmAnfang(spiele);
+                if (!turnierSpiele.isEmpty()) {
+                    App.turnierbaum.ladeSpieleAmAnfang(spiele);
+                }
+                this.setVisible(false);
             }
-            this.setVisible(false);
         });
         addConfigButton.addActionListener(e -> {
             initializeUI();
