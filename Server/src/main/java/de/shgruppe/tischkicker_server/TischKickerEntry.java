@@ -15,6 +15,8 @@ import tischkicker.models.Spieler;
 import tischkicker.models.Team;
 import tischkicker.models.Turnier;
 
+//test
+
 @SpringBootApplication
 @EntityScan("tischkicker.models")
 @EnableJpaRepositories("de.shgruppe.tischkicker_server.repositories")
