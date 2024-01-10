@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+//test
+
 @SpringBootApplication
 @EntityScan("tischkicker.models")
 @EnableJpaRepositories("de.shgruppe.tischkicker_server.repositories")
