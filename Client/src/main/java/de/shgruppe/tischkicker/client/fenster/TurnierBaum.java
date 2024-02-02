@@ -22,12 +22,12 @@ public class TurnierBaum {
     static ArrayList<ArrayList<Spielfeld>> reihen = new ArrayList<>();
     public JFrame frame = new JFrame();
     Spielfeld selectedSpielfeld;
-    Spielfeld aktuellesSpiel;
+    public Spielfeld aktuellesSpiel;
     JLabel hinweis = new JLabel();
     JLabel tore = new JLabel();
     JLabel torDifferenz = new JLabel();
     ArrayList<Spielfeld> spielfeldList = new ArrayList<>();
-    ArrayList<Spielfeld> alleSpielfelder = new ArrayList<>();
+    public ArrayList<Spielfeld> alleSpielfelder = new ArrayList<>();
     ArrayList<Verbindungslinie> linienListe = new ArrayList<>();
     DataButton starteSpiel = new DataButton("Spiel starten", true);
     JPanel panel;

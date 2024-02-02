@@ -245,7 +245,7 @@ public class SpielManager {
         for (Spiel spiel : spieleVorherigePhase) {
             int verliereID = Arrays.stream(spiel.getTeamIDs()).filter(id -> id != spiel.getGewinnerID()).findFirst()
                                    .getAsInt();
-            if (verliereID != zweiter.getId() && verliereID != erster.getId()) {
+            if (verliereID != zweiter.getId() && verliereID != erster.getId() && verliereID > 0) {
                 teams.add(teamRepository.findById(verliereID).get());
             }
         }

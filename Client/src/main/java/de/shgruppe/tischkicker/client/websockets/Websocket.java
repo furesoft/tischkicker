@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 class Websocket extends WebSocketClient {
@@ -67,6 +68,10 @@ class Websocket extends WebSocketClient {
             if(spielergebnis.getSpiel().getSpielID()!=1) {
             Spielfeld f = App.turnierbaum.getNaechstesSpielfeld();
             if (f != null) {
+                if(f.spiel.getQualifikation()==spielergebnis.getNeuesSpiel().getQualifikation()-1)
+                {
+                    f = App.turnierbaum.alleSpielfelder.stream().filter(s -> s.spiel.getSpielID()==spielergebnis.getNeuesSpiel().getSpielID()).findFirst().get();
+                }
                 f.spiel = spielergebnis.getNeuesSpiel();
                 App.turnierbaum.feldInitialisieren(f.spiel, spielergebnis.getGewinner());
             }

@@ -110,8 +110,10 @@ public class SpielPhase {
                 {
                     Spiel nachFolgeSpiel = findeSpieleMitNachfolgerVonSpiel(uebriegesSpiel.getSpielID(), uebriegesSpiel.getTurnierID()).get();
                     Optional<Team> uebrigesTeam = teamRepository.findById(uebriegesSpiel.getTeamIDs()[0]);
-                    teamNachfolgespielSetzen(nachFolgeSpiel, uebrigesTeam.get());
-
+                    if(uebrigesTeam.isPresent())
+                    {
+                        teamNachfolgespielSetzen(nachFolgeSpiel, uebrigesTeam.get());
+                    }
                     break;
                 }
             }
@@ -119,9 +121,32 @@ public class SpielPhase {
 
         //wenn Nachfolger, dann Nachfolgespiel aktualisieren.
         Spiel naechstesSpiel = maybeNaechstesSpiel.get();
+        if(naechstesSpiel.getTeamIDs()[0]==-2 || naechstesSpiel.getTeamIDs()[1]==-2) {
+            Spiel sonderFallCheck = (sonderfallCheck(naechstesSpiel, alleSpiele, gewinnerTeam));
+            if (sonderFallCheck != null) {
+                return sonderFallCheck;
+            }
+        }
         teamNachfolgespielSetzen(naechstesSpiel, gewinnerTeam);
 
         return naechstesSpiel;
+    }
+    public Spiel sonderfallCheck (Spiel naechstesSpiel, List<Spiel> alleSpiele, Team gewinnerTeam)
+    {
+        List<Spiel> naechsteSpielePhase = alleSpiele.stream().filter(s -> s.getQualifikation() == naechstesSpiel.getQualifikation())
+                .filter(t -> t.getTurnierID() == naechstesSpiel.getTurnierID()).collect(Collectors.toList());
+
+        List<Spiel> naechsteSpieleVorbeiPhase = naechsteSpielePhase.stream().filter(t -> t.getGewinnerID() > 0).collect(Collectors.toList());
+        boolean spielCheckSonderfall = (naechstesSpiel.getTeamIDs()[0]==-2 || naechstesSpiel.getTeamIDs()[1]==-2)
+                && (naechstesSpiel.getTeamIDs()[0]==-1 || naechstesSpiel.getTeamIDs()[1]==-1);
+        if(naechsteSpielePhase.size()-1==naechsteSpieleVorbeiPhase.size() && spielCheckSonderfall)
+        {
+            //teamNachfolgespielSetzen(naechstesSpiel, gewinnerTeam);
+            Spiel uebernaechstesSpiel = findeSpieleMitNachfolgerVonSpiel(naechstesSpiel.getSpielID(),naechstesSpiel.getTurnierID()).get();
+            teamNachfolgespielSetzen(uebernaechstesSpiel,gewinnerTeam);
+            return uebernaechstesSpiel;
+        }
+        return null;
     }
     public void teamNachfolgespielSetzen(Spiel nachfolgeSpiel, Team gewinner)
     {
